@@ -13,8 +13,10 @@ environment:
   flutter: ">=3.10.0"
 
 dependencies:
+  dotenv: ^4.2.0
   flutter:
     sdk: flutter
+  http: ^1.6.0
 
 dev_dependencies:
   flutter_test:
