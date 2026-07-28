@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SATE AI — Stress Test Report</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #f8f9fb;
+      --surface:    #ffffff;
+      --surface-2:  #f1f3f5;
+      --border:     #e2e5e9;
+      --border-2:   #d1d5db;
+      --text:       #1a1d23;
+      --text-2:     #4b5563;
+      --text-3:     #9ca3af;
+      --accent:     #2563eb;
+      --accent-bg:  #eff6ff;
+      --pass:       #059669;
+      --pass-bg:    #ecfdf5;
+      --pass-border:#a7f3d0;
+      --fail:       #dc2626;
+      --fail-bg:    #fef2f2;
+      --fail-border:#fecaca;
+      --warn:       #d97706;
+      --mono:       'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+      --sans:       'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --radius:     8px;
+      --shadow-sm:  0 1px 2px rgba(0,0,0,0.04);
+    }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Layout ──────────────────────────────────────────── */
+    .app {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 24px 80px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      width: 32px; height: 32px;
+      background: var(--text);
+      border-radius: 6px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+    .logo svg { width: 18px; height: 18px; color: #fff; }
+
+    header h1 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    header .sep {
+      width: 1px;
+      height: 18px;
+      background: var(--border-2);
+    }
+
+    header .sub {
+      font-size: 0.8125rem;
+      color: var(--text-3);
+      font-weight: 400;
+    }
+
+    /* ── Drop Zone ───────────────────────────────────────── */
+    .drop-zone {
+      border: 1.5px dashed var(--border-2);
+      border-radius: var(--radius);
+      padding: 56px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+      background: var(--surface);
+    }
+    .drop-zone:hover, .drop-zone.drag-over {
+      border-color: var(--accent);
+      background: var(--accent-bg);
+    }
+    .drop-zone svg {
+      width: 40px; height: 40px;
+      color: var(--text-3);
+      margin-bottom: 12px;
+    }
+    .drop-zone:hover svg,
+    .drop-zone.drag-over svg { color: var(--accent); }
+    .drop-zone p {
+      color: var(--text-2);
+      font-size: 0.875rem;
+    }
+    .drop-zone strong { color: var(--text); }
+    .drop-zone input[type="file"] { display: none; }
+
+    /* ── Toolbar ─────────────────────────────────────────── */
+    .toolbar {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .toolbar.visible { display: flex; }
+
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .file-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 0.75rem;
+      color: var(--text-2);
+      font-family: var(--mono);
+      font-weight: 500;
+    }
+    .file-badge svg { width: 12px; height: 12px; color: var(--text-3); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-2);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      font-family: var(--sans);
+      cursor: pointer;
+      transition: background .12s, border-color .12s, color .12s;
+    }
+    .btn:hover {
+      background: var(--surface-2);
+      border-color: var(--border-2);
+      color: var(--text);
+    }
+    .btn svg { width: 14px; height: 14px; }
+
+    .btn-primary {
+      background: var(--text);
+      color: #fff;
+      border-color: var(--text);
+    }
+    .btn-primary:hover {
+      background: #2d3139;
+      color: #fff;
+    }
+
+    /* ── Status banner ───────────────────────────────────── */
+    .status-banner {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: var(--radius);
+      margin-bottom: 20px;
+      font-weight: 500;
+      font-size: 0.8125rem;
+      border: 1px solid;
+    }
+    .status-banner.visible { display: flex; }
+    .status-banner.pass {
+      background: var(--pass-bg);
+      border-color: var(--pass-border);
+      color: var(--pass);
+    }
+    .status-banner.fail {
+      background: var(--fail-bg);
+      border-color: var(--fail-border);
+      color: var(--fail);
+    }
+    .status-banner svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+    /* ── Cards grid ──────────────────────────────────────── */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card .value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      font-family: var(--mono);
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+    .card .label {
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-3);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    .card.pass .value  { color: var(--pass); }
+    .card.fail .value  { color: var(--fail); }
+    .card.info .value  { color: var(--accent); }
+    .card.warn .value  { color: var(--warn); }
+    .card.muted .value { color: var(--text-2); }
+
+    /* ── Charts ──────────────────────────────────────────── */
+    .charts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 640px) {
+      .charts { grid-template-columns: 1fr; }
+    }
+
+    .chart-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .chart-card h3 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-3);
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+    .chart-card canvas {
+      width: 100% !important;
+      max-height: 220px;
+    }
+
+    /* ── Results table ───────────────────────────────────── */
+    .table-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .table-card h3 {
+      padding: 12px 16px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-3);
+      border-bottom: 1px solid var(--border);
+      font-weight: 600;
+    }
+
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .results-table th {
+      text-align: left;
+      padding: 8px 16px;
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-3);
+      border-bottom: 1px solid var(--border);
+      font-weight: 600;
+      background: var(--surface-2);
+    }
+    .results-table td {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8125rem;
+      color: var(--text-2);
+    }
+    .results-table tr:last-child td { border-bottom: none; }
+    .results-table tr:hover td { background: var(--surface-2); }
+
+    .results-table td:first-child {
+      font-weight: 500;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .results-table td:first-child svg {
+      width: 14px; height: 14px;
+      color: var(--text-3);
+      flex-shrink: 0;
+    }
+
+    .results-table .mono {
+      font-family: var(--mono);
+      font-size: 0.8125rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .badge.pass { background: var(--pass-bg); color: var(--pass); }
+    .badge.fail { background: var(--fail-bg); color: var(--fail); }
+    .badge svg { width: 10px; height: 10px; }
+
+    .error-text {
+      color: var(--fail);
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      word-break: break-all;
+    }
+
+    /* ── Export bar ──────────────────────────────────────── */
+    .export-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* ── Failures section ────────────────────────────────── */
+    .failures-card {
+      background: var(--surface);
+      border: 1px solid var(--fail-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .failures-card h3 {
+      padding: 12px 16px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--fail);
+      border-bottom: 1px solid var(--fail-border);
+      font-weight: 600;
+      background: var(--fail-bg);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .failures-card h3 svg { width: 14px; height: 14px; }
+    .failure-item {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .failure-item:last-child { border-bottom: none; }
+    .failure-item .type {
+      font-weight: 600;
+      font-size: 0.8125rem;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .failure-item .msg {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--fail);
+      word-break: break-all;
+    }
+
+    /* ── Empty state ─────────────────────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: 56px 24px;
+      color: var(--text-3);
+    }
+    .empty-state svg { width: 48px; height: 48px; margin-bottom: 16px; opacity: 0.4; }
+    .empty-state p { font-size: 0.875rem; }
+
+    /* ── Utilities ───────────────────────────────────────── */
+    .hidden { display: none !important; }
+
+    /* ── Responsive ──────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .app { padding: 20px 16px 60px; }
+      .cards { grid-template-columns: repeat(3, 1fr); }
+      .card .value { font-size: 1.25rem; }
+      header h1 { font-size: 1rem; }
+    }
+    @media (max-width: 420px) {
+      .cards { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+        </svg>
+      </div>
+      <h1>SATE AI</h1>
+      <div class="sep"></div>
+      <span class="sub">Stress Test Report Viewer</span>
+    </header>
+
+    <!-- Drop zone -->
+    <div class="drop-zone" id="dropZone">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="17 8 12 3 7 8"/>
+        <line x1="12" y1="3" x2="12" y2="15"/>
+      </svg>
+      <p>Drop a <strong>stress report JSON</strong> here, or click to browse</p>
+      <input type="file" id="fileInput" accept=".json,application/json">
+    </div>
+
+    <!-- Dashboard (hidden until report loaded) -->
+    <div id="dashboard" class="hidden">
+
+      <!-- Toolbar -->
+      <div class="toolbar visible" id="toolbar">
+        <div class="toolbar-left">
+          <span class="file-badge" id="fileBadge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span id="fileName">report.json</span>
+          </span>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-primary" id="newReportBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Report
+          </button>
+        </div>
+      </div>
+
+      <!-- Status banner -->
+      <div class="status-banner" id="statusBanner">
+        <span id="statusIcon"></span>
+        <span id="statusText"></span>
+      </div>
+
+      <!-- Summary cards -->
+      <div class="cards" id="summaryCards"></div>
+
+      <!-- Charts -->
+      <div class="charts">
+        <div class="chart-card">
+          <h3>Inference Time</h3>
+          <canvas id="inferenceChart"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3>Memory Usage</h3>
+          <canvas id="memoryChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Detailed results table -->
+      <div class="table-card">
+        <h3>Injector Results</h3>
+        <table class="results-table" id="resultsTable">
+          <thead>
+            <tr>
+              <th>Injector</th>
+              <th>Status</th>
+              <th>Inference (ms)</th>
+              <th>Memory (MB)</th>
+              <th>Error</th>
+            </tr>
+          </thead>
+          <tbody id="resultsBody"></tbody>
+        </table>
+      </div>
+
+      <!-- Unexpected failures (hidden when empty) -->
+      <div class="failures-card hidden" id="failuresCard">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Unexpected Errors
+        </h3>
+        <div id="failuresBody"></div>
+      </div>
+
+      <!-- Export bar -->
+      <div class="export-bar">
+        <button id="exportJson" class="btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          JSON
+        </button>
+        <button id="exportMarkdown" class="btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Markdown
+        </button>
+        <button id="exportCsv" class="btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          CSV
+        </button>
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div id="emptyState" class="empty-state">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/>
+        <line x1="16" y1="17" x2="8" y2="17"/>
+        <polyline points="10 9 9 9 8 9"/>
+      </svg>
+      <p>No report loaded.<br>Drop a JSON file above to get started.</p>
+    </div>
+  </div>
+
+  <!-- Hidden file input for New Report button -->
+  <input type="file" id="newReportInput" accept=".json,application/json" style="display:none">
+
+  <script src="dashboard.js"></script>
+</body>
+</html>

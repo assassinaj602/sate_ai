@@ -102,6 +102,7 @@ class StressRunner {
       final inferenceTime = DateTime.now().difference(inferenceStart);
 
       final degraded = model.isDegraded;
+      final memoryMB = model.currentMemoryMB;
 
       return FaultResult(
         injectorType: injector.type,
@@ -109,6 +110,7 @@ class StressRunner {
         inferenceTime: inferenceTime,
         output: output,
         errorMessage: degraded ? 'Model entered degraded state' : null,
+        memoryUsageMB: memoryMB > 0 ? memoryMB : null,
       );
     } on TimeoutException {
       return FaultResult(

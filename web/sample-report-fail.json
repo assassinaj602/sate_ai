@@ -1,0 +1,56 @@
+{
+  "modelId": "demo-llm-v1",
+  "passed": false,
+  "results": [
+    {
+      "injectorType": "memoryPressure",
+      "passed": false,
+      "inferenceTimeMs": 1500,
+      "output": {
+        "text": "[DEGRADED] stress-test-probe",
+        "inferenceTimeMs": 1500,
+        "confidence": 0.2,
+        "metadata": {"degraded": true}
+      },
+      "errorMessage": "Model entered degraded state",
+      "memoryUsageMB": 175.0
+    },
+    {
+      "injectorType": "malformedInput",
+      "passed": true,
+      "inferenceTimeMs": 490,
+      "output": {
+        "text": "Hello from MockAdapter! Input: stress-test-probe",
+        "inferenceTimeMs": 490,
+        "confidence": 0.97,
+        "metadata": {"mock": true}
+      },
+      "errorMessage": null,
+      "memoryUsageMB": 0.0
+    },
+    {
+      "injectorType": "latency",
+      "passed": false,
+      "inferenceTimeMs": null,
+      "output": null,
+      "errorMessage": "Timed out after 30s",
+      "memoryUsageMB": null
+    }
+  ],
+  "failures": [
+    {
+      "injectorType": "networkFailure",
+      "message": "AIInferenceError: Connection refused",
+      "stackTrace": "#0 main main.dart:42"
+    }
+  ],
+  "startTime": "2026-07-28T10:00:00.000",
+  "endTime": "2026-07-28T10:00:35.200",
+  "totalDurationMs": 35200,
+  "summary": {
+    "totalTests": 3,
+    "passed": 1,
+    "failed": 2,
+    "unexpectedErrors": 1
+  }
+}
