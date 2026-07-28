@@ -1,0 +1,32 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+  errors:
+    missing_required_param: error
+    missing_return: error
+    todo: ignore
+
+linter:
+  rules:
+    # Style
+    - prefer_single_quotes
+    - always_declare_return_types
+    - prefer_const_constructors
+    - prefer_const_declarations
+    - prefer_final_locals
+    - avoid_print
+    # Documentation
+    - public_member_api_docs
+    - comment_references
+    # Safety
+    - avoid_dynamic_calls
+    - cancel_subscriptions
+    - close_sinks
+    - unawaited_futures
+    # Disabled: conflicts with normal field-then-constructor ordering
+    # - sort_constructors_first
+    # Disabled: too strict for fluent method chains
+    # - require_trailing_commas

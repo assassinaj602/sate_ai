@@ -1,0 +1,65 @@
+# Flutter/Dart build artifacts
+.dart_tool/
+.pub/
+.pub-cache/
+.packages
+build/
+*.lock
+*.log
+
+# Flutter generated
+*.g.dart
+*.freezed.dart
+
+# Coverage
+coverage/
+*.lcov
+lcov.info
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+.editorconfig
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Android
+android/.gradle/
+android/local.properties
+android/key.properties
+**/android/gradlew
+**/android/gradlew.bat
+**/android/gradle/
+
+# iOS
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+**/ios/Runner/GeneratedPluginRegistrant.*
+
+# macOS
+**/macos/Flutter/GeneratedPluginRegistrant.swift
+**/macos/Flutter/ephemeral/
+
+# Web
+lib/generated_plugin_registrant.dart
+
+# Secrets
+.env
+.env.local
+*.pem
+*.key
+
+# Test outputs
+test/
+*.snap
+
+# Docs generated
+doc/api/

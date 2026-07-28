@@ -1,0 +1,39 @@
+name: Stale
+
+on:
+  schedule:
+    - cron: "0 8 * * 1" # Every Monday at 08:00 UTC
+
+jobs:
+  stale:
+    name: Close stale issues and PRs
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/stale@v9
+        with:
+          stale-issue-message: >
+            👋 This issue has been automatically marked as stale because it has not had
+            any activity in the past 60 days. It will be closed in 7 days unless
+            there is new activity. If this is still relevant, please leave a comment!
+          stale-pr-message: >
+            👋 This pull request has been automatically marked as stale because it has not had
+            any activity in the past 30 days. It will be closed in 7 days unless
+            there is new activity. If you'd like to keep it open, please leave a comment
+            or push new commits!
+          close-issue-message: >
+            ❌ This issue was closed due to inactivity. Feel free to reopen it if it is
+            still relevant.
+          close-pr-message: >
+            ❌ This PR was closed due to inactivity. Please reopen it if you wish to
+            continue working on it.
+          days-before-stale: 60
+          days-before-close: 7
+          days-before-pr-stale: 30
+          days-before-pr-close: 7
+          stale-issue-label: stale
+          exempt-issue-labels: "pinned,security,good first issue"
+          exempt-pr-labels: "pinned,work-in-progress"
