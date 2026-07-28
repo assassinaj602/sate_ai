@@ -43,6 +43,7 @@ SATE AI provides a `pytest`-style experience for AI failure modes: wrap your mod
 - `SateAI.stress()` convenience API for one-call test execution
 - Extensible adapter interface for wrapping any on-device AI runtime
 - 59 unit tests with full coverage of core modules
+- Web dashboard for visualizing stress test reports with charts and exports
 
 ---
 
@@ -262,6 +263,7 @@ A GitHub Actions workflow for CI is included in the repository at `.github/workf
 - [Contributing Guide](https://github.com/assassinaj602/sate_ai/blob/main/CONTRIBUTING.md)
 - [Example Application](https://github.com/assassinaj602/sate_ai/tree/main/example)
 - [Changelog](https://github.com/assassinaj602/sate_ai/blob/main/CHANGELOG.md)
+- [Web Dashboard](web/) - Visualize stress test reports
 
 ---
 

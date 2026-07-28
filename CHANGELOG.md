@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 0.1.1 - 2026-07-28
+
+- Web dashboard for visualizing stress test reports (Issue Create Web Dashboard for Reports #7)
+- MemoryUsageMB field to FaultResult for memory tracking
+- Export reports to JSON, Markdown, and CSV
+
 ## [0.1.0] - 2026-07-28
 
 Initial release of SATE AI.
@@ -40,5 +46,6 @@ Initial release of SATE AI.
 - Zero `flutter analyze` issues
 - `dart format` compliant
 
-[Unreleased]: https://github.com/assassinaj602/sate_ai/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/assassinaj602/sate_ai/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/assassinaj602/sate_ai/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/assassinaj602/sate_ai/releases/tag/v0.1.0
