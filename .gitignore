@@ -58,7 +58,6 @@ lib/generated_plugin_registrant.dart
 *.key
 
 # Test outputs
-test/
 *.snap
 
 # Docs generated
