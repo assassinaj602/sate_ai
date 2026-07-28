@@ -1,0 +1,26 @@
+# Files to exclude from the published pub.dev package.
+# This complements .gitignore — list anything that should NOT be in the package.
+
+# Android build artifacts
+example/android/.kotlin/
+example/android/local.properties
+example/android/.gradle/
+
+# iOS build artifacts
+example/ios/Pods/
+example/ios/.symlinks/
+
+# Build outputs
+build/
+example/build/
+
+# Scripts (automation tools, not part of the public API)
+scripts/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+
+# Git session files
+**/*.salive
