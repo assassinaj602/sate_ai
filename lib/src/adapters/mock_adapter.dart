@@ -36,8 +36,10 @@ class MockAdapter implements AIModelAdapter {
   bool _isHealthy = true;
 
   // Allocated list simulates memory consumption; GC'd on reset.
-  // ignore: unused_field — intentionally retained to prevent GC during test
   List<int>? _allocatedMemory;
+
+  /// Returns the simulated raw bytes allocated under memory pressure.
+  List<int>? get allocatedMemory => _allocatedMemory;
 
   // ---------------------------------------------------------------------------
   // AIModelAdapter interface

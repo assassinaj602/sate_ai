@@ -17,15 +17,15 @@ jobs:
           script: |
             const username = context.payload.sender.login;
             const message = `@\${username} Thanks for starring **SATE AI**! 🎉
-
-We're building the future of on-device AI testing.
-
-**Get involved:**
-- 📝 Check out [good first issues](https://github.com/\${context.repo.owner}/\${context.repo.repo}/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
-- 📖 Read the [contribution guide](https://github.com/\${context.repo.owner}/\${context.repo.repo}/blob/main/CONTRIBUTING.md)
-- 💬 Join [Discussions](https://github.com/\${context.repo.owner}/\${context.repo.repo}/discussions)
-
-Together we'll make AI testing a standard practice! 🚀`;
+            
+            We're building the future of on-device AI testing.
+            
+            **Get involved:**
+            - 📝 Check out [good first issues](https://github.com/\${context.repo.owner}/\${context.repo.repo}/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+            - 📖 Read the [contribution guide](https://github.com/\${context.repo.owner}/\${context.repo.repo}/blob/main/CONTRIBUTING.md)
+            - 💬 Join [Discussions](https://github.com/\${context.repo.owner}/\${context.repo.repo}/discussions)
+            
+            Together we'll make AI testing a standard practice! 🚀`;
 
             await github.rest.issues.create({
               owner: context.repo.owner,
@@ -34,3 +34,4 @@ Together we'll make AI testing a standard practice! 🚀`;
               body: message,
               labels: ['good first issue', 'documentation']
             });
+
