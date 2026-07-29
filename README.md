@@ -177,7 +177,7 @@ A `FaultInjector` simulates a specific failure mode by manipulating the model ad
 |---|---|---|
 | MemoryPressureInjector | Available | memoryPressure |
 | MalformedInputInjector | Available | malformedInput |
-| QuantizationDriftInjector | Planned | quantizationDrift |
+| QuantizationDriftInjector | Available | Simulates gradual precision loss |
 | ThermalThrottleInjector | Planned | thermalThrottle |
 | LatencyInjector | Planned | latency |
 | ModelSwapInjector | Planned | modelSwap |
