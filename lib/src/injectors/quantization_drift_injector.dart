@@ -67,7 +67,7 @@ class QuantizationDriftInjector implements FaultInjector {
   int get driftSteps => _confidenceHistory.length;
 
   /// Whether the model is degraded (confidence below threshold).
-  bool get isDegraded => _currentConfidence < degradationThreshold;
+  bool get isDegraded => _currentConfidence < degradationThreshold - 1e-9;
 
   /// Applies drift to a model adapter by:
   /// 1. Simulating memory pressure equivalent to drift
