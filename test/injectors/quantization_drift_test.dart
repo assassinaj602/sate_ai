@@ -7,11 +7,12 @@ void main() {
     late MockAdapter model;
 
     setUp(() {
+      model = MockAdapter(modelId: 'test-model');
       injector = QuantizationDriftInjector(
+        model: model,
         driftFactor: 0.1,
         degradationThreshold: 0.3,
       );
-      model = MockAdapter(modelId: 'test-model');
     });
 
     // --- Basic interface tests ---
@@ -78,7 +79,7 @@ void main() {
       expect(injector.isDegraded, isTrue);
     });
 
-    test('inject() is degraded after 7 injections (threshold 0.3)', () async {
+    test('inject() is degraded after 8 injections (threshold 0.3)', () async {
       // 7 injections: 1.0 - 7*0.1 = 0.3 (not degraded, equal to threshold)
       for (var i = 0; i < 7; i++) {
         await injector.inject();
@@ -120,34 +121,35 @@ void main() {
       expect(injector.isDegraded, isFalse);
     });
 
-    // --- ApplyTo model tests ---
+    // --- Model integration tests ---
 
-    test('applyTo() simulates memory pressure on model', () async {
+    test('inject() simulates memory pressure on model', () async {
       final initialMemory = model.currentMemoryMB;
-      await injector.applyTo(model);
+      await injector.inject();
       expect(model.currentMemoryMB, greaterThan(initialMemory));
     });
 
-    test('applyTo() marks model as degraded after enough drift', () async {
-      // Apply drift until degraded
-      // Each applyTo adds 10MB memory pressure (driftFactor * 100 = 10)
+    test('inject() marks model as degraded after enough drift', () async {
+      // Apply drift until degraded on model
+      // Each inject adds 10MB memory pressure (driftFactor * 100 = 10)
       // Degradation threshold is 150MB, so after 16 applications: 160MB
       for (var i = 0; i < 16; i++) {
-        await injector.applyTo(model);
+        await injector.inject();
       }
       expect(model.isDegraded, isTrue);
     });
 
-    test('applyTo() does not degrade model below threshold', () async {
+    test('inject() does not degrade model below threshold', () async {
       // 5 applications: 50MB < 150MB threshold
       for (var i = 0; i < 5; i++) {
-        await injector.applyTo(model);
+        await injector.inject();
       }
       expect(model.isDegraded, isFalse);
     });
 
     test('works with custom driftFactor and threshold', () async {
       final customInjector = QuantizationDriftInjector(
+        model: model,
         driftFactor: 0.05,
         degradationThreshold: 0.5,
       );
@@ -182,22 +184,24 @@ void main() {
 
     test('constructor throws assertion for invalid driftFactor', () {
       expect(
-        () => QuantizationDriftInjector(driftFactor: -0.1),
+        () => QuantizationDriftInjector(model: model, driftFactor: -0.1),
         throwsAssertionError,
       );
       expect(
-        () => QuantizationDriftInjector(driftFactor: 1.5),
+        () => QuantizationDriftInjector(model: model, driftFactor: 1.5),
         throwsAssertionError,
       );
     });
 
     test('constructor throws assertion for invalid degradationThreshold', () {
       expect(
-        () => QuantizationDriftInjector(degradationThreshold: -0.1),
+        () =>
+            QuantizationDriftInjector(model: model, degradationThreshold: -0.1),
         throwsAssertionError,
       );
       expect(
-        () => QuantizationDriftInjector(degradationThreshold: 1.5),
+        () =>
+            QuantizationDriftInjector(model: model, degradationThreshold: 1.5),
         throwsAssertionError,
       );
     });

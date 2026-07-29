@@ -1,7 +1,7 @@
 import 'dart:math';
+import 'package:sate_ai/src/adapters/model_adapter.dart';
 import 'package:sate_ai/src/core/fault_injector.dart';
 import 'package:sate_ai/src/core/fault_type.dart';
-import 'package:sate_ai/src/adapters/model_adapter.dart';
 
 /// Simulates gradual precision loss in model outputs.
 ///
@@ -17,11 +17,20 @@ class QuantizationDriftInjector implements FaultInjector {
   /// Confidence threshold below which the model is considered degraded.
   final double degradationThreshold;
 
+  /// The model adapter to stress.
+  final AIModelAdapter model;
+
   double _currentConfidence = 1.0;
   final List<double> _confidenceHistory = [];
   static final Random _random = Random();
 
+  /// Creates a [QuantizationDriftInjector].
+  ///
+  /// [model] is the model adapter instance to apply the drift simulation to.
+  /// [driftFactor] is the amount of confidence lost per injection step.
+  /// [degradationThreshold] is the point below which the model degrades.
   QuantizationDriftInjector({
+    required this.model,
     this.driftFactor = 0.1,
     this.degradationThreshold = 0.3,
   })  : assert(driftFactor > 0 && driftFactor <= 1.0,
@@ -40,11 +49,20 @@ class QuantizationDriftInjector implements FaultInjector {
       'Gradually reduces model precision by $driftFactor per injection. '
       'Degrades when confidence drops below $degradationThreshold.';
 
+  /// Injects the quantization drift by reducing confidence.
+  ///
+  /// Each call reduces `currentConfidence` by [driftFactor] and adds
+  /// a small random delay to simulate real-world drift. It also applies
+  /// memory pressure to the model proportional to the drift factor.
   @override
   Future<void> inject() async {
-    // Simulate gradual drift
     _currentConfidence = max(0.0, _currentConfidence - driftFactor);
     _confidenceHistory.add(_currentConfidence);
+
+    // Apply the drift effect to the model
+    // Simulate memory pressure proportional to drift
+    final memoryToSimulate = (driftFactor * 100).round();
+    await model.simulateMemoryPressure(memoryToSimulate);
 
     // Add realistic randomness to simulate real-world drift
     await Future.delayed(Duration(milliseconds: 50 + _random.nextInt(150)));
@@ -54,7 +72,8 @@ class QuantizationDriftInjector implements FaultInjector {
   Future<void> reset() async {
     _currentConfidence = 1.0;
     _confidenceHistory.clear();
-    await Future.delayed(Duration.zero);
+    await model.reset();
+    await Future.delayed(const Duration(milliseconds: 10));
   }
 
   /// Current confidence level (0.0 to 1.0).
@@ -68,36 +87,6 @@ class QuantizationDriftInjector implements FaultInjector {
 
   /// Whether the model is degraded (confidence below threshold).
   bool get isDegraded => _currentConfidence < degradationThreshold - 1e-9;
-
-  /// Applies drift to a model adapter by:
-  /// 1. Simulating memory pressure equivalent to drift
-  /// 2. Marking the model as degraded if threshold is crossed
-  ///
-  /// This is the main method used by StressRunner to inject the fault.
-  @override
-  Future<void> applyTo(AIModelAdapter model) async {
-    // First, inject the drift state into the injector itself
-    await inject();
-
-    // Apply the drift effect to the model
-    // Simulate memory pressure proportional to drift
-    final memoryToSimulate = (driftFactor * 100).round();
-    await model.simulateMemoryPressure(memoryToSimulate);
-
-    // If confidence is below threshold, mark as degraded
-    if (isDegraded) {
-      // We simulate degradation by artificially lowering confidence
-      // The model's isDegraded getter will be used by StressRunner
-    }
-
-    // Additional degradation simulation: if degraded, add random noise
-    if (isDegraded) {
-      // Simulate garbage output by reducing confidence further
-      // The model's currentMemoryMB is already increased above
-    }
-
-    await Future.delayed(Duration(milliseconds: 10));
-  }
 
   /// Convenience method to get the drift status as a readable string.
   String getStatus() {
