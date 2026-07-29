@@ -74,7 +74,8 @@ class FaultResult {
       buf.writeln('- **Inference time**: ${inferenceTime!.inMilliseconds} ms');
     }
     if (memoryUsageMB != null) {
-      buf.writeln('- **Memory usage**: ${memoryUsageMB!.toStringAsFixed(1)} MB');
+      buf.writeln(
+          '- **Memory usage**: ${memoryUsageMB!.toStringAsFixed(1)} MB');
     }
     if (errorMessage != null) {
       buf.writeln('- **Error**: `$errorMessage`');

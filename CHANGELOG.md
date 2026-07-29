@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-07-29
+
+### Added
+
+- `OnnxAdapter` — [AIModelAdapter] implementation backed by the ONNX Runtime
+  (`onnxruntime ^1.4.1`). Supports text and binary inputs, memory pressure
+  simulation, degradation tracking, and safe reset. (Closes #1)
+- Injectable `OrtSessionFactory` parameter on `OnnxAdapter` for unit testing
+  without a real `.onnx` model file.
+- 11 new unit tests for `OnnxAdapter` (70 total across the library).
+
+### Changed
+
+- `pubspec.yaml` version bumped to `0.2.0`.
+
+
 ## [0.1.0] - 2026-07-28
 
 Initial release of SATE AI.

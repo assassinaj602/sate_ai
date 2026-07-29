@@ -29,6 +29,7 @@ export 'src/core/stress_runner.dart';
 export 'src/core/report.dart';
 export 'src/adapters/model_adapter.dart';
 export 'src/adapters/mock_adapter.dart';
+export 'src/adapters/onnx_adapter.dart';
 export 'src/injectors/memory_pressure_injector.dart';
 export 'src/injectors/malformed_input_injector.dart';
 
