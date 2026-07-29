@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.2.0] - 2026-07-29
+## [0.1.1] - 2026-07-29
 
 ### Added
 
@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- `pubspec.yaml` version bumped to `0.2.0`.
+- `pubspec.yaml` version bumped to `0.1.1`.
 
 
 ## [0.1.0] - 2026-07-28
@@ -56,6 +56,6 @@ Initial release of SATE AI.
 - Zero `flutter analyze` issues
 - `dart format` compliant
 
-[Unreleased]: https://github.com/assassinaj602/sate_ai/compare/v0.2.0...HEAD
-[0.2.0]: https://github.com/assassinaj602/sate_ai/compare/v0.1.0...v0.2.0
+[Unreleased]: https://github.com/assassinaj602/sate_ai/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/assassinaj602/sate_ai/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/assassinaj602/sate_ai/releases/tag/v0.1.0
