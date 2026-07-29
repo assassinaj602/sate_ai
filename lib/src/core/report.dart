@@ -64,12 +64,8 @@ class FaultResult {
   /// Renders this result as a Markdown section.
   String toMarkdown() {
     final buf = StringBuffer()
-      ..writeln(
-        '### ${injectorType.icon} ${injectorType.displayName}',
-      )
-      ..writeln(
-        '- **Status**: ${passed ? "✅ PASS" : "❌ FAIL"}',
-      );
+      ..writeln('### ${injectorType.icon} ${injectorType.displayName}')
+      ..writeln('- **Status**: ${passed ? "✅ PASS" : "❌ FAIL"}');
     if (inferenceTime != null) {
       buf.writeln('- **Inference time**: ${inferenceTime!.inMilliseconds} ms');
     }
@@ -221,9 +217,7 @@ class StressReport {
       ..writeln('| Key | Value |')
       ..writeln('|---|---|')
       ..writeln('| Model | `$modelId` |')
-      ..writeln(
-        '| Overall | ${passed ? "✅ PASSED" : "❌ FAILED"} |',
-      )
+      ..writeln('| Overall | ${passed ? "✅ PASSED" : "❌ FAILED"} |')
       ..writeln('| Total tests | $totalTests |')
       ..writeln('| Passed | $passCount |')
       ..writeln('| Failed | $failureCount |')
