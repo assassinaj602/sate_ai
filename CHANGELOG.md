@@ -7,11 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## 0.1.1 - 2026-07-28
+## [0.1.2] - 2026-07-29
 
-- Web dashboard for visualizing stress test reports (Issue Create Web Dashboard for Reports #7)
+### Added
+- Web dashboard for visualizing stress test reports (Issue #7)
+  - Drag-and-drop JSON upload
+  - Dark/light mode toggle with localStorage persistence
+  - Chart.js integration for inference time and memory usage charts
+  - Export reports to JSON, Markdown, and CSV
+  - Mobile responsive design
 - MemoryUsageMB field to FaultResult for memory tracking
-- Export reports to JSON, Markdown, and CSV
+
+## [0.1.1] - 2026-07-29
+
+### Added
+
+- `OnnxAdapter` — [AIModelAdapter] implementation backed by the ONNX Runtime
+  (`onnxruntime ^1.4.1`). Supports text and binary inputs, memory pressure
+  simulation, degradation tracking, and safe reset. (Closes #1)
+- Injectable `OrtSessionFactory` parameter on `OnnxAdapter` for unit testing
+  without a real `.onnx` model file.
+- 11 new unit tests for `OnnxAdapter` (70 total across the library).
+
+### Changed
+
+- `pubspec.yaml` version bumped to `0.1.1`.
 
 ## [0.1.0] - 2026-07-28
 
@@ -46,6 +66,7 @@ Initial release of SATE AI.
 - Zero `flutter analyze` issues
 - `dart format` compliant
 
-[Unreleased]: https://github.com/assassinaj602/sate_ai/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/assassinaj602/sate_ai/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/assassinaj602/sate_ai/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/assassinaj602/sate_ai/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/assassinaj602/sate_ai/releases/tag/v0.1.0

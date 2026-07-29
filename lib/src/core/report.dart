@@ -35,13 +35,13 @@ class FaultResult {
 
   /// Serialises to a JSON-compatible map.
   Map<String, dynamic> toJson() => {
-    'injectorType': injectorType.name,
-    'passed': passed,
-    'inferenceTimeMs': inferenceTime?.inMilliseconds,
-    'output': output?.toJson(),
-    'errorMessage': errorMessage,
-    'memoryUsageMB': memoryUsageMB,
-  };
+        'injectorType': injectorType.name,
+        'passed': passed,
+        'inferenceTimeMs': inferenceTime?.inMilliseconds,
+        'output': output?.toJson(),
+        'errorMessage': errorMessage,
+        'memoryUsageMB': memoryUsageMB,
+      };
 
   /// Deserialises from a JSON map.
   factory FaultResult.fromJson(Map<String, dynamic> json) {
@@ -70,7 +70,8 @@ class FaultResult {
       buf.writeln('- **Inference time**: ${inferenceTime!.inMilliseconds} ms');
     }
     if (memoryUsageMB != null) {
-      buf.writeln('- **Memory usage**: ${memoryUsageMB!.toStringAsFixed(1)} MB');
+      buf.writeln(
+          '- **Memory usage**: ${memoryUsageMB!.toStringAsFixed(1)} MB');
     }
     if (errorMessage != null) {
       buf.writeln('- **Error**: `$errorMessage`');
@@ -99,10 +100,10 @@ class Failure {
 
   /// Serialises to a JSON-compatible map.
   Map<String, dynamic> toJson() => {
-    'injectorType': injectorType.name,
-    'message': message,
-    'stackTrace': stackTrace?.toString(),
-  };
+        'injectorType': injectorType.name,
+        'message': message,
+        'stackTrace': stackTrace?.toString(),
+      };
 
   /// Deserialises from a JSON map.
   factory Failure.fromJson(Map<String, dynamic> json) {
@@ -173,20 +174,20 @@ class StressReport {
 
   /// Serialises to a JSON-compatible map.
   Map<String, dynamic> toJson() => {
-    'modelId': modelId,
-    'passed': passed,
-    'results': results.map((r) => r.toJson()).toList(),
-    'failures': failures.map((f) => f.toJson()).toList(),
-    'startTime': startTime.toIso8601String(),
-    'endTime': endTime.toIso8601String(),
-    'totalDurationMs': totalDuration.inMilliseconds,
-    'summary': {
-      'totalTests': totalTests,
-      'passed': passCount,
-      'failed': failureCount,
-      'unexpectedErrors': failures.length,
-    },
-  };
+        'modelId': modelId,
+        'passed': passed,
+        'results': results.map((r) => r.toJson()).toList(),
+        'failures': failures.map((f) => f.toJson()).toList(),
+        'startTime': startTime.toIso8601String(),
+        'endTime': endTime.toIso8601String(),
+        'totalDurationMs': totalDuration.inMilliseconds,
+        'summary': {
+          'totalTests': totalTests,
+          'passed': passCount,
+          'failed': failureCount,
+          'unexpectedErrors': failures.length,
+        },
+      };
 
   /// Deserialises from a JSON map.
   factory StressReport.fromJson(Map<String, dynamic> json) {
