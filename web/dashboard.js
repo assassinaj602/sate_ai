@@ -50,6 +50,7 @@
   const exportJson     = document.getElementById('exportJson');
   const exportMarkdown = document.getElementById('exportMarkdown');
   const exportCsv      = document.getElementById('exportCsv');
+  const themeToggle    = document.getElementById('themeToggle');
 
   let inferChart = null;
   let memChart   = null;
@@ -198,6 +199,11 @@
     const existing = canvasId === 'inferenceChart' ? inferChart : memChart;
     if (existing) existing.destroy();
 
+    const cs = getComputedStyle(document.documentElement);
+    const tickColor  = cs.getPropertyValue('--text-3').trim();
+    const borderColor = cs.getPropertyValue('--border').trim();
+    const gridColor  = cs.getPropertyValue('--surface-2').trim();
+
     const chart = new Chart(document.getElementById(canvasId).getContext('2d'), {
       type: 'bar',
       data: {
@@ -217,10 +223,10 @@
         plugins: {
           legend: { display: false },
           tooltip: {
-            backgroundColor: '#1a1d23',
-            titleColor: '#fff',
-            bodyColor: '#9ca3af',
-            borderColor: '#e2e5e9',
+            backgroundColor: cs.getPropertyValue('--surface').trim(),
+            titleColor: cs.getPropertyValue('--text').trim(),
+            bodyColor: cs.getPropertyValue('--text-2').trim(),
+            borderColor: borderColor,
             borderWidth: 1,
             padding: 10,
             cornerRadius: 6,
@@ -229,14 +235,14 @@
         },
         scales: {
           x: {
-            ticks: { color: '#9ca3af', font: { family: 'Inter', size: 11, weight: '500' } },
+            ticks: { color: tickColor, font: { family: 'Inter', size: 11, weight: '500' } },
             grid: { display: false },
-            border: { color: '#e2e5e9' },
+            border: { color: borderColor },
           },
           y: {
             beginAtZero: true,
-            ticks: { color: '#9ca3af', font: { family: 'JetBrains Mono', size: 11 } },
-            grid: { color: '#f1f3f5' },
+            ticks: { color: tickColor, font: { family: 'JetBrains Mono', size: 11 } },
+            grid: { color: gridColor },
             border: { display: false },
           },
         },
@@ -323,5 +329,25 @@
     return d.innerHTML;
   }
 
+  // ── Theme ───────────────────────────────────────────────────────
+
+  function initTheme() {
+    const saved = localStorage.getItem('sate-theme');
+    if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.body.classList.add('dark');
+    }
+  }
+
+  themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    localStorage.setItem('sate-theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    // re-render charts so they pick up new CSS variable colours
+    const saved = localStorage.getItem('sate-report');
+    if (saved) {
+      try { render(JSON.parse(saved)); } catch (_) {}
+    }
+  });
+
+  initTheme();
   restore();
 })();

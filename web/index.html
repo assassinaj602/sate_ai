@@ -34,6 +34,27 @@
       --shadow-sm:  0 1px 2px rgba(0,0,0,0.04);
     }
 
+    body.dark {
+      --bg:         #0f1117;
+      --surface:    #1a1d27;
+      --surface-2:  #232733;
+      --border:     #2e3345;
+      --border-2:   #3d4256;
+      --text:       #e4e6ed;
+      --text-2:     #a0a5b5;
+      --text-3:     #6b7185;
+      --accent:     #60a5fa;
+      --accent-bg:  rgba(96,165,250,0.1);
+      --pass:       #34d399;
+      --pass-bg:    rgba(52,211,153,0.1);
+      --pass-border:rgba(52,211,153,0.25);
+      --fail:       #f87171;
+      --fail-bg:    rgba(248,113,113,0.1);
+      --fail-border:rgba(248,113,113,0.25);
+      --warn:       #fbbf24;
+      --shadow-sm:  0 1px 2px rgba(0,0,0,0.2);
+    }
+
     body {
       font-family: var(--sans);
       background: var(--bg);
@@ -58,6 +79,33 @@
       border-bottom: 1px solid var(--border);
     }
 
+    .header-right {
+      margin-left: auto;
+    }
+
+    .theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-2);
+      cursor: pointer;
+      transition: background .12s, color .12s;
+    }
+    .theme-toggle:hover {
+      background: var(--surface-2);
+      color: var(--text);
+    }
+    .theme-toggle svg { width: 16px; height: 16px; }
+    .theme-toggle .icon-moon { display: block; }
+    .theme-toggle .icon-sun  { display: none; }
+    body.dark .theme-toggle .icon-moon { display: none; }
+    body.dark .theme-toggle .icon-sun  { display: block; }
+
     .logo {
       width: 32px; height: 32px;
       background: var(--text);
@@ -66,7 +114,7 @@
       place-items: center;
       flex-shrink: 0;
     }
-    .logo svg { width: 18px; height: 18px; color: #fff; }
+    .logo svg { width: 18px; height: 18px; color: var(--bg); }
 
     header h1 {
       font-size: 1.125rem;
@@ -170,12 +218,12 @@
 
     .btn-primary {
       background: var(--text);
-      color: #fff;
+      color: var(--bg);
       border-color: var(--text);
     }
     .btn-primary:hover {
-      background: #2d3139;
-      color: #fff;
+      opacity: 0.9;
+      color: var(--bg);
     }
 
     /* ── Status banner ───────────────────────────────────── */
@@ -248,9 +296,6 @@
       gap: 12px;
       margin-bottom: 24px;
     }
-    @media (max-width: 640px) {
-      .charts { grid-template-columns: 1fr; }
-    }
 
     .chart-card {
       background: var(--surface);
@@ -291,9 +336,15 @@
       font-weight: 600;
     }
 
+    .table-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
     .results-table {
       width: 100%;
       border-collapse: collapse;
+      min-width: 520px;
     }
     .results-table th {
       text-align: left;
@@ -305,12 +356,14 @@
       border-bottom: 1px solid var(--border);
       font-weight: 600;
       background: var(--surface-2);
+      white-space: nowrap;
     }
     .results-table td {
       padding: 10px 16px;
       border-bottom: 1px solid var(--border);
       font-size: 0.8125rem;
       color: var(--text-2);
+      white-space: nowrap;
     }
     .results-table tr:last-child td { border-bottom: none; }
     .results-table tr:hover td { background: var(--surface-2); }
@@ -419,11 +472,15 @@
     @media (max-width: 640px) {
       .app { padding: 20px 16px 60px; }
       .cards { grid-template-columns: repeat(3, 1fr); }
+      .charts { grid-template-columns: 1fr; }
       .card .value { font-size: 1.25rem; }
       header h1 { font-size: 1rem; }
     }
     @media (max-width: 420px) {
       .cards { grid-template-columns: repeat(2, 1fr); }
+      .toolbar { flex-direction: column; align-items: stretch; }
+      .toolbar-left { justify-content: center; }
+      .export-bar { justify-content: center; }
     }
   </style>
 </head>
@@ -438,6 +495,12 @@
       <h1>SATE AI</h1>
       <div class="sep"></div>
       <span class="sub">Stress Test Report Viewer</span>
+      <div class="header-right">
+        <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+      </div>
     </header>
 
     <!-- Drop zone -->
@@ -494,18 +557,20 @@
       <!-- Detailed results table -->
       <div class="table-card">
         <h3>Injector Results</h3>
-        <table class="results-table" id="resultsTable">
-          <thead>
-            <tr>
-              <th>Injector</th>
-              <th>Status</th>
-              <th>Inference (ms)</th>
-              <th>Memory (MB)</th>
-              <th>Error</th>
-            </tr>
-          </thead>
-          <tbody id="resultsBody"></tbody>
-        </table>
+        <div class="table-scroll">
+          <table class="results-table" id="resultsTable">
+            <thead>
+              <tr>
+                <th>Injector</th>
+                <th>Status</th>
+                <th>Inference (ms)</th>
+                <th>Memory (MB)</th>
+                <th>Error</th>
+              </tr>
+            </thead>
+            <tbody id="resultsBody"></tbody>
+          </table>
+        </div>
       </div>
 
       <!-- Unexpected failures (hidden when empty) -->
