@@ -59,7 +59,7 @@ class ThermalThrottleInjector implements FaultInjector {
   @override
   String get description =>
       'Simulates CPU thermal throttling by increasing temperature by '
-      '$temperatureStep°C per injection. Throttles at ${maxTemperature}°C.';
+      '$temperatureStep°C per injection. Throttles at $maxTemperature°C.';
 
   /// Injects the thermal throttle simulation.
   ///
@@ -122,8 +122,8 @@ class ThermalThrottleInjector implements FaultInjector {
   /// Convenience method to get the throttling status as a readable string.
   String getStatus() {
     if (_isThrottling) {
-      return 'THROTTLING (temperature: ${_currentTemperature}°C, count: $_throttleCount)';
+      return 'THROTTLING (temperature: $_currentTemperature°C, count: $_throttleCount)';
     }
-    return 'Normal (temperature: ${_currentTemperature}°C)';
+    return 'Normal (temperature: $_currentTemperature°C)';
   }
 }
