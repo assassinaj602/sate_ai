@@ -1,0 +1,42 @@
+{
+  "modelId": "demo-llm-v1",
+  "passed": true,
+  "results": [
+    {
+      "injectorType": "memoryPressure",
+      "passed": true,
+      "inferenceTimeMs": 520,
+      "output": {
+        "text": "Hello from MockAdapter! Input: stress-test-probe",
+        "inferenceTimeMs": 520,
+        "confidence": 0.97,
+        "metadata": {"mock": true}
+      },
+      "errorMessage": null,
+      "memoryUsageMB": 120.0
+    },
+    {
+      "injectorType": "malformedInput",
+      "passed": true,
+      "inferenceTimeMs": 485,
+      "output": {
+        "text": "Hello from MockAdapter! Input: stress-test-probe",
+        "inferenceTimeMs": 485,
+        "confidence": 0.97,
+        "metadata": {"mock": true}
+      },
+      "errorMessage": null,
+      "memoryUsageMB": 0.0
+    }
+  ],
+  "failures": [],
+  "startTime": "2026-07-28T10:00:00.000",
+  "endTime": "2026-07-28T10:00:01.050",
+  "totalDurationMs": 1050,
+  "summary": {
+    "totalTests": 2,
+    "passed": 2,
+    "failed": 0,
+    "unexpectedErrors": 0
+  }
+}

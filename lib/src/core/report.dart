@@ -12,6 +12,7 @@ class FaultResult {
     this.inferenceTime,
     this.output,
     this.errorMessage,
+    this.memoryUsageMB,
   });
 
   /// Which fault type was tested.
@@ -29,6 +30,9 @@ class FaultResult {
   /// Error description when [passed] is `false`.
   final String? errorMessage;
 
+  /// Model memory usage in megabytes at the time of this result.
+  final double? memoryUsageMB;
+
   /// Serialises to a JSON-compatible map.
   Map<String, dynamic> toJson() => {
         'injectorType': injectorType.name,
@@ -36,6 +40,7 @@ class FaultResult {
         'inferenceTimeMs': inferenceTime?.inMilliseconds,
         'output': output?.toJson(),
         'errorMessage': errorMessage,
+        'memoryUsageMB': memoryUsageMB,
       };
 
   /// Deserialises from a JSON map.
@@ -52,6 +57,7 @@ class FaultResult {
           ? AIOutput.fromJson(json['output'] as Map<String, dynamic>)
           : null,
       errorMessage: json['errorMessage'] as String?,
+      memoryUsageMB: (json['memoryUsageMB'] as num?)?.toDouble(),
     );
   }
 
@@ -66,6 +72,10 @@ class FaultResult {
       );
     if (inferenceTime != null) {
       buf.writeln('- **Inference time**: ${inferenceTime!.inMilliseconds} ms');
+    }
+    if (memoryUsageMB != null) {
+      buf.writeln(
+          '- **Memory usage**: ${memoryUsageMB!.toStringAsFixed(1)} MB');
     }
     if (errorMessage != null) {
       buf.writeln('- **Error**: `$errorMessage`');

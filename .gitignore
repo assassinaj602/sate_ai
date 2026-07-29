@@ -10,6 +10,8 @@ build/
 # Flutter generated
 *.g.dart
 *.freezed.dart
+.flutter-plugins
+.flutter-plugins-dependencies
 
 # Coverage
 coverage/

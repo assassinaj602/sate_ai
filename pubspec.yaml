@@ -1,5 +1,5 @@
 name: sate_ai
-version: 0.1.0
+version: 0.1.1
 description: >-
   A fault injection framework for testing on-device AI models in Flutter.
   Simulate memory pressure, malformed inputs, and other failure modes to
@@ -17,6 +17,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  onnxruntime: ^1.4.1
 
 dev_dependencies:
   flutter_test:
