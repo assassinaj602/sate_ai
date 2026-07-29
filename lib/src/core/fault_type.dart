@@ -27,6 +27,11 @@ enum FaultType {
   ///
   /// Relevant for hybrid on-device/cloud inference pipelines.
   networkFailure,
+
+  /// Simulates gradual precision loss / output degradation.
+  ///
+  /// Tests that the model degrades gracefully rather than crashing.
+  quantizationDrift,
 }
 
 /// Extension helpers on [FaultType].
@@ -44,6 +49,8 @@ extension FaultTypeX on FaultType {
         return 'Thermal Throttle';
       case FaultType.networkFailure:
         return 'Network Failure';
+      case FaultType.quantizationDrift:
+        return 'Quantization Drift';
     }
   }
 
@@ -60,6 +67,8 @@ extension FaultTypeX on FaultType {
         return '🌡';
       case FaultType.networkFailure:
         return '🌐';
+      case FaultType.quantizationDrift:
+        return '📉';
     }
   }
 }

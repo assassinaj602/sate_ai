@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-07-30
+
+### Added
+- Quantization Drift Injector for simulating gradual precision loss (Issue #2)
+  - Configurable driftFactor and degradationThreshold
+  - Tracks confidence history for debugging
+  - Applies memory pressure proportional to drift
+  - 20 new unit tests for comprehensive coverage
+  - Full integration with StressRunner
+
+### Changed
+- Documentation updated with QuantizationDriftInjector details
+- Injector table in README updated
+
 ## [0.1.2] - 2026-07-29
 
 ### Added
@@ -66,7 +80,8 @@ Initial release of SATE AI.
 - Zero `flutter analyze` issues
 - `dart format` compliant
 
-[Unreleased]: https://github.com/assassinaj602/sate_ai/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/assassinaj602/sate_ai/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/assassinaj602/sate_ai/compare/v0.1.2...v0.2.0
 [0.1.2]: https://github.com/assassinaj602/sate_ai/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/assassinaj602/sate_ai/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/assassinaj602/sate_ai/releases/tag/v0.1.0
