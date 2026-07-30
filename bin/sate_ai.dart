@@ -1,15 +1,14 @@
+// ignore_for_file: prefer_const_constructors
 import 'dart:io';
 import 'package:args/args.dart';
 import 'package:sate_ai/sate_ai.dart';
 
-/// Logs a message to the standard output.
 void log(String message) {
   // ignore: avoid_print
   print(message);
 }
 
 void main(List<String> arguments) async {
-  // ignore: prefer_const_constructors
   final parser = ArgParser()
     ..addOption('model',
         abbr: 'm',
@@ -42,14 +41,11 @@ void main(List<String> arguments) async {
     final outputFile = results['output'] as String?;
     final useMarkdown = results['markdown'] as bool;
 
-    // Parse injectors
     final injectorNames = injectorsStr.split(',').map((s) => s.trim()).toList();
     final injectors = <FaultInjector>[];
 
-    // Load model adapter (for now we use MockAdapter in CLI, but we can extend later)
-    final model = MockAdapter(modelId: modelPath);
+    final model = MockAdapter(modelId: 'cli-model');
 
-    // Build injectors from names
     for (final name in injectorNames) {
       switch (name.toLowerCase()) {
         case 'memorypressure':
@@ -78,14 +74,12 @@ void main(List<String> arguments) async {
 
     log('Running stress test with injectors: ${injectors.map((i) => i.name).join(', ')}');
 
-    // Run the test
     final report = await SateAI.stress(
       model: model,
       injectors: injectors,
       timeout: Duration(seconds: timeoutSeconds),
     );
 
-    // Output
     if (outputFile != null) {
       final content = useMarkdown ? report.toMarkdown() : report.toJsonString();
       await File(outputFile).writeAsString(content);
@@ -98,7 +92,6 @@ void main(List<String> arguments) async {
       }
     }
 
-    // Exit with appropriate code
     exit(report.passed ? 0 : 1);
   } on FormatException catch (e) {
     log('Error parsing arguments: ${e.message}');

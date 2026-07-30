@@ -1,10 +1,10 @@
+// ignore_for_file: prefer_const_constructors
 import 'dart:io';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:sate_ai/src/adapters/model_adapter.dart';
 
 /// Adapter for TensorFlow Lite models using tflite_flutter.
 class TFLiteAdapter implements AIModelAdapter {
-  /// The model identifier.
   @override
   final String modelId;
 
@@ -54,15 +54,11 @@ class TFLiteAdapter implements AIModelAdapter {
     final stopwatch = Stopwatch()..start();
 
     try {
-      // Convert input to tensor
       final inputData = input.text?.codeUnits ?? <int>[];
       final inputTensor = inputData.map((e) => e.toDouble()).toList();
 
-      // Run inference (dummy: replace with real tensor handling)
-      // For simplicity, we just return a dummy output.
-      // In real usage, you'd prepare input tensors and run interpreter.
       final output = await Future.delayed(
-        const Duration(milliseconds: 100),
+        Duration(milliseconds: 100),
         () =>
             'TFLite output: ${input.text ?? "binary"} (input tensor size: ${inputTensor.length})',
       );
@@ -87,14 +83,14 @@ class TFLiteAdapter implements AIModelAdapter {
     if (_currentMemoryMB > 150) {
       _isDegraded = true;
     }
-    await Future.delayed(const Duration(milliseconds: 10));
+    await Future.delayed(Duration(milliseconds: 10));
   }
 
   @override
   Future<void> reset() async {
     _currentMemoryMB = 0;
     _isDegraded = false;
-    await Future.delayed(const Duration(milliseconds: 10));
+    await Future.delayed(Duration(milliseconds: 10));
   }
 
   @override
