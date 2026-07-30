@@ -22,20 +22,22 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Setup Flutter
-      uses: subosito/flutter-action@v2
+    - name: Setup Dart
+      uses: dart-lang/setup-dart@v1
       with:
-        flutter-version: '3.19.0'
+        sdk: 'stable'
 
-    - name: Install Dependencies and Run Test
+    - name: Install Dependencies
+      run: dart pub get
+      shell: bash
+
+    - name: Run SATE AI Stress Test
       run: |
-        cd $GITHUB_WORKSPACE
-        flutter pub get
-        flutter pub run sate_ai stress \
-          --model ${{ inputs.model-path }} \
-          --injectors ${{ inputs.injectors }} \
-          --timeout ${{ inputs.timeout }} \
-          --output stress-report.json \
+        dart run bin/sate_ai.dart \
+          --model "${{ inputs.model-path }}" \
+          --injectors "${{ inputs.injectors }}" \
+          --timeout "${{ inputs.timeout }}" \
+          --output stress-report.${{ inputs.output-format == 'markdown' && 'md' || 'json' }} \
           ${{ inputs.output-format == 'markdown' && '--markdown' || '' }}
       shell: bash
 
