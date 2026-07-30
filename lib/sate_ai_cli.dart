@@ -24,7 +24,6 @@ export 'src/injectors/thermal_throttle_injector.dart';
 export 'src/injectors/latency_injector.dart';
 export 'src/injectors/model_swap_injector.dart';
 
-
 import 'src/adapters/model_adapter.dart';
 import 'src/core/fault_injector.dart';
 import 'src/core/report.dart';

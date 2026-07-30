@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:sate_ai/sate_ai_cli.dart';
 
-
 void log(String message) {
   // ignore: avoid_print
   print(message);
@@ -21,8 +20,7 @@ void main(List<String> arguments) async {
         defaultsTo: 'memoryPressure,malformedInput')
     ..addOption('output',
         abbr: 'o', help: 'Output file path for the report (JSON or Markdown)')
-    ..addFlag('markdown',
-        abbr: 'md', help: 'Output in Markdown format (instead of JSON)')
+    ..addFlag('markdown', help: 'Output in Markdown format (instead of JSON)')
     ..addOption('timeout',
         abbr: 't', help: 'Timeout in seconds for each test', defaultsTo: '30')
     ..addFlag('help', abbr: 'h', help: 'Show this help', negatable: false);
