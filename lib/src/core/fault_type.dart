@@ -32,6 +32,11 @@ enum FaultType {
   ///
   /// Tests that the model degrades gracefully rather than crashing.
   quantizationDrift,
+
+  /// Simulates model swapping or corruption.
+  ///
+  /// Useful for testing behaviour when model files get corrupted.
+  modelSwap,
 }
 
 /// Extension helpers on [FaultType].
@@ -51,6 +56,8 @@ extension FaultTypeX on FaultType {
         return 'Network Failure';
       case FaultType.quantizationDrift:
         return 'Quantization Drift';
+      case FaultType.modelSwap:
+        return 'Model Swap';
     }
   }
 
@@ -69,6 +76,8 @@ extension FaultTypeX on FaultType {
         return '🌐';
       case FaultType.quantizationDrift:
         return '📉';
+      case FaultType.modelSwap:
+        return '🔄';
     }
   }
 }
