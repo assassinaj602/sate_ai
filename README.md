@@ -592,3 +592,5 @@ This project is licensed under the MIT License. See the [LICENSE](https://github
 - [pub.dev Package](https://pub.dev/packages/sate_ai)
 - [Changelog](https://github.com/assassinaj602/sate_ai/blob/main/CHANGELOG.md)
 - [Contributors](https://github.com/assassinaj602/sate_ai/graphs/contributors)
+ 
+ 
