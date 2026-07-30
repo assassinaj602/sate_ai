@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:sate_ai/src/adapters/model_adapter.dart';
 
@@ -36,7 +35,7 @@ class TFLiteAdapter implements AIModelAdapter {
     String filePath, {
     required String modelId,
   }) async {
-    final interpreter = await Interpreter.fromFile(File(filePath));
+    final interpreter = Interpreter.fromFile(File(filePath));
     return TFLiteAdapter(modelId: modelId, interpreter: interpreter);
   }
 
@@ -64,7 +63,8 @@ class TFLiteAdapter implements AIModelAdapter {
       // In real usage, you'd prepare input tensors and run interpreter.
       final output = await Future.delayed(
         const Duration(milliseconds: 100),
-        () => 'TFLite output: ${input.text ?? "binary"}',
+        () =>
+            'TFLite output: ${input.text ?? "binary"} (input tensor size: ${inputTensor.length})',
       );
 
       stopwatch.stop();
