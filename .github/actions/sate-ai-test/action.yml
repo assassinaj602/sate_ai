@@ -27,13 +27,11 @@ runs:
       with:
         flutter-version: '3.19.0'
 
-    - name: Install SATE AI and Run Test
+    - name: Install Dependencies and Run Test
       run: |
         cd $GITHUB_WORKSPACE
         flutter pub get
-        flutter pub global activate --source=path .
-        export PATH="$HOME/.pub-cache/bin:$PATH"
-        sate_ai stress \
+        dart run bin/sate_ai.dart stress \
           --model ${{ inputs.model-path }} \
           --injectors ${{ inputs.injectors }} \
           --timeout ${{ inputs.timeout }} \
