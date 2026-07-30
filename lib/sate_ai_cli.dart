@@ -3,8 +3,8 @@
 /// Use this import in Dart CLI executables (`bin/`) or pure-Dart tools
 /// that must run with `dart run` (i.e., without the Flutter toolchain).
 ///
-/// Flutter-specific adapters ([TFLiteAdapter]) are intentionally excluded
-/// from this library. Import [package:sate_ai/sate_ai.dart] in your Flutter
+/// Flutter-specific adapters (`TFLiteAdapter`) are intentionally excluded
+/// from this library. Import `package:sate_ai/sate_ai.dart` in your Flutter
 /// app code to access the full API including TFLite support.
 library sate_ai_cli;
 
