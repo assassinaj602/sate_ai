@@ -27,19 +27,12 @@ runs:
       with:
         channel: 'stable'
 
-    - name: Install SATE AI
+    - name: Install SATE AI and Run Test
       run: |
         cd $GITHUB_WORKSPACE
         flutter pub get
         dart pub global activate --source=path .
-      shell: bash
-
-    - name: Add pub cache to PATH
-      run: echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
-      shell: bash
-
-    - name: Run Stress Test
-      run: |
+        export PATH="$HOME/.pub-cache/bin:$PATH"
         sate_ai \
           --model ${{ inputs.model-path }} \
           --injectors ${{ inputs.injectors }} \
