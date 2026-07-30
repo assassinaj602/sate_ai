@@ -17,7 +17,7 @@ jobs:
       - name: Test AI Model with SATE AI
         uses: ./.github/actions/sate-ai-test
         with:
-          model-path: 'models/my-model.gguf'
+          model-path: 'models/dummy.gguf'
           injectors: 'memoryPressure,malformedInput,quantizationDrift'
           timeout: '60'
           output-format: 'json'

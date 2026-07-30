@@ -31,7 +31,7 @@ runs:
       run: |
         cd $GITHUB_WORKSPACE
         flutter pub get
-        dart run bin/sate_ai.dart stress \
+        flutter pub run sate_ai stress \
           --model ${{ inputs.model-path }} \
           --injectors ${{ inputs.injectors }} \
           --timeout ${{ inputs.timeout }} \
