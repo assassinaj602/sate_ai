@@ -31,7 +31,7 @@ runs:
       run: |
         cd $GITHUB_WORKSPACE
         flutter pub get
-        dart pub global activate --source=path .
+        flutter pub global activate --source=path .
         export PATH="$HOME/.pub-cache/bin:$PATH"
         sate_ai stress \
           --model ${{ inputs.model-path }} \
