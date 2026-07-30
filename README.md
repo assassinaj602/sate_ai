@@ -445,6 +445,7 @@ A `FaultInjector` simulates a specific failure mode by manipulating the model ad
 | ThermalThrottleInjector | Available | Simulates CPU thermal throttling |
 | LatencyInjector | Available | Simulates increasing inference latency |
 | ModelSwapInjector | Available | Simulates model corruption |
+| ConfidenceThresholdInjector | Available | Validates model confidence stays above threshold |
 
 ### Writing a Custom Injector
 
@@ -592,5 +593,6 @@ This project is licensed under the MIT License. See the [LICENSE](https://github
 - [pub.dev Package](https://pub.dev/packages/sate_ai)
 - [Changelog](https://github.com/assassinaj602/sate_ai/blob/main/CHANGELOG.md)
 - [Contributors](https://github.com/assassinaj602/sate_ai/graphs/contributors)
- 
+
+ 
  

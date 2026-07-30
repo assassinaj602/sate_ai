@@ -64,6 +64,10 @@ void main(List<String> arguments) async {
         case 'modelswap':
           injectors.add(ModelSwapInjector(model: model));
           break;
+        case 'confidencevalidation':
+          injectors
+              .add(ConfidenceThresholdInjector(model: model, threshold: 0.5));
+          break;
         default:
           log('Unknown injector: $name');
           exit(1);
