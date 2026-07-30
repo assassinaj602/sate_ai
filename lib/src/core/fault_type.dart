@@ -37,6 +37,9 @@ enum FaultType {
   ///
   /// Useful for testing behaviour when model files get corrupted.
   modelSwap,
+
+  /// Validates that model confidence score stays above threshold.
+  confidenceValidation,
 }
 
 /// Extension helpers on [FaultType].
@@ -58,6 +61,8 @@ extension FaultTypeX on FaultType {
         return 'Quantization Drift';
       case FaultType.modelSwap:
         return 'Model Swap';
+      case FaultType.confidenceValidation:
+        return 'Confidence Validation';
     }
   }
 
@@ -78,6 +83,8 @@ extension FaultTypeX on FaultType {
         return '📉';
       case FaultType.modelSwap:
         return '🔄';
+      case FaultType.confidenceValidation:
+        return '🎯';
     }
   }
 }

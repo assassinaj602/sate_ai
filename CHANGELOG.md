@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-07-30
+
+### Added
+- Confidence Threshold Validator injector (Issue #6)
+  - Validates that model confidence stays above a threshold
+  - Configurable threshold (default 0.5)
+  - Marks test as failed when confidence drops below
+  - 10 new unit/integration tests (now 164 total)
+
 ## [0.6.0] - 2026-07-30
 
 ### Added
