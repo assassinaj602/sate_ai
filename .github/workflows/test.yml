@@ -88,6 +88,8 @@ jobs:
     needs: [test, example]
     if: github.event_name == 'release'
     environment: pub_dev
+    permissions:
+      id-token: write  # Required for OIDC publishing to pub.dev
 
     steps:
       - name: Checkout
@@ -98,9 +100,9 @@ jobs:
         with:
           channel: stable
 
-      - name: Publish
-        uses: k-paxian/dart-package-publisher@v1.6
-        with:
-          credentialJson: ${{ secrets.PUB_CREDENTIALS }}
-          flutter: true
-          skipTests: true
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Publish to pub.dev
+        run: flutter pub publish --force
+
