@@ -2,6 +2,12 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:sate_ai/sate_ai.dart';
 
+/// Logs a message to the standard output.
+void log(String message) {
+  // ignore: avoid_print
+  print(message);
+}
+
 void main(List<String> arguments) async {
   final parser = ArgParser()
     ..addOption('model',
@@ -23,9 +29,9 @@ void main(List<String> arguments) async {
   try {
     final results = parser.parse(arguments);
     if (results['help'] as bool) {
-      print('SATE AI CLI - Run stress tests on your AI model');
-      print('');
-      print(parser.usage);
+      log('SATE AI CLI - Run stress tests on your AI model');
+      log('');
+      log(parser.usage);
       exit(0);
     }
 
@@ -64,13 +70,12 @@ void main(List<String> arguments) async {
           injectors.add(ModelSwapInjector(model: model));
           break;
         default:
-          print('Unknown injector: $name');
+          log('Unknown injector: $name');
           exit(1);
       }
     }
 
-    print(
-        'Running stress test with injectors: ${injectors.map((i) => i.name).join(', ')}');
+    log('Running stress test with injectors: ${injectors.map((i) => i.name).join(', ')}');
 
     // Run the test
     final report = await SateAI.stress(
@@ -83,21 +88,21 @@ void main(List<String> arguments) async {
     if (outputFile != null) {
       final content = useMarkdown ? report.toMarkdown() : report.toJsonString();
       await File(outputFile).writeAsString(content);
-      print('Report written to $outputFile');
+      log('Report written to $outputFile');
     } else {
       if (useMarkdown) {
-        print(report.toMarkdown());
+        log(report.toMarkdown());
       } else {
-        print(report.toJsonString());
+        log(report.toJsonString());
       }
     }
 
     // Exit with appropriate code
     exit(report.passed ? 0 : 1);
   } on FormatException catch (e) {
-    print('Error parsing arguments: ${e.message}');
-    print('');
-    print(parser.usage);
+    log('Error parsing arguments: ${e.message}');
+    log('');
+    log(parser.usage);
     exit(1);
   }
 }

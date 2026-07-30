@@ -31,8 +31,11 @@ runs:
       run: |
         cd $GITHUB_WORKSPACE
         flutter pub get
-        flutter pub global activate --source=path .
-        echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
+        dart pub global activate --source=path .
+      shell: bash
+
+    - name: Add pub cache to PATH
+      run: echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
       shell: bash
 
     - name: Run Stress Test

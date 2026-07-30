@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-07-30
+
+### Added
+- TensorFlow Lite Adapter (`TFLiteAdapter`) wrapping `tflite_flutter` (Issue #4)
+  - Supports `fromAsset` and `fromFile` factory constructors
+  - Memory pressure simulation and degradation tracking
+  - 8 new unit tests (now 153 total)
+
+### Changed
+- Documentation updated with TensorFlow Lite details
+- Injector/Adapter tables in README updated
+
 ## [0.5.0] - 2026-07-30
 
 ### Added
@@ -119,7 +131,8 @@ Initial release of SATE AI.
 - Zero `flutter analyze` issues
 - `dart format` compliant
 
-[Unreleased]: https://github.com/assassinaj602/sate_ai/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/assassinaj602/sate_ai/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/assassinaj602/sate_ai/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/assassinaj602/sate_ai/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/assassinaj602/sate_ai/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/assassinaj602/sate_ai/compare/v0.2.0...v0.3.0
