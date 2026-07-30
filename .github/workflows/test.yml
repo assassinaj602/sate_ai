@@ -87,8 +87,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [test, example]
     if: github.event_name == 'release'
-    permissions:
-      id-token: write  # Required for OIDC publishing to pub.dev
 
     steps:
       - name: Checkout
@@ -102,9 +100,11 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Setup pub.dev credentials
+        run: |
+          mkdir -p ~/.pub-cache
+          echo '${{ secrets.PUB_CREDENTIALS }}' > ~/.pub-cache/credentials.json
+
       - name: Publish to pub.dev
         run: dart pub publish --force
-        timeout-minutes: 5
-        env:
-          PUB_ENVIRONMENT: bot/github-actions
 
