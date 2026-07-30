@@ -35,7 +35,7 @@ void main(List<String> arguments) async {
       exit(0);
     }
 
-    final modelPath = results['model'] as String;
+    final _ = results['model'] as String;
     final injectorsStr = results['injectors'] as String;
     final timeoutSeconds = int.parse(results['timeout'] as String);
     final outputFile = results['output'] as String?;
