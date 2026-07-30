@@ -72,14 +72,16 @@ import 'package:sate_ai/sate_ai.dart';
 
 ## Quick Start
 
+### Basic Usage
+
 ```dart
 import 'package:sate_ai/sate_ai.dart';
 
 Future<void> main() async {
-  // Use MockAdapter during development; replace with a real adapter for production.
+  // Use MockAdapter during development
   final model = MockAdapter(modelId: 'my-llm-v1');
 
-  // Run a stress test with multiple fault injectors.
+  // Run a stress test with multiple fault injectors
   final report = await SateAI.stress(
     model: model,
     injectors: [
@@ -89,44 +91,306 @@ Future<void> main() async {
     timeout: const Duration(seconds: 60),
   );
 
-  // Inspect results.
+  // Check results
   if (report.passed) {
-    print('Model passed all stress tests.');
+    print('✅ Model passed all stress tests.');
   } else {
-    print('Model failed: ${report.failureCount} failure(s) detected.');
+    print('❌ Model failed: ${report.failureCount} failure(s) detected.');
     print(report.toMarkdown());
   }
 
-  // Export to JSON for CI/CD pipelines.
+  // Export to JSON for CI/CD
   final json = report.toJsonString();
   print(json);
 }
 ```
 
-### Expected Output
+### Advanced: Using Multiple Injectors
 
-When all tests pass:
+```dart
+import 'package:sate_ai/sate_ai.dart';
 
+Future<void> testWithMultipleInjectors() async {
+  final model = MockAdapter(modelId: 'advanced-test');
+
+  final report = await SateAI.stress(
+    model: model,
+    injectors: [
+      MemoryPressureInjector(limitMb: 150),
+      MalformedInputInjector(),
+      QuantizationDriftInjector(
+        driftFactor: 0.1,
+        degradationThreshold: 0.3,
+      ),
+      ThermalThrottleInjector(
+        model: model,
+        temperatureStep: 10,
+        maxTemperature: 85,
+      ),
+    ],
+  );
+
+  // Check individual results
+  for (final result in report.results) {
+    print('${result.injectorType.displayName}: ${result.passed ? "✅" : "❌"}');
+    if (result.memoryUsageMB != null) {
+      print('  Memory: ${result.memoryUsageMB} MB');
+    }
+  }
+
+  if (!report.passed) {
+    for (final failure in report.failures) {
+      print('⚠️ ${failure.injectorType.displayName}: ${failure.message}');
+    }
+  }
+}
 ```
-Model passed all stress tests.
+
+### Custom Model Adapter
+
+```dart
+import 'package:sate_ai/sate_ai.dart';
+
+class MyCustomModelAdapter implements AIModelAdapter {
+  final String _modelId;
+  double _currentMemoryMB = 0;
+  bool _isDegraded = false;
+
+  MyCustomModelAdapter(this._modelId);
+
+  @override
+  String get modelId => _modelId;
+
+  @override
+  double get currentMemoryMB => _currentMemoryMB;
+
+  @override
+  bool get isDegraded => _isDegraded;
+
+  @override
+  Future<AIOutput> runInference(AIInput input) async {
+    // Call your model runtime here
+    final startTime = DateTime.now();
+    // Simulate runtime inference...
+    return AIOutput(
+      text: 'Mock response',
+      inferenceTime: DateTime.now().difference(startTime),
+      confidence: 0.95,
+      metadata: const {'custom': true},
+    );
+  }
+
+  @override
+  Future<void> simulateMemoryPressure(int mb) async {
+    _currentMemoryMB += mb.toDouble();
+    if (_currentMemoryMB > 150) {
+      _isDegraded = true;
+    }
+  }
+
+  @override
+  Future<void> reset() async {
+    _currentMemoryMB = 0;
+    _isDegraded = false;
+  }
+
+  @override
+  Future<bool> isHealthy() async {
+    return !_isDegraded && _currentMemoryMB < 150;
+  }
+}
+
+void main() async {
+  final model = MyCustomModelAdapter('my-custom-model');
+  final report = await SateAI.stress(
+    model: model,
+    injectors: [MemoryPressureInjector(limitMb: 120)],
+  );
+  print(report.passed ? '✅ Passed' : '❌ Failed');
+}
 ```
 
-When failures are detected, `report.toMarkdown()` produces a structured report:
+### Custom Fault Injector
 
+```dart
+import 'package:sate_ai/sate_ai.dart';
+
+class CustomLatencyInjector implements FaultInjector {
+  int _injections = 0;
+
+  @override
+  FaultType get type => FaultType.latency;
+
+  @override
+  String get name => 'Custom Latency Injector';
+
+  @override
+  String get description => 'Adds 100ms latency per injection';
+
+  @override
+  Future<void> inject() async {
+    _injections++;
+    await Future.delayed(Duration(milliseconds: 100 * _injections));
+  }
+
+  @override
+  Future<void> reset() async {
+    _injections = 0;
+    await Future.delayed(Duration.zero);
+  }
+}
+
+void main() async {
+  final model = MockAdapter();
+  final report = await SateAI.stress(
+    model: model,
+    injectors: [CustomLatencyInjector()],
+  );
+  print(report.passed ? '✅ Passed' : '❌ Failed');
+}
 ```
-# Stress Report: my-llm-v1
 
-- Passed: false
-- Total Tests: 2
-- Failures: 1
-- Duration: 1.23s
+### CI/CD Integration
 
-## Failures
+```yaml
+# .github/workflows/test-ai.yml
+name: AI Model Testing
 
-### Memory Pressure Injector
-- Fault: memoryPressure
-- Error: Model degraded under memory pressure (currentMemoryMB: 150)
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+      - run: flutter pub get
+      - run: |
+          dart run sate_ai \
+            --model models/model.gguf \
+            --injectors memoryPressure,malformedInput \
+            --output report.json
+      - name: Upload Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-test-report
+          path: report.json
 ```
+
+### Real-World Scenario: Testing a Chatbot Model
+
+```dart
+import 'dart:io';
+import 'package:sate_ai/sate_ai.dart';
+
+Future<void> testChatbotModel() async {
+  // Simulate a chatbot model
+  final model = MockAdapter(modelId: 'chatbot-v1');
+
+  // Test different failure scenarios
+  final report = await SateAI.stress(
+    model: model,
+    injectors: [
+      // Test memory pressure (OOM scenarios)
+      MemoryPressureInjector(limitMb: 200),
+      
+      // Test malformed user inputs
+      MalformedInputInjector(),
+      
+      // Test model quality degradation over time
+      QuantizationDriftInjector(
+        driftFactor: 0.15,
+        degradationThreshold: 0.4,
+      ),
+    ],
+    timeout: const Duration(seconds: 45),
+  );
+
+  // Generate a readable report
+  if (report.passed) {
+    print('✅ Chatbot model is reliable under stress!');
+  } else {
+    print('❌ Chatbot model needs improvement:');
+    for (final failure in report.failures) {
+      print('  - ${failure.injectorType.displayName}: ${failure.message}');
+    }
+  }
+
+  // Export for documentation
+  final markdown = report.toMarkdown();
+  await File('chatbot-test-report.md').writeAsString(markdown);
+}
+```
+
+### Real-World Scenario: Testing an Image Classifier
+
+```dart
+import 'package:sate_ai/sate_ai.dart';
+
+Future<void> testImageClassifier() async {
+  final model = MockAdapter(modelId: 'image-classifier-v1');
+
+  final report = await SateAI.stress(
+    model: model,
+    injectors: [
+      // Test thermal throttling (mobile devices)
+      ThermalThrottleInjector(
+        model: model,
+        temperatureStep: 15,
+        maxTemperature: 80,
+      ),
+      
+      // Test model corruption (model swap scenario)
+      ModelSwapInjector(
+        initialQuality: 1.0,
+        qualityDegradation: 0.2,
+        qualityThreshold: 0.4,
+      ),
+    ],
+  );
+
+  if (!report.passed) {
+    print('⚠️ Image classifier degraded under stress:');
+    for (final result in report.results) {
+      if (!result.passed) {
+        print('  - ${result.injectorType.displayName}: FAILED');
+        if (result.memoryUsageMB != null) {
+          print('    Memory: ${result.memoryUsageMB} MB');
+        }
+      }
+    }
+  }
+}
+```
+
+### Using the CLI
+
+```bash
+# Install the CLI
+flutter pub global activate sate_ai
+
+# Run a basic stress test
+sate_ai --model model.gguf --injectors memoryPressure,malformedInput
+
+# Run with all injectors and save report
+sate_ai \
+  --model model.gguf \
+  --injectors memoryPressure,malformedInput,quantizationDrift,thermalThrottle \
+  --output report.json \
+  --timeout 60
+
+# Get a Markdown report
+sate_ai --model model.gguf --injectors memoryPressure --markdown
+```
+
+### Best Practices
+
+1. **Start Simple**: Begin with 1-2 injectors and gradually add more.
+2. **Test Early**: Run stress tests early in your development cycle.
+3. **Monitor Memory**: Always check `memoryUsageMB` to catch memory leaks.
+4. **Export Reports**: Save reports to track model reliability over time.
+5. **Integrate with CI**: Add SATE AI to your CI/CD pipeline for automated testing.
+
 
 ---
 
