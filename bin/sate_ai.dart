@@ -9,7 +9,7 @@ void log(String message) {
 }
 
 void main(List<String> arguments) async {
-  final parser = ArgParser()
+  final parser = const ArgParser()
     ..addOption('model',
         abbr: 'm',
         help: 'Path to the model file (e.g., model.gguf)',
