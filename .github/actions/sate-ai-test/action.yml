@@ -25,7 +25,7 @@ runs:
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
-        channel: 'stable'
+        flutter-version: '3.24.0'
 
     - name: Install SATE AI and Run Test
       run: |
@@ -33,7 +33,7 @@ runs:
         flutter pub get
         dart pub global activate --source=path .
         export PATH="$HOME/.pub-cache/bin:$PATH"
-        sate_ai \
+        sate_ai stress \
           --model ${{ inputs.model-path }} \
           --injectors ${{ inputs.injectors }} \
           --timeout ${{ inputs.timeout }} \
