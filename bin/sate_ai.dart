@@ -4,7 +4,6 @@ import 'package:args/args.dart';
 import 'package:sate_ai/sate_ai_cli.dart';
 
 void log(String message) {
-  // ignore: avoid_print
   print(message);
 }
 
