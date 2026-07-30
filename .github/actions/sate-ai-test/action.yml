@@ -1,0 +1,50 @@
+name: 'SATE AI Test'
+description: 'Run SATE AI stress tests on your AI model'
+author: 'assassinaj602'
+
+inputs:
+  model-path:
+    description: 'Path to the AI model file'
+    required: true
+  injectors:
+    description: 'Comma-separated list of injectors to use'
+    required: false
+    default: 'memoryPressure,malformedInput'
+  timeout:
+    description: 'Timeout in seconds for each test'
+    required: false
+    default: '30'
+  output-format:
+    description: 'Output format (json or markdown)'
+    required: false
+    default: 'json'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.0'
+
+    - name: Install SATE AI
+      run: |
+        flutter pub global activate sate_ai
+        echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
+      shell: bash
+
+    - name: Run Stress Test
+      run: |
+        sate_ai \
+          --model ${{ inputs.model-path }} \
+          --injectors ${{ inputs.injectors }} \
+          --timeout ${{ inputs.timeout }} \
+          --output stress-report.json \
+          ${{ inputs.output-format == 'markdown' && '--markdown' || '' }}
+      shell: bash
+
+    - name: Upload Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: sate-ai-report
+        path: stress-report.*

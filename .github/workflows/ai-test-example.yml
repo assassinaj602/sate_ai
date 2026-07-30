@@ -1,0 +1,23 @@
+name: AI Model Testing
+
+on:
+  push:
+    paths:
+      - 'models/**'
+  pull_request:
+    paths:
+      - 'models/**'
+
+jobs:
+  test-ai-model:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test AI Model with SATE AI
+        uses: ./.github/actions/sate-ai-test
+        with:
+          model-path: 'models/my-model.gguf'
+          injectors: 'memoryPressure,malformedInput,quantizationDrift'
+          timeout: '60'
+          output-format: 'json'
