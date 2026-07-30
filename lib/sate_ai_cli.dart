@@ -14,13 +14,16 @@ export 'src/core/stress_runner.dart';
 export 'src/core/report.dart';
 export 'src/adapters/model_adapter.dart';
 export 'src/adapters/mock_adapter.dart';
-export 'src/adapters/onnx_adapter.dart';
+// NOTE: OnnxAdapter and TFLiteAdapter are intentionally excluded — both
+// transitively import Flutter (dart:ui) and cannot be used in dart run CLIs.
+// Use `package:sate_ai/sate_ai.dart` in Flutter apps to access those adapters.
 export 'src/injectors/memory_pressure_injector.dart';
 export 'src/injectors/malformed_input_injector.dart';
 export 'src/injectors/quantization_drift_injector.dart';
 export 'src/injectors/thermal_throttle_injector.dart';
 export 'src/injectors/latency_injector.dart';
 export 'src/injectors/model_swap_injector.dart';
+
 
 import 'src/adapters/model_adapter.dart';
 import 'src/core/fault_injector.dart';
