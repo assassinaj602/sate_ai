@@ -34,6 +34,8 @@ export 'src/injectors/memory_pressure_injector.dart';
 export 'src/injectors/malformed_input_injector.dart';
 export 'src/injectors/quantization_drift_injector.dart';
 export 'src/injectors/thermal_throttle_injector.dart';
+export 'src/injectors/latency_injector.dart';
+export 'src/injectors/model_swap_injector.dart';
 
 /// Top-level convenience API for running SATE AI stress tests.
 ///
