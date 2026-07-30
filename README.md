@@ -288,6 +288,30 @@ flutter test
 flutter analyze
 ```
 
+## Command Line Interface
+
+SATE AI provides a CLI for running stress tests from the terminal.
+
+### Installation
+
+```bash
+flutter pub global activate sate_ai
+```
+
+### Usage
+
+```bash
+sate_ai --model path/to/model.gguf --injectors memoryPressure,malformedInput
+```
+
+Options:
+- `--model, -m` – Path to model file (required)
+- `--injectors, -i` – Comma-separated list of injectors
+- `--timeout, -t` – Timeout per test (seconds)
+- `--output, -o` – Save report to file
+- `--markdown, -md` – Output as Markdown instead of JSON
+- `--help, -h` – Show help
+
 ---
 
 ## License

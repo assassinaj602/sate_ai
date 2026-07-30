@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-07-30
+
+### Added
+- CLI command `sate_ai` for running stress tests from the terminal
+- GitHub Action for CI/CD integration (`.github/actions/sate-ai-test`)
+- Example workflow showing how to use the action
+- New documentation for CLI and GitHub Action
+
 ## [0.4.0] - 2026-07-30
 
 ### Added
@@ -111,7 +119,8 @@ Initial release of SATE AI.
 - Zero `flutter analyze` issues
 - `dart format` compliant
 
-[Unreleased]: https://github.com/assassinaj602/sate_ai/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/assassinaj602/sate_ai/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/assassinaj602/sate_ai/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/assassinaj602/sate_ai/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/assassinaj602/sate_ai/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/assassinaj602/sate_ai/compare/v0.1.2...v0.2.0
