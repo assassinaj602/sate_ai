@@ -29,7 +29,9 @@ runs:
 
     - name: Install SATE AI
       run: |
-        flutter pub global activate sate_ai
+        cd $GITHUB_WORKSPACE
+        flutter pub get
+        flutter pub global activate --source=path .
         echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
       shell: bash
 
