@@ -84,6 +84,8 @@ jobs:
   # -------------------------------------------------------------------------
   publish:
     name: Publish to pub.dev
+    permissions:
+      id-token: write
     runs-on: ubuntu-latest
     needs: [test, example]
     if: github.event_name == 'release'
@@ -100,15 +102,6 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Setup pub.dev credentials
-        run: |
-          mkdir -p ~/.pub-cache
-          echo '${{ secrets.PUB_CREDENTIALS }}' > ~/.pub-cache/credentials.json
-          mkdir -p ~/.config/dart
-          echo '${{ secrets.PUB_CREDENTIALS }}' > ~/.config/dart/pub-credentials.json
-
       - name: Publish to pub.dev
         run: dart pub publish --force
-        env:
-          PUB_ENVIRONMENT: bot/github-actions
 
