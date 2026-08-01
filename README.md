@@ -42,7 +42,7 @@ SATE AI provides a `pytest`-style experience for AI failure modes: wrap your mod
 - `MalformedInputInjector` for input validation testing (empty, oversized, binary garbage)
 - `SateAI.stress()` convenience API for one-call test execution
 - Extensible adapter interface for wrapping any on-device AI runtime
-- 59 unit tests with full coverage of core modules
+- 164 unit tests with full coverage of core modules
 - Web dashboard for visualizing stress test reports with charts and exports
 
 ---
@@ -53,7 +53,7 @@ Add the dependency to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  sate_ai: ^0.1.0
+  sate_ai: ^0.7.0
 ```
 
 Then run:
@@ -391,7 +391,6 @@ sate_ai --model model.gguf --injectors memoryPressure --markdown
 4. **Export Reports**: Save reports to track model reliability over time.
 5. **Integrate with CI**: Add SATE AI to your CI/CD pipeline for automated testing.
 
-
 ---
 
 ## Adapters
@@ -424,10 +423,10 @@ class MyModelAdapter implements AIModelAdapter {
   }
 
   @override
-  bool get isHealthy => myRuntime.isAvailable;
+  Future<bool> isHealthy() async => myRuntime.isAvailable;
 
   @override
-  int get currentMemoryMB => myRuntime.memoryUsage;
+  double get currentMemoryMB => myRuntime.memoryUsage.toDouble();
 }
 ```
 
@@ -450,24 +449,24 @@ A `FaultInjector` simulates a specific failure mode by manipulating the model ad
 ### Writing a Custom Injector
 
 ```dart
-class ThermalThrottleInjector implements FaultInjector {
+class MyLatencyInjector implements FaultInjector {
   @override
-  FaultType get type => FaultType.thermalThrottle;
+  FaultType get type => FaultType.latency;
 
   @override
-  String get name => 'Thermal Throttle Injector';
+  String get name => 'My Latency Injector';
 
   @override
   String get description => 'Simulates CPU throttling under sustained thermal load.';
 
   @override
-  Future<void> inject(AIModelAdapter model) async {
+  Future<void> inject() async {
     // Add artificial latency to simulate a throttled CPU.
     await Future.delayed(const Duration(seconds: 2));
   }
 
   @override
-  Future<void> reset(AIModelAdapter model) async {
+  Future<void> reset() async {
     // No persistent state to clean up.
   }
 }
@@ -492,7 +491,7 @@ sate_ai/
       memory_pressure_injector.dart
       malformed_input_injector.dart
   lib/sate_ai.dart             - Public API barrel export
-  test/                        - 59 unit tests
+  test/                        - 164 unit tests
   example/                     - Flutter demo application
 ```
 
@@ -518,7 +517,7 @@ if (!report.passed) {
 }
 ```
 
-A GitHub Actions workflow for CI is included in the repository at `.github/workflows/ci.yml`.
+A GitHub Actions workflow for CI is included in the repository at `.github/workflows/test.yml`.
 
 ---
 
@@ -538,8 +537,8 @@ Contributions are welcome. Please read the [Contributing Guide](https://github.c
 
 Good first issues are labeled [`good first issue`](https://github.com/assassinaj602/sate_ai/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) and cover:
 
-- New fault injectors (thermal throttle, latency, model swap)
-- New adapters (ONNX Runtime, TensorFlow Lite, Fllama)
+- Additional fault injectors
+- New model adapters (Fllama, Whisper)
 - Documentation improvements
 - Additional test coverage
 
@@ -592,7 +591,4 @@ This project is licensed under the MIT License. See the [LICENSE](https://github
 - [Discussions](https://github.com/assassinaj602/sate_ai/discussions)
 - [pub.dev Package](https://pub.dev/packages/sate_ai)
 - [Changelog](https://github.com/assassinaj602/sate_ai/blob/main/CHANGELOG.md)
-- [Contributors](https://github.com/assassinaj602/sate_ai/graphs/contributors)
-
- 
- 
+- [Contributors](https://github.com/assassinaj602/sate_ai/graphs/contributors)

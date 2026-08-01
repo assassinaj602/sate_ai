@@ -136,11 +136,12 @@ Initial release of SATE AI.
 
 - Dart SDK constraint: `>=3.0.0 <4.0.0`
 - Flutter constraint: `>=3.10.0`
-- Zero production dependencies (Flutter SDK only)
+- Minimal dependencies (Flutter SDK + test tooling)
 - Zero `flutter analyze` issues
 - `dart format` compliant
 
-[Unreleased]: https://github.com/assassinaj602/sate_ai/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/assassinaj602/sate_ai/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/assassinaj602/sate_ai/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/assassinaj602/sate_ai/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/assassinaj602/sate_ai/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/assassinaj602/sate_ai/compare/v0.3.0...v0.4.0
