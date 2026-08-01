@@ -39,7 +39,7 @@ This project follows the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.
 
 ## Good First Issues
 
-Look for issues labelled [`good first issue`](https://github.com/YOUR_USERNAME/sate_ai/issues?q=label%3A%22good+first+issue%22) — they are scoped to be completable in a few hours and include detailed guidance.
+Look for issues labelled [`good first issue`](https://github.com/assassinaj602/sate_ai/issues?q=label%3A%22good+first+issue%22) — they are scoped to be completable in a few hours and include detailed guidance.
 
 Examples of good first issues:
 - Add `toMarkdown()` for a new `FaultResult` field
@@ -60,7 +60,7 @@ Examples of good first issues:
 ### Clone and install
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/sate_ai.git
+git clone https://github.com/assassinaj602/sate_ai.git
 cd sate_ai
 flutter pub get
 ```
@@ -180,4 +180,4 @@ class YourInjector implements FaultInjector {
 
 ## Questions?
 
-Open a [GitHub Discussion](https://github.com/YOUR_USERNAME/sate_ai/discussions) — we respond quickly!
+Open a [GitHub Discussion](https://github.com/assassinaj602/sate_ai/discussions) — we respond quickly!
