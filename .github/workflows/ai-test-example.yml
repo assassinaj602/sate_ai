@@ -4,16 +4,7 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'models/**'
-      - '.github/actions/sate-ai-test/**'
-      - '.github/workflows/ai-test-example.yml'
-      - 'bin/**'
-      - 'lib/**'
   pull_request:
-    paths:
-      - 'models/**'
-
 
 jobs:
   test-ai-model:
