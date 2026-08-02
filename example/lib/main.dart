@@ -1,5 +1,5 @@
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sate_ai/sate_ai.dart';
 
 void main() => runApp(const SateAIApp());
@@ -73,11 +73,12 @@ class _StressDashboardState extends State<StressDashboard>
         );
 
       case AdapterType.onnx:
-        _appendLog('📦 Attempting to initialize OnnxAdapter...');
+        _appendLog('📦 Attempting to initialize OnnxAdapter (assets/models/mobilenet.onnx)...');
         try {
+          final bytes = await rootBundle.load('assets/models/mobilenet.onnx');
           return OnnxAdapter(
             modelId: 'onnx-mobilenet-v2',
-            modelBytes: Uint8List(0), // Stub bytes for demo safety
+            modelBytes: bytes.buffer.asUint8List(),
           );
         } catch (e) {
           _appendLog('⚠️ ONNX init fallback to Mock: $e');
@@ -85,10 +86,10 @@ class _StressDashboardState extends State<StressDashboard>
         }
 
       case AdapterType.tflite:
-        _appendLog('📦 Attempting to initialize TFLiteAdapter...');
+        _appendLog('📦 Attempting to initialize TFLiteAdapter (assets/models/mobilenet.tflite)...');
         try {
           return await TFLiteAdapter.fromAsset(
-            'assets/models/sample.tflite',
+            'assets/models/mobilenet.tflite',
             modelId: 'tflite-mobilenet-v1',
           );
         } catch (e) {
