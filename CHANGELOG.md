@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.1] - 2026-08-02
+
+### Fixed
+- Updated `tflite_flutter` constraint to `^0.12.0` (recovers 10 pub points → 160/160 score)
+- Fixed CI workflow status badge URL in `README.md`
+- Fixed `OnnxAdapter` null-safety call for `runAsync` timeout
+- All dependencies now up-to-date with latest stable releases
+
+### Added
+- Prominent Research Paper section and links in `README.md`
+- Live demo animations (`pass.gif`, `fail.gif`) and physical app preview (`demo.png`)
+- New package topics (`research`, `flutter`, `machine-learning`)
+
 ## [0.7.0] - 2026-07-30
 
 ### Added

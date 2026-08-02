@@ -33,6 +33,21 @@ SATE AI provides a `pytest`-style experience for AI failure modes: wrap your mod
 
 ---
 
+## 📄 Research Paper
+
+A full research paper describing SATE AI is available:
+
+- 📄 [Read the Paper Webpage](https://assassinaj602.github.io/sate_ai/paper.html)
+- 📥 [Download PDF Version](https://assassinaj602.github.io/sate_ai/assets/pdf/paper.pdf)
+- 📚 [View on arXiv](https://arxiv.org/abs/XXXX.XXXXX) *(Preprint coming soon)*
+
+The paper covers:
+- SATE AI architecture with 7 fault injectors and 3 model adapters
+- 164 unit/integration tests with 160/160 pub.dev score
+- Real-world mobile benchmarks with ONNX and TensorFlow Lite models
+
+---
+
 ## Live App Demos & App Preview
 
 ![SATE AI Real-World App Interface](docs/assets/demo.png)
