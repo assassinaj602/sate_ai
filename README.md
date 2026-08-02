@@ -8,7 +8,7 @@ Fault Injection Framework for On-Device AI Models in Flutter
 [![popularity](https://img.shields.io/pub/popularity/sate_ai)](https://pub.dev/packages/sate_ai/score)
 [![likes](https://img.shields.io/pub/likes/sate_ai)](https://pub.dev/packages/sate_ai/score)
 [![GitHub stars](https://img.shields.io/github/stars/assassinaj602/sate_ai?style=flat)](https://github.com/assassinaj602/sate_ai/stargazers)
-[![CI](https://github.com/assassinaj602/sate_ai/workflows/CI/badge.svg)](https://github.com/assassinaj602/sate_ai/actions)
+[![CI](https://github.com/assassinaj602/sate_ai/actions/workflows/test.yml/badge.svg)](https://github.com/assassinaj602/sate_ai/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Flutter](https://img.shields.io/badge/Flutter-3.10%2B-blue.svg)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-3.0%2B-blue.svg)](https://dart.dev)
