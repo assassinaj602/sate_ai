@@ -437,6 +437,8 @@ class MyModelAdapter implements AIModelAdapter {
 
 A `FaultInjector` simulates a specific failure mode by manipulating the model adapter's state before inference runs.
 
+![Fault Injectors Overview](docs/assets/figures/injectors-overview.png)
+
 | Injector | Status | Fault Type |
 |---|---|---|
 | MemoryPressureInjector | Available | memoryPressure |
@@ -477,6 +479,8 @@ class MyLatencyInjector implements FaultInjector {
 
 ## Architecture
 
+![SATE AI Architecture](docs/assets/figures/architecture.png)
+
 ```
 sate_ai/
   lib/src/
@@ -495,6 +499,11 @@ sate_ai/
   test/                        - 164 unit tests
   example/                     - Flutter demo application
 ```
+
+### Fault Injection Execution Workflow
+
+![Fault Injection Workflow](docs/assets/figures/fault-injection-workflow.png)
+
 
 ---
 
