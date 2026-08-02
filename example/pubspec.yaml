@@ -1,7 +1,7 @@
 name: sate_ai_example
-description: Demo application for the sate_ai package.
+description: Demo application for the sate_ai package with ONNX, TFLite, and Mock adapter options.
 publish_to: "none"
-version: 0.1.0
+version: 0.2.0
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -12,6 +12,8 @@ dependencies:
     sdk: flutter
   sate_ai:
     path: ../
+  onnxruntime: ^1.4.1
+  tflite_flutter: ^0.12.0
 
 dev_dependencies:
   flutter_test:
@@ -20,3 +22,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/models/

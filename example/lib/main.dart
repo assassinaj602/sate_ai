@@ -1,8 +1,10 @@
-// ignore_for_file: public_member_api_docs
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:sate_ai/sate_ai.dart';
 
 void main() => runApp(const SateAIApp());
+
+enum AdapterType { mock, onnx, tflite }
 
 class SateAIApp extends StatelessWidget {
   const SateAIApp({super.key});
@@ -10,7 +12,7 @@ class SateAIApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'SATE AI Demo',
+      title: 'SATE AI Real-World Stress Test Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
@@ -18,16 +20,11 @@ class SateAIApp extends StatelessWidget {
           brightness: Brightness.dark,
         ),
         useMaterial3: true,
-        fontFamily: 'GoogleSans',
       ),
       home: const StressDashboard(),
     );
   }
 }
-
-// ---------------------------------------------------------------------------
-// Dashboard screen
-// ---------------------------------------------------------------------------
 
 class StressDashboard extends StatefulWidget {
   const StressDashboard({super.key});
@@ -38,11 +35,19 @@ class StressDashboard extends StatefulWidget {
 
 class _StressDashboardState extends State<StressDashboard>
     with TickerProviderStateMixin {
+  AdapterType _selectedAdapter = AdapterType.mock;
   StressReport? _report;
   bool _running = false;
   String _status = 'Ready';
   final List<String> _log = [];
   late AnimationController _pulseCtrl;
+
+  // Selected injectors
+  bool _useMemoryPressure = true;
+  bool _useMalformedInput = true;
+  bool _useThermalThrottle = true;
+  bool _useQuantizationDrift = true;
+  bool _useConfidenceValidation = true;
 
   @override
   void initState() {
@@ -59,49 +64,116 @@ class _StressDashboardState extends State<StressDashboard>
     super.dispose();
   }
 
+  Future<AIModelAdapter> _createAdapter() async {
+    switch (_selectedAdapter) {
+      case AdapterType.mock:
+        return MockAdapter(
+          modelId: 'mock-llm-v1',
+          inferenceDelay: const Duration(milliseconds: 150),
+        );
+
+      case AdapterType.onnx:
+        _appendLog('📦 Attempting to initialize OnnxAdapter...');
+        try {
+          return OnnxAdapter(
+            modelId: 'onnx-mobilenet-v2',
+            modelBytes: Uint8List(0), // Stub bytes for demo safety
+          );
+        } catch (e) {
+          _appendLog('⚠️ ONNX init fallback to Mock: $e');
+          return MockAdapter(modelId: 'onnx-fallback-mock');
+        }
+
+      case AdapterType.tflite:
+        _appendLog('📦 Attempting to initialize TFLiteAdapter...');
+        try {
+          return await TFLiteAdapter.fromAsset(
+            'assets/models/sample.tflite',
+            modelId: 'tflite-mobilenet-v1',
+          );
+        } catch (e) {
+          _appendLog('⚠️ TFLite init fallback to Mock: $e');
+          return MockAdapter(modelId: 'tflite-fallback-mock');
+        }
+    }
+  }
+
   Future<void> _runStressTest() async {
     setState(() {
       _running = true;
       _report = null;
       _log.clear();
-      _status = 'Initialising model…';
+      _status = 'Initialising selected model adapter...';
     });
 
-    final model = MockAdapter(
-      modelId: 'demo-llm-v1',
-      inferenceDelay: const Duration(milliseconds: 200),
-    );
+    _appendLog('🤖 Selected Adapter: ${_selectedAdapter.name.toUpperCase()}');
+    final model = await _createAdapter();
+    _appendLog('✅ Model initialized: ${model.modelId}');
 
-    _appendLog('🤖  Model: ${model.modelId}');
-    _appendLog('🧪  Starting stress test…');
+    final List<FaultInjector> injectors = [];
 
-    setState(() => _status = 'Injecting memory pressure…');
-    _appendLog('⚙️   Running MemoryPressureInjector (100 MB)');
+    if (_useMemoryPressure) {
+      injectors.add(MemoryPressureInjector(model: model, limitMb: 120));
+      _appendLog('⚙️ Configured MemoryPressureInjector (120 MB)');
+    }
+    if (_useMalformedInput) {
+      injectors.add(const MalformedInputInjector());
+      _appendLog('⚙️ Configured MalformedInputInjector');
+    }
+    if (_useThermalThrottle) {
+      injectors.add(
+        ThermalThrottleInjector(
+          model: model,
+          temperatureStep: 15,
+          maxTemperature: 80,
+        ),
+      );
+      _appendLog('⚙️ Configured ThermalThrottleInjector (Max 80°C)');
+    }
+    if (_useQuantizationDrift) {
+      injectors.add(
+        QuantizationDriftInjector(
+          model: model,
+          driftFactor: 0.1,
+          degradationThreshold: 0.3,
+        ),
+      );
+      _appendLog('⚙️ Configured QuantizationDriftInjector');
+    }
+    if (_useConfidenceValidation) {
+      injectors.add(ConfidenceThresholdInjector(model: model, threshold: 0.6));
+      _appendLog('⚙️ Configured ConfidenceThresholdInjector (0.6)');
+    }
 
-    setState(() => _status = 'Injecting malformed inputs…');
-    _appendLog('⚙️   Running MalformedInputInjector');
+    if (injectors.isEmpty) {
+      _appendLog('⚠️ No injectors selected. Adding default MalformedInputInjector.');
+      injectors.add(const MalformedInputInjector());
+    }
+
+    setState(() => _status = 'Running SateAI.stress() runner...');
+    _appendLog('🧪 Starting stress runner evaluation (${injectors.length} injectors)...');
 
     final report = await SateAI.stress(
       model: model,
-      injectors: [
-        MemoryPressureInjector(model: model, limitMb: 100),
-        const MalformedInputInjector(),
-      ],
-      timeout: const Duration(seconds: 15),
+      injectors: injectors,
+      timeout: const Duration(seconds: 30),
     );
 
     for (final result in report.results) {
       final icon = result.passed ? '✅' : '❌';
+      final timeMs = result.inferenceTime?.inMilliseconds ?? 0;
       _appendLog(
-        '$icon  ${result.injectorType.displayName}: '
-        '${result.inferenceTime?.inMilliseconds ?? "N/A"} ms',
+        '$icon ${result.injectorType.displayName}: ${timeMs}ms '
+        '${result.memoryUsageMB != null ? "(${result.memoryUsageMB}MB)" : ""}',
       );
     }
 
     setState(() {
       _running = false;
       _report = report;
-      _status = report.passed ? '✅ All tests passed!' : '❌ Failures detected';
+      _status = report.passed
+          ? '✅ Stress Suite Passed (${report.passCount}/${report.totalTests})'
+          : '❌ Failures Detected (${report.failureCount} failed)';
     });
   }
 
@@ -130,33 +202,148 @@ class _StressDashboardState extends State<StressDashboard>
             ),
             const SizedBox(width: 12),
             const Text(
-              'SATE AI',
+              'SATE AI Stress Test Demo',
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
-                fontSize: 22,
-                letterSpacing: 1.2,
+                fontSize: 18,
               ),
             ),
           ],
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            _buildAdapterSelector(),
+            const SizedBox(height: 12),
+            _buildInjectorToggles(),
+            const SizedBox(height: 12),
             _buildStatusCard(cs),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
             _buildRunButton(cs),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
             if (_report != null) ...[
-              _buildSummaryCard(_report!, cs),
-              const SizedBox(height: 16),
+              _buildSummaryCard(_report!),
+              const SizedBox(height: 12),
             ],
-            Expanded(child: _buildLogCard(cs)),
+            Expanded(child: _buildLogCard()),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildAdapterSelector() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1A1A2E),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.white12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'SELECT MODEL ADAPTER',
+            style: TextStyle(
+              color: Colors.white70,
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: AdapterType.values.map((type) {
+              final isSelected = _selectedAdapter == type;
+              return Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: ChoiceChip(
+                    label: Center(
+                      child: Text(
+                        type.name.toUpperCase(),
+                        style: TextStyle(
+                          color: isSelected ? Colors.white : Colors.white60,
+                          fontWeight:
+                              isSelected ? FontWeight.bold : FontWeight.normal,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                    selected: isSelected,
+                    selectedColor: const Color(0xFF6C63FF),
+                    backgroundColor: const Color(0xFF0F0F1A),
+                    onSelected: (val) {
+                      if (val) setState(() => _selectedAdapter = type);
+                    },
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInjectorToggles() {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1A1A2E),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.white12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'CONFIGURED INJECTORS',
+            style: TextStyle(
+              color: Colors.white70,
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Wrap(
+            spacing: 8,
+            runSpacing: 4,
+            children: [
+              FilterChip(
+                label: const Text('Memory Pressure', style: TextStyle(fontSize: 11)),
+                selected: _useMemoryPressure,
+                onSelected: (v) => setState(() => _useMemoryPressure = v),
+              ),
+              FilterChip(
+                label: const Text('Malformed Input', style: TextStyle(fontSize: 11)),
+                selected: _useMalformedInput,
+                onSelected: (v) => setState(() => _useMalformedInput = v),
+              ),
+              FilterChip(
+                label: const Text('Thermal Throttle', style: TextStyle(fontSize: 11)),
+                selected: _useThermalThrottle,
+                onSelected: (v) => setState(() => _useThermalThrottle = v),
+              ),
+              FilterChip(
+                label: const Text('Quantization Drift', style: TextStyle(fontSize: 11)),
+                selected: _useQuantizationDrift,
+                onSelected: (v) => setState(() => _useQuantizationDrift = v),
+              ),
+              FilterChip(
+                label: const Text('Confidence Threshold', style: TextStyle(fontSize: 11)),
+                selected: _useConfidenceValidation,
+                onSelected: (v) => setState(() => _useConfidenceValidation = v),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -172,32 +359,23 @@ class _StressDashboardState extends State<StressDashboard>
       animation: _pulseCtrl,
       builder: (context, child) {
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(
             color: const Color(0xFF1A1A2E),
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(14),
             border: Border.all(
               color: _running
-                  ? color.withAlpha(
-                      ((_pulseCtrl.value * 180 + 75).round()),
-                    )
+                  ? color.withAlpha(((_pulseCtrl.value * 180 + 75).round()))
                   : color.withAlpha(80),
               width: 1.5,
             ),
-            boxShadow: [
-              BoxShadow(
-                color: color.withAlpha(_running ? 60 : 20),
-                blurRadius: 20,
-                spreadRadius: 2,
-              ),
-            ],
           ),
           child: Row(
             children: [
               _running
                   ? SizedBox(
-                      width: 20,
-                      height: 20,
+                      width: 18,
+                      height: 18,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
                         color: color,
@@ -210,16 +388,16 @@ class _StressDashboardState extends State<StressDashboard>
                               ? Icons.check_circle
                               : Icons.error),
                       color: color,
-                      size: 22,
+                      size: 20,
                     ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 10),
               Expanded(
                 child: Text(
                   _status,
                   style: TextStyle(
                     color: color,
                     fontWeight: FontWeight.w600,
-                    fontSize: 15,
+                    fontSize: 14,
                   ),
                 ),
               ),
@@ -235,7 +413,7 @@ class _StressDashboardState extends State<StressDashboard>
       onTap: _running ? null : _runStressTest,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(vertical: 16),
+        padding: const EdgeInsets.symmetric(vertical: 14),
         decoration: BoxDecoration(
           gradient: _running
               ? const LinearGradient(
@@ -243,19 +421,8 @@ class _StressDashboardState extends State<StressDashboard>
                 )
               : const LinearGradient(
                   colors: [Color(0xFF6C63FF), Color(0xFF48CAE4)],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
                 ),
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: _running
-              ? []
-              : [
-                  const BoxShadow(
-                    color: Color(0x556C63FF),
-                    blurRadius: 20,
-                    offset: Offset(0, 6),
-                  ),
-                ],
+          borderRadius: BorderRadius.circular(14),
         ),
         child: Center(
           child: Row(
@@ -267,12 +434,11 @@ class _StressDashboardState extends State<StressDashboard>
               ),
               const SizedBox(width: 8),
               Text(
-                _running ? 'Running…' : 'Run Stress Test',
+                _running ? 'Running Suite...' : 'Execute Stress Suite',
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w700,
-                  fontSize: 16,
-                  letterSpacing: 0.5,
+                  fontSize: 15,
                 ),
               ),
             ],
@@ -282,76 +448,45 @@ class _StressDashboardState extends State<StressDashboard>
     );
   }
 
-  Widget _buildSummaryCard(StressReport report, ColorScheme cs) {
+  Widget _buildSummaryCard(StressReport report) {
     return Container(
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: const Color(0xFF1A1A2E),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(14),
         border: Border.all(color: Colors.white12),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          const Text(
-            'Summary',
-            style: TextStyle(
-              color: Colors.white70,
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 1,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _StatChip(
-                label: 'Tests',
-                value: '${report.totalTests}',
-                color: const Color(0xFF48CAE4),
-              ),
-              _StatChip(
-                label: 'Passed',
-                value: '${report.passCount}',
-                color: const Color(0xFF06D6A0),
-              ),
-              _StatChip(
-                label: 'Failed',
-                value: '${report.failureCount}',
-                color: const Color(0xFFEF476F),
-              ),
-              _StatChip(
-                label: 'Duration',
-                value: '${report.totalDuration.inMilliseconds}ms',
-                color: const Color(0xFFFFD166),
-              ),
-            ],
-          ),
+          _StatChip(label: 'Total', value: '${report.totalTests}', color: const Color(0xFF48CAE4)),
+          _StatChip(label: 'Passed', value: '${report.passCount}', color: const Color(0xFF06D6A0)),
+          _StatChip(label: 'Failed', value: '${report.failureCount}', color: const Color(0xFFEF476F)),
+          _StatChip(label: 'Duration', value: '${report.totalDuration.inMilliseconds}ms', color: const Color(0xFFFFD166)),
         ],
       ),
     );
   }
 
-  Widget _buildLogCard(ColorScheme cs) {
+  Widget _buildLogCard() {
     return Container(
       decoration: BoxDecoration(
         color: const Color(0xFF0D0D1A),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(14),
         border: Border.all(color: Colors.white10),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Padding(
-            padding: EdgeInsets.fromLTRB(16, 12, 16, 4),
+            padding: EdgeInsets.fromLTRB(14, 10, 14, 4),
             child: Text(
-              'LOG',
+              'EXECUTION LOG',
               style: TextStyle(
                 color: Colors.white38,
-                fontSize: 11,
+                fontSize: 10,
                 fontWeight: FontWeight.w700,
-                letterSpacing: 2,
+                letterSpacing: 1.5,
               ),
             ),
           ),
@@ -360,24 +495,21 @@ class _StressDashboardState extends State<StressDashboard>
             child: _log.isEmpty
                 ? const Center(
                     child: Text(
-                      'Hit "Run Stress Test" to begin',
-                      style: TextStyle(color: Colors.white24, fontSize: 13),
+                      'Select an adapter and hit "Execute Stress Suite"',
+                      style: TextStyle(color: Colors.white24, fontSize: 12),
                     ),
                   )
                 : ListView.builder(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8,
-                      horizontal: 16,
-                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 14),
                     itemCount: _log.length,
                     itemBuilder: (ctx, i) => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 3),
+                      padding: const EdgeInsets.symmetric(vertical: 2),
                       child: Text(
                         _log[i],
                         style: const TextStyle(
                           color: Color(0xFFB0B8D8),
                           fontFamily: 'monospace',
-                          fontSize: 13,
+                          fontSize: 12,
                         ),
                       ),
                     ),
@@ -408,18 +540,16 @@ class _StatChip extends StatelessWidget {
           value,
           style: TextStyle(
             color: color,
-            fontSize: 22,
+            fontSize: 18,
             fontWeight: FontWeight.w800,
           ),
         ),
-        const SizedBox(height: 4),
         Text(
           label,
           style: const TextStyle(
             color: Colors.white38,
-            fontSize: 11,
+            fontSize: 10,
             fontWeight: FontWeight.w600,
-            letterSpacing: 0.5,
           ),
         ),
       ],
