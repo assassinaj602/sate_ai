@@ -1,0 +1,420 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  11pt,
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\newenvironment{Shaded}{}{}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{\textbf{#1}}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newlength{\cslentryspacingunit} % times entry-spacing
+\setlength{\cslentryspacingunit}{\parskip}
+\newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
+ {% don't indent paragraphs
+  \setlength{\parindent}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+  \let\oldpar\par
+  \def\par{\hangindent=\cslhangindent\oldpar}
+  \fi
+  % set entry spacing
+  \setlength{\parskip}{#2\cslentryspacingunit}
+ }%
+ {}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{#1\hfill\break}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={SATE AI: A Fault Injection Framework for On-Device AI Models in Flutter},
+  pdfauthor={Muhammad Assad Ullah},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={blue},
+  urlcolor={blue},
+  pdfcreator={LaTeX via pandoc}}
+
+\title{SATE AI: A Fault Injection Framework for On-Device AI Models in
+Flutter}
+\author{Muhammad Assad Ullah}
+\date{1 August 2026}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\textit{Department of Computer Science, University of Engineering and Technology, Taxila, Pakistan}\\
+ORCID: 0009-0007-2290-304X
+\end{center}
+
+\vspace{0.5em}
+
+\hypertarget{summary}{%
+\section{Summary}\label{summary}}
+
+SATE AI is an open-source fault injection and stress-testing framework
+for on-device artificial intelligence (AI) models running inside Flutter
+applications. As machine learning inference increasingly moves from the
+cloud onto phones and embedded devices, developers must contend with a
+class of failure modes that conventional software tests do not exercise:
+memory pressure during inference, malformed or adversarial input,
+numerical drift from post-training quantization, thermal throttling of
+the host CPU, latency degradation under load, corrupted or swapped model
+files, and silent confidence collapse. SATE AI packages these failure
+modes as a library of composable \emph{fault injectors} that can be run
+against any on-device model through a common adapter interface,
+producing a structured pass/fail report that developers can inspect
+locally, export, or wire into continuous integration (CI).
+
+The framework ships with seven fault injectors
+(\texttt{MemoryPressureInjector}, \texttt{MalformedInputInjector},
+\texttt{QuantizationDriftInjector}, \texttt{ThermalThrottleInjector},
+\texttt{LatencyInjector}, \texttt{ModelSwapInjector}, and
+\texttt{ConfidenceThresholdInjector}) and three model adapters
+(\texttt{MockAdapter} for pure-Dart testing without a real model,
+\texttt{OnnxAdapter} for ONNX Runtime models, and \texttt{TFLiteAdapter}
+for TensorFlow Lite models). Results are exposed through a
+\texttt{StressRunner} and \texttt{Report} API that supports JSON,
+Markdown, and CSV export, a browser-based dashboard with dark mode and
+mobile-responsive layout for visual inspection, a command-line interface
+for local and scripted runs, and a GitHub composite action so that
+stress tests can gate pull requests the same way unit tests do.
+
+SATE AI is implemented in Dart, distributed via pub.dev, and covered by
+164 automated unit tests spanning all core modules. As of this writing
+it has reached pub.dev's maximum quality score of 160/160 and nine
+published releases (v0.1.0 through v0.7.0), reflecting an iterative
+design process driven by real usage on on-device large language model
+(LLM) and embedding-model deployments.
+
+\hypertarget{statement-of-need}{%
+\section{Statement of need}\label{statement-of-need}}
+
+On-device AI is now common in production mobile software:
+retrieval-augmented generation assistants, offline speech and vision
+models, and privacy-preserving personalization all run inference
+directly on a user's phone rather than a server. This shift removes the
+network as a single point of failure but introduces a different, less
+well-understood set of failure modes that are specific to constrained,
+heterogeneous consumer hardware. A model that performs correctly in a
+controlled benchmark can still fail in the field because the host device
+is thermally throttled, because available memory has been reclaimed by
+the operating system, because a quantized model's numerical error
+compounds over a session, or because a corrupted download silently swaps
+in the wrong model weights. These failures are rarely caught by
+conventional unit or widget tests, which assume a stable execution
+environment and well-formed input.
+
+Existing testing practice for mobile AI features tends to fall back on
+manual, ad hoc device testing or on general-purpose chaos engineering
+tools that were designed for backend services rather than for the
+specific resource and numerical constraints of on-device inference.
+There is no widely adopted, Flutter-native framework that lets a
+developer declare ``run this model under memory pressure, thermal
+throttling, and quantization drift, and tell me whether it still meets
+its confidence threshold'' as part of an automated test suite. This gap
+means AI-specific robustness regressions are frequently discovered by
+end users rather than by CI, which is costly for teams shipping AI
+features on tight release cycles.
+
+SATE AI addresses this gap by providing a systematic, reusable, and
+CI-friendly way to stress-test on-device models within the Flutter
+ecosystem (Google, n.d.b) that the majority of cross-platform mobile AI
+applications already use. By expressing each failure mode as an
+independent, composable injector against a common adapter interface, the
+framework lets developers start with a single fault injector and grow
+their coverage incrementally, rather than requiring a full testing
+framework rewrite. This design was informed by direct experience
+building and shipping offline-first, on-device AI Flutter applications,
+where the absence of such tooling had previously meant that robustness
+issues were found only through manual exploratory testing.
+
+\hypertarget{state-of-the-field}{%
+\section{State of the field}\label{state-of-the-field}}
+
+General-purpose testing tools for Flutter, such as the
+\texttt{flutter\_test} and \texttt{integration\_test} packages, verify
+widget behavior and application logic but have no built-in vocabulary
+for AI-specific failure modes such as quantization drift or confidence
+collapse. Chaos-engineering tools originating in backend and
+distributed-systems contexts, such as Chaos Monkey (Netflix, Inc. 2012),
+popularized the idea of deliberately injecting failures to validate
+system resilience, but they target infrastructure-level faults (killing
+processes, dropping network connections) rather than the resource and
+numerical faults specific to on-device inference on a single mobile
+device. In the deep-learning testing literature, systems such as
+DeepXplore (Pei et al. 2017) and DeepTest (Tian et al. 2018) introduced
+systematic testing of neural networks through metrics like neuron
+coverage and metamorphic input transformations, primarily for vision
+models running on servers or in simulation; they do not address
+deployment-time concerns such as device memory pressure, thermal
+throttling, or model-file corruption, and they are not integrated with a
+mobile application framework.
+
+On-device inference runtimes themselves, including TensorFlow Lite
+(Google, n.d.c) and ONNX Runtime (ONNX Runtime developers, n.d.),
+provide APIs for loading and running quantized models efficiently on
+constrained hardware, and their documentation describes best practices
+for quantization and hardware acceleration, but they do not provide a
+testing harness for validating that an integrating application degrades
+gracefully when those constraints are violated. SATE AI is positioned to
+complement these runtimes rather than replace them: it treats a
+\texttt{TFLiteAdapter} or \texttt{OnnxAdapter}-wrapped model as the
+system under test and applies fault injectors around it, so it can be
+adopted incrementally alongside an existing inference pipeline.
+
+What distinguishes SATE AI from the tools above is the combination of
+(1) fault injectors that specifically target on-device AI failure modes
+rather than generic infrastructure or generic neural-network
+correctness, (2) a Flutter/Dart-native implementation that integrates
+directly into the toolchain most cross-platform mobile AI developers
+already use, and (3) first-class CI integration through a GitHub
+composite action and CLI, so stress testing can run automatically on
+every pull request rather than depending on manual device testing. This
+combination targets a currently underserved point in the testing
+landscape: mobile-specific, AI-specific, CI-automatable robustness
+testing.
+
+\hypertarget{software-architecture}{%
+\section{Software architecture}\label{software-architecture}}
+
+SATE AI is organized around three core abstractions:
+\texttt{FaultInjector}, \texttt{StressRunner}, and \texttt{Report}. A
+\texttt{FaultInjector} implements a single, self-contained failure
+scenario against a model under test and yields a pass/fail outcome along
+with diagnostic detail; injectors are independent of one another and can
+be freely combined. The \texttt{StressRunner} orchestrates a stress-test
+session by applying a list of injectors to a given model adapter and
+aggregating their outcomes, and the resulting \texttt{Report} object
+exposes the aggregate pass/fail status, individual failures, and export
+methods for JSON, Markdown, and CSV.
+
+Models under test are wrapped behind a common adapter interface so that
+the fault injectors are agnostic to the underlying inference runtime.
+Three adapters ship with the library: \texttt{MockAdapter}, a pure-Dart
+adapter with no native dependencies, intended for testing the framework
+itself and for demonstrating usage without a real model file;
+\texttt{OnnxAdapter}, which wraps ONNX Runtime for models exported in
+the ONNX format; and \texttt{TFLiteAdapter}, which wraps TensorFlow Lite
+for \texttt{.tflite} models. This adapter pattern is the primary
+extension point of the framework: supporting a new inference runtime
+requires implementing the adapter interface rather than modifying any
+fault injector.
+
+The seven bundled fault injectors cover distinct, empirically motivated
+failure modes. \texttt{MemoryPressureInjector} simulates out-of-memory
+conditions by constraining available memory during inference.
+\texttt{MalformedInputInjector} exercises empty, oversized, and
+binary-garbage inputs. \texttt{QuantizationDriftInjector} simulates the
+gradual numerical precision loss associated with quantized model
+weights. \texttt{ThermalThrottleInjector} simulates CPU thermal
+throttling, a common condition on sustained mobile inference workloads.
+\texttt{LatencyInjector} simulates progressively increasing inference
+latency. \texttt{ModelSwapInjector} simulates model file corruption or
+an unintended model substitution. \texttt{ConfidenceThresholdInjector}
+validates that a model's output confidence remains above a configurable
+threshold under the other injected conditions. Because injectors
+implement a shared interface, third-party injectors can be authored and
+composed alongside the built-in set without modifying the core library.
+
+\hypertarget{implementation}{%
+\section{Implementation}\label{implementation}}
+
+SATE AI is implemented in Dart (Google, n.d.a) and distributed as a
+Flutter/Dart (Google, n.d.b) package on pub.dev. The core library,
+adapters, and injectors are validated by 164 automated unit tests
+covering all core modules, and the package currently holds pub.dev's
+maximum static-analysis and documentation quality score of 160/160. Nine
+releases (v0.1.0 through v0.7.0) have been published to date, reflecting
+incremental hardening of the injector set, adapter interface, and
+reporting layer based on real-world use.
+
+Beyond the core Dart library, SATE AI provides three interfaces for
+running and consuming stress tests. A browser-based dashboard renders
+\texttt{Report} output for visual inspection, with a dark-mode theme and
+a mobile-responsive layout, and supports exporting results as JSON,
+Markdown, or CSV for sharing or archival. A command-line interface
+allows stress tests to be invoked outside of a Dart test runner, for
+example
+\texttt{sate\_ai\ stress\ -\/-model\ model.gguf\ -\/-injectors\ memoryPressure},
+which is useful for ad hoc local runs against a specific model artifact.
+Finally, a GitHub composite action packages the CLI for continuous
+integration, allowing a repository to fail a pull request automatically
+when a bundled or newly trained model regresses against its stress-test
+baseline, in the same way conventional unit tests already gate merges.
+
+\hypertarget{example-usage}{%
+\section{Example usage}\label{example-usage}}
+
+The snippet below shows a minimal stress test using the pure-Dart
+\texttt{MockAdapter} and two of the bundled fault injectors. The
+resulting \texttt{Report} exposes a boolean \texttt{passed} flag and, on
+failure, a list of individual \texttt{failures} plus a Markdown
+rendering suitable for posting as CI output or a pull-request comment.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{import} \StringTok{\textquotesingle{}package:sate\_ai/sate\_ai.dart\textquotesingle{}}\NormalTok{;}
+
+\DataTypeTok{Future}\OperatorTok{\textless{}}\DataTypeTok{void}\OperatorTok{\textgreater{}}\NormalTok{ main() }\AttributeTok{async}\NormalTok{ \{}
+  \AttributeTok{final}\NormalTok{ model }\OperatorTok{=}\NormalTok{ MockAdapter(modelId}\OperatorTok{:} \StringTok{\textquotesingle{}my{-}model\textquotesingle{}}\NormalTok{);}
+  \AttributeTok{final}\NormalTok{ report }\OperatorTok{=} \AttributeTok{await}\NormalTok{ SateAI}\OperatorTok{.}\NormalTok{stress(}
+\NormalTok{    model}\OperatorTok{:}\NormalTok{ model}\OperatorTok{,}
+\NormalTok{    injectors}\OperatorTok{:}\NormalTok{ [}
+\NormalTok{      MemoryPressureInjector(limitMb}\OperatorTok{:} \DecValTok{100}\NormalTok{)}\OperatorTok{,}
+\NormalTok{      MalformedInputInjector()}\OperatorTok{,}
+\NormalTok{    ]}\OperatorTok{,}
+\NormalTok{  );}
+
+  \ControlFlowTok{if}\NormalTok{ (report}\OperatorTok{.}\NormalTok{passed) \{}
+\NormalTok{    print(}\StringTok{\textquotesingle{}PASS: Model passed stress test.\textquotesingle{}}\NormalTok{);}
+\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{    print(}\StringTok{\textquotesingle{}FAIL: Model failed: $\{report.failures.length\} failures.\textquotesingle{}}\NormalTok{);}
+\NormalTok{    print(report}\OperatorTok{.}\NormalTok{toMarkdown());}
+\NormalTok{  \}}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+Swapping \texttt{MockAdapter} for \texttt{OnnxAdapter} or
+\texttt{TFLiteAdapter} runs the identical injector list against a real
+ONNX or TensorFlow Lite model without any other code changes, and the
+same call can be driven from the CLI or from the GitHub composite action
+to make stress testing part of a project's regular CI pipeline.
+
+\hypertarget{acknowledgements}{%
+\section{Acknowledgements}\label{acknowledgements}}
+
+The author thanks contributors to the SATE AI repository and the
+open-source Flutter and Dart communities whose tooling this project
+builds upon.
+
+\hypertarget{references}{%
+\section*{References}\label{references}}
+\addcontentsline{toc}{section}{References}
+
+\hypertarget{refs}{}
+\begin{CSLReferences}{1}{0}
+\leavevmode\vadjust pre{\hypertarget{ref-dart}{}}%
+Google. n.d.a. {``Dart: A Client-Optimized Language for Fast Apps on Any
+Platform.''} \url{https://dart.dev}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-flutter}{}}%
+---------. n.d.b. {``Flutter: Build Apps for Any Screen.''}
+\url{https://flutter.dev}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-tflite}{}}%
+---------. n.d.c. {``TensorFlow Lite: On-Device Machine Learning.''}
+\url{https://www.tensorflow.org/lite}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-chaosmonkey}{}}%
+Netflix, Inc. 2012. {``Chaos Monkey.''}
+\url{https://github.com/Netflix/chaosmonkey}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-onnxruntime}{}}%
+ONNX Runtime developers. n.d. {``ONNX Runtime.''}
+\url{https://onnxruntime.ai}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-deepxplore}{}}%
+Pei, Kexin, Yinzhi Cao, Junfeng Yang, and Suman Jana. 2017.
+{``DeepXplore: Automated Whitebox Testing of Deep Learning Systems.''}
+In \emph{Proceedings of the 26th Symposium on Operating Systems
+Principles (SOSP)}, 1--18.
+\url{https://doi.org/10.1145/3132747.3132785}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-deeptest}{}}%
+Tian, Yuchi, Kexin Pei, Suman Jana, and Baishakhi Ray. 2018.
+{``DeepTest: Automated Testing of Deep-Neural-Network-Driven Autonomous
+Cars.''} In \emph{Proceedings of the 40th International Conference on
+Software Engineering (ICSE)}, 303--14.
+\url{https://doi.org/10.1145/3180155.3180220}.
+
+\end{CSLReferences}
+
+\end{document}
