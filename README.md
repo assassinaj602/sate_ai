@@ -2,16 +2,16 @@
 
 Fault Injection Framework for On-Device AI Models in Flutter
 
-[![Website](https://img.shields.io/badge/Website-sate_ai-blue)](https://assassinaj602.github.io/sate_ai)
-[![pub package](https://img.shields.io/pub/v/sate_ai.svg)](https://pub.dev/packages/sate_ai)
-[![pub points](https://img.shields.io/pub/points/sate_ai)](https://pub.dev/packages/sate_ai/score)
-[![popularity](https://img.shields.io/pub/popularity/sate_ai)](https://pub.dev/packages/sate_ai/score)
-[![likes](https://img.shields.io/pub/likes/sate_ai)](https://pub.dev/packages/sate_ai/score)
-[![GitHub stars](https://img.shields.io/github/stars/assassinaj602/sate_ai?style=flat)](https://github.com/assassinaj602/sate_ai/stargazers)
-[![CI](https://github.com/assassinaj602/sate_ai/actions/workflows/test.yml/badge.svg)](https://github.com/assassinaj602/sate_ai/actions)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Flutter](https://img.shields.io/badge/Flutter-3.10%2B-blue.svg)](https://flutter.dev)
-[![Dart](https://img.shields.io/badge/Dart-3.0%2B-blue.svg)](https://dart.dev)
+[![Website](https://img.shields.io/badge/Website-sate__ai-007ACC?style=for-the-badge&logo=google-chrome&logoColor=white)](https://assassinaj602.github.io/sate_ai)
+[![pub package](https://img.shields.io/pub/v/sate_ai.svg?style=for-the-badge&logo=dart&logoColor=white)](https://pub.dev/packages/sate_ai)
+[![pub points](https://img.shields.io/pub/points/sate_ai?style=for-the-badge&logo=dart&logoColor=white)](https://pub.dev/packages/sate_ai/score)
+[![popularity](https://img.shields.io/pub/popularity/sate_ai?style=for-the-badge)](https://pub.dev/packages/sate_ai/score)
+[![likes](https://img.shields.io/pub/likes/sate_ai?style=for-the-badge)](https://pub.dev/packages/sate_ai/score)
+[![GitHub stars](https://img.shields.io/github/stars/assassinaj602/sate_ai?style=for-the-badge&logo=github)](https://github.com/assassinaj602/sate_ai/stargazers)
+[![CI Workflow](https://img.shields.io/github/actions/workflow/status/assassinaj602/sate_ai/test.yml?branch=main&style=for-the-badge&logo=githubactions&logoColor=white&label=CI)](https://github.com/assassinaj602/sate_ai/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![Flutter](https://img.shields.io/badge/Flutter-3.10%2B-02569B?style=for-the-badge&logo=flutter&logoColor=white)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Dart-3.0%2B-0175C2?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
 
 ---
 
