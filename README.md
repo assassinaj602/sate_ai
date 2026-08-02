@@ -33,6 +33,12 @@ SATE AI provides a `pytest`-style experience for AI failure modes: wrap your mod
 
 ---
 
+## Demo
+
+![SATE AI Demo](docs/demo.gif)
+
+---
+
 ## Features
 
 - Core fault injection engine with a composable `FaultInjector` interface
