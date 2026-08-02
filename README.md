@@ -2,6 +2,7 @@
 
 Fault Injection Framework for On-Device AI Models in Flutter
 
+[![Website](https://img.shields.io/badge/Website-sate_ai-blue)](https://assassinaj602.github.io/sate_ai)
 [![pub package](https://img.shields.io/pub/v/sate_ai.svg)](https://pub.dev/packages/sate_ai)
 [![pub points](https://img.shields.io/pub/points/sate_ai)](https://pub.dev/packages/sate_ai/score)
 [![popularity](https://img.shields.io/pub/popularity/sate_ai)](https://pub.dev/packages/sate_ai/score)
