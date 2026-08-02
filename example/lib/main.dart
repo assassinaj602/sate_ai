@@ -12,7 +12,7 @@ class SateAIApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'SATE AI Real-World Stress Test Demo',
+      title: 'SATE AI Stress Test Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
@@ -73,7 +73,7 @@ class _StressDashboardState extends State<StressDashboard>
         );
 
       case AdapterType.onnx:
-        _appendLog('📦 Attempting to initialize OnnxAdapter (assets/models/mobilenet.onnx)...');
+        _appendLog('📦 Initializing OnnxAdapter (assets/models/mobilenet.onnx)...');
         try {
           final bytes = await rootBundle.load('assets/models/mobilenet.onnx');
           return OnnxAdapter(
@@ -86,7 +86,7 @@ class _StressDashboardState extends State<StressDashboard>
         }
 
       case AdapterType.tflite:
-        _appendLog('📦 Attempting to initialize TFLiteAdapter (assets/models/mobilenet.tflite)...');
+        _appendLog('📦 Initializing TFLiteAdapter (assets/models/mobilenet.tflite)...');
         try {
           return await TFLiteAdapter.fromAsset(
             'assets/models/mobilenet.tflite',
@@ -192,44 +192,56 @@ class _StressDashboardState extends State<StressDashboard>
         title: Row(
           children: [
             Container(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [Color(0xFF6C63FF), Color(0xFF48CAE4)],
                 ),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(8),
               ),
-              child: const Icon(Icons.science, color: Colors.white, size: 20),
+              child: const Icon(Icons.science, color: Colors.white, size: 18),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: 10),
             const Text(
               'SATE AI Stress Test Demo',
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
-                fontSize: 18,
+                fontSize: 16,
               ),
             ),
           ],
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _buildAdapterSelector(),
-            const SizedBox(height: 12),
-            _buildInjectorToggles(),
-            const SizedBox(height: 12),
-            _buildStatusCard(cs),
-            const SizedBox(height: 12),
-            _buildRunButton(cs),
-            const SizedBox(height: 12),
+            // Row 1: Compact Horizontal Adapter Selector
+            _buildAdapterSelectorRow(),
+            const SizedBox(height: 8),
+            
+            // Row 2: Horizontal Sliding Injectors Row (Left-to-Right Scrollable)
+            _buildInjectorScrollRow(),
+            const SizedBox(height: 8),
+
+            // Compact Status Banner + Run Button Row
+            Row(
+              children: [
+                Expanded(child: _buildStatusCard(cs)),
+                const SizedBox(width: 8),
+                _buildRunButton(cs),
+              ],
+            ),
+            const SizedBox(height: 8),
+
             if (_report != null) ...[
               _buildSummaryCard(_report!),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
             ],
+
+            // Maximized Execution Log Screen (Fills remaining height)
             Expanded(child: _buildLogCard()),
           ],
         ),
@@ -237,115 +249,118 @@ class _StressDashboardState extends State<StressDashboard>
     );
   }
 
-  Widget _buildAdapterSelector() {
+  // Row layout for Select Model Adapter
+  Widget _buildAdapterSelectorRow() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: const Color(0xFF1A1A2E),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(color: Colors.white12),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
           const Text(
-            'SELECT MODEL ADAPTER',
+            'ADAPTER:',
             style: TextStyle(
               color: Colors.white70,
-              fontSize: 11,
+              fontSize: 10,
               fontWeight: FontWeight.w700,
-              letterSpacing: 1,
+              letterSpacing: 0.8,
             ),
           ),
-          const SizedBox(height: 8),
-          Row(
-            children: AdapterType.values.map((type) {
-              final isSelected = _selectedAdapter == type;
-              return Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: ChoiceChip(
-                    label: Center(
-                      child: Text(
-                        type.name.toUpperCase(),
-                        style: TextStyle(
-                          color: isSelected ? Colors.white : Colors.white60,
-                          fontWeight:
-                              isSelected ? FontWeight.bold : FontWeight.normal,
-                          fontSize: 12,
+          const SizedBox(width: 8),
+          Expanded(
+            child: Row(
+              children: AdapterType.values.map((type) {
+                final isSelected = _selectedAdapter == type;
+                return Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 3),
+                    child: ChoiceChip(
+                      padding: EdgeInsets.zero,
+                      labelPadding: const EdgeInsets.symmetric(horizontal: 4),
+                      visualDensity: VisualDensity.compact,
+                      label: Center(
+                        child: Text(
+                          type.name.toUpperCase(),
+                          style: TextStyle(
+                            color: isSelected ? Colors.white : Colors.white60,
+                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                            fontSize: 11,
+                          ),
                         ),
                       ),
+                      selected: isSelected,
+                      selectedColor: const Color(0xFF6C63FF),
+                      backgroundColor: const Color(0xFF0F0F1A),
+                      onSelected: (val) {
+                        if (val) setState(() => _selectedAdapter = type);
+                      },
                     ),
-                    selected: isSelected,
-                    selectedColor: const Color(0xFF6C63FF),
-                    backgroundColor: const Color(0xFF0F0F1A),
-                    onSelected: (val) {
-                      if (val) setState(() => _selectedAdapter = type);
-                    },
                   ),
-                ),
-              );
-            }).toList(),
+                );
+              }).toList(),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildInjectorToggles() {
+  // Horizontal Left-to-Right Sliding Injectors Row
+  Widget _buildInjectorScrollRow() {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: const Color(0xFF1A1A2E),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(color: Colors.white12),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'CONFIGURED INJECTORS',
+            'INJECTORS (SWIPE LEFT/RIGHT):',
             style: TextStyle(
               color: Colors.white70,
-              fontSize: 11,
+              fontSize: 10,
               fontWeight: FontWeight.w700,
-              letterSpacing: 1,
+              letterSpacing: 0.8,
             ),
           ),
-          const SizedBox(height: 6),
-          Wrap(
-            spacing: 8,
-            runSpacing: 4,
-            children: [
-              FilterChip(
-                label: const Text('Memory Pressure', style: TextStyle(fontSize: 11)),
-                selected: _useMemoryPressure,
-                onSelected: (v) => setState(() => _useMemoryPressure = v),
-              ),
-              FilterChip(
-                label: const Text('Malformed Input', style: TextStyle(fontSize: 11)),
-                selected: _useMalformedInput,
-                onSelected: (v) => setState(() => _useMalformedInput = v),
-              ),
-              FilterChip(
-                label: const Text('Thermal Throttle', style: TextStyle(fontSize: 11)),
-                selected: _useThermalThrottle,
-                onSelected: (v) => setState(() => _useThermalThrottle = v),
-              ),
-              FilterChip(
-                label: const Text('Quantization Drift', style: TextStyle(fontSize: 11)),
-                selected: _useQuantizationDrift,
-                onSelected: (v) => setState(() => _useQuantizationDrift = v),
-              ),
-              FilterChip(
-                label: const Text('Confidence Threshold', style: TextStyle(fontSize: 11)),
-                selected: _useConfidenceValidation,
-                onSelected: (v) => setState(() => _useConfidenceValidation = v),
-              ),
-            ],
+          const SizedBox(height: 4),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
+            child: Row(
+              children: [
+                _buildInjectorChip('Memory Pressure', _useMemoryPressure, (v) => setState(() => _useMemoryPressure = v)),
+                const SizedBox(width: 6),
+                _buildInjectorChip('Malformed Input', _useMalformedInput, (v) => setState(() => _useMalformedInput = v)),
+                const SizedBox(width: 6),
+                _buildInjectorChip('Thermal Throttle', _useThermalThrottle, (v) => setState(() => _useThermalThrottle = v)),
+                const SizedBox(width: 6),
+                _buildInjectorChip('Quantization Drift', _useQuantizationDrift, (v) => setState(() => _useQuantizationDrift = v)),
+                const SizedBox(width: 6),
+                _buildInjectorChip('Confidence Validator', _useConfidenceValidation, (v) => setState(() => _useConfidenceValidation = v)),
+              ],
+            ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildInjectorChip(String label, bool selected, ValueChanged<bool> onSelected) {
+    return FilterChip(
+      visualDensity: VisualDensity.compact,
+      labelPadding: const EdgeInsets.symmetric(horizontal: 4),
+      label: Text(label, style: const TextStyle(fontSize: 11)),
+      selected: selected,
+      selectedColor: const Color(0xFF48CAE4).withAlpha(180),
+      checkmarkColor: Colors.white,
+      onSelected: onSelected,
     );
   }
 
@@ -360,10 +375,10 @@ class _StressDashboardState extends State<StressDashboard>
       animation: _pulseCtrl,
       builder: (context, child) {
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           decoration: BoxDecoration(
             color: const Color(0xFF1A1A2E),
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(10),
             border: Border.all(
               color: _running
                   ? color.withAlpha(((_pulseCtrl.value * 180 + 75).round()))
@@ -375,8 +390,8 @@ class _StressDashboardState extends State<StressDashboard>
             children: [
               _running
                   ? SizedBox(
-                      width: 18,
-                      height: 18,
+                      width: 16,
+                      height: 16,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
                         color: color,
@@ -385,21 +400,20 @@ class _StressDashboardState extends State<StressDashboard>
                   : Icon(
                       _report == null
                           ? Icons.pending_outlined
-                          : (_report!.passed
-                              ? Icons.check_circle
-                              : Icons.error),
+                          : (_report!.passed ? Icons.check_circle : Icons.error),
                       color: color,
-                      size: 20,
+                      size: 18,
                     ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   _status,
                   style: TextStyle(
                     color: color,
                     fontWeight: FontWeight.w600,
-                    fontSize: 14,
+                    fontSize: 12,
                   ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
@@ -414,7 +428,7 @@ class _StressDashboardState extends State<StressDashboard>
       onTap: _running ? null : _runStressTest,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(vertical: 14),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
           gradient: _running
               ? const LinearGradient(
@@ -423,27 +437,26 @@ class _StressDashboardState extends State<StressDashboard>
               : const LinearGradient(
                   colors: [Color(0xFF6C63FF), Color(0xFF48CAE4)],
                 ),
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(10),
         ),
-        child: Center(
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                _running ? Icons.hourglass_top : Icons.play_arrow_rounded,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              _running ? Icons.hourglass_top : Icons.play_arrow_rounded,
+              color: Colors.white,
+              size: 18,
+            ),
+            const SizedBox(width: 6),
+            Text(
+              _running ? 'Running...' : 'Run Suite',
+              style: const TextStyle(
                 color: Colors.white,
+                fontWeight: FontWeight.w700,
+                fontSize: 13,
               ),
-              const SizedBox(width: 8),
-              Text(
-                _running ? 'Running Suite...' : 'Execute Stress Suite',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 15,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -451,10 +464,10 @@ class _StressDashboardState extends State<StressDashboard>
 
   Widget _buildSummaryCard(StressReport report) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
         color: const Color(0xFF1A1A2E),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(color: Colors.white12),
       ),
       child: Row(
@@ -469,26 +482,33 @@ class _StressDashboardState extends State<StressDashboard>
     );
   }
 
+  // Maximized Execution Log Card
   Widget _buildLogCard() {
     return Container(
       decoration: BoxDecoration(
         color: const Color(0xFF0D0D1A),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.white10),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Padding(
-            padding: EdgeInsets.fromLTRB(14, 10, 14, 4),
-            child: Text(
-              'EXECUTION LOG',
-              style: TextStyle(
-                color: Colors.white38,
-                fontSize: 10,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 1.5,
-              ),
+            padding: EdgeInsets.fromLTRB(12, 8, 12, 4),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'EXECUTION LOG (MAXIMIZED SCREEN)',
+                  style: TextStyle(
+                    color: Colors.white54,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1.2,
+                  ),
+                ),
+                Icon(Icons.terminal, color: Colors.white38, size: 14),
+              ],
             ),
           ),
           const Divider(color: Colors.white10, height: 1),
@@ -496,12 +516,12 @@ class _StressDashboardState extends State<StressDashboard>
             child: _log.isEmpty
                 ? const Center(
                     child: Text(
-                      'Select an adapter and hit "Execute Stress Suite"',
+                      'Select Model Adapter & Injectors, then tap "Run Suite"',
                       style: TextStyle(color: Colors.white24, fontSize: 12),
                     ),
                   )
                 : ListView.builder(
-                    padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 14),
+                    padding: const EdgeInsets.all(10),
                     itemCount: _log.length,
                     itemBuilder: (ctx, i) => Padding(
                       padding: const EdgeInsets.symmetric(vertical: 2),
@@ -541,7 +561,7 @@ class _StatChip extends StatelessWidget {
           value,
           style: TextStyle(
             color: color,
-            fontSize: 18,
+            fontSize: 15,
             fontWeight: FontWeight.w800,
           ),
         ),
@@ -549,7 +569,7 @@ class _StatChip extends StatelessWidget {
           label,
           style: const TextStyle(
             color: Colors.white38,
-            fontSize: 10,
+            fontSize: 9,
             fontWeight: FontWeight.w600,
           ),
         ),
