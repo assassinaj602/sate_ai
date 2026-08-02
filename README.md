@@ -33,9 +33,14 @@ SATE AI provides a `pytest`-style experience for AI failure modes: wrap your mod
 
 ---
 
-## Demo
+## Live App Demos & App Preview
 
-![SATE AI Demo](docs/demo.gif)
+![SATE AI Real-World App Interface](docs/assets/demo.png)
+
+| Successful Model Stress Run (`pass.gif`) | Failure Detection & Exception Report (`fail.gif`) |
+|:---:|:---:|
+| ![SATE AI Passing Stress Test](docs/assets/pass.gif) | ![SATE AI Fault Detection](docs/assets/fail.gif) |
+| *TFLite / Mock Adapter passing all stress checks* | *ONNX Adapter catching shape mismatch failure cleanly* |
 
 ---
 
