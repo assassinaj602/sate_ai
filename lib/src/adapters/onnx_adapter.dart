@@ -100,7 +100,7 @@ class OnnxAdapter implements AIModelAdapter {
       final runOptions = OrtRunOptions();
       final outputs = await _session
           .runAsync(runOptions, {'input': inputTensor})
-          .timeout(const Duration(seconds: 3));
+          ?.timeout(const Duration(seconds: 3));
 
       String outputText;
       if (outputs != null && outputs.isNotEmpty) {
