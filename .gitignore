@@ -37,7 +37,6 @@ android/local.properties
 android/key.properties
 **/android/gradlew
 **/android/gradlew.bat
-**/android/gradle/
 
 # iOS
 ios/Pods/

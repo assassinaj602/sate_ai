@@ -22,5 +22,9 @@ scripts/
 *.iml
 .vscode/
 
-# Git session files
-**/*.salive
+# Web documentation & assets
+docs/
+
+# Large model assets in example folder
+example/assets/models/
+
