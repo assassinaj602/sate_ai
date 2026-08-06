@@ -554,6 +554,8 @@ if (!report.passed) {
 ```
 
 A GitHub Actions workflow for CI is included in the repository at `.github/workflows/test.yml`.
+> **Note on OIDC Publishing:** The included CI workflow uses OIDC authentication (`permissions: id-token: write`) to publish to pub.dev. For this to work, you must enable automated publishing for your package via GitHub Actions in your package's admin settings on pub.dev. No `PUB_CREDENTIALS` secret is required!
+
 
 ---
 
