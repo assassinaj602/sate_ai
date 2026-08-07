@@ -65,11 +65,12 @@ The paper covers:
 - `StressRunner` for orchestrating multiple injectors with timeout support
 - `StressReport` with JSON and Markdown serialization
 - `MockAdapter` for testing without real AI models
-- `MemoryPressureInjector` for out-of-memory simulation
+- `MemoryPressureInjector` for RAM out-of-memory simulation
+- `GpuMemoryPressureInjector` for GPU VRAM pressure simulation
 - `MalformedInputInjector` for input validation testing (empty, oversized, binary garbage)
 - `SateAI.stress()` convenience API for one-call test execution
 - Extensible adapter interface for wrapping any on-device AI runtime
-- 164 unit tests with full coverage of core modules
+- 172 unit tests with full coverage of core modules
 - Web dashboard for visualizing stress test reports with charts and exports
 
 ---

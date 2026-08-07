@@ -32,6 +32,7 @@ class MockAdapter implements AIModelAdapter {
   final String? _forceFailureMessage;
 
   double _currentMemoryMB = 0;
+  double _currentGPUMemoryMB = 0;
   bool _isDegraded = false;
   bool _isHealthy = true;
 
@@ -50,6 +51,9 @@ class MockAdapter implements AIModelAdapter {
 
   @override
   double get currentMemoryMB => _currentMemoryMB;
+
+  @override
+  double get currentGPUMemoryMB => _currentGPUMemoryMB;
 
   @override
   bool get isDegraded => _isDegraded;
@@ -95,9 +99,19 @@ class MockAdapter implements AIModelAdapter {
   }
 
   @override
+  Future<void> simulateGPUMemoryPressure(int mb) async {
+    _currentGPUMemoryMB += mb.toDouble();
+    if (_currentGPUMemoryMB > 150) {
+      _isDegraded = true;
+    }
+    await Future<void>.delayed(const Duration(milliseconds: 10));
+  }
+
+  @override
   Future<void> reset() async {
     _allocatedMemory = null;
     _currentMemoryMB = 0;
+    _currentGPUMemoryMB = 0;
     _isDegraded = false;
     _isHealthy = true;
     await Future<void>.delayed(const Duration(milliseconds: 50));

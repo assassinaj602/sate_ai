@@ -132,6 +132,9 @@ abstract class AIModelAdapter {
   /// Estimated memory currently consumed by the model in megabytes.
   double get currentMemoryMB;
 
+  /// Estimated GPU memory currently consumed by the model in megabytes.
+  double get currentGPUMemoryMB;
+
   /// Whether the model is in a degraded / unreliable state.
   bool get isDegraded;
 
@@ -144,6 +147,11 @@ abstract class AIModelAdapter {
   ///
   /// Used by `MemoryPressureInjector` to stress the model.
   Future<void> simulateMemoryPressure(int mb);
+
+  /// Simulate [mb] megabytes of additional GPU memory allocation.
+  ///
+  /// Used by `GpuMemoryPressureInjector` to stress GPU memory.
+  Future<void> simulateGPUMemoryPressure(int mb);
 
   /// Restore the model to a clean, non-degraded state.
   Future<void> reset();

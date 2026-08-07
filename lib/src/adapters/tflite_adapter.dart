@@ -10,6 +10,7 @@ class TFLiteAdapter implements AIModelAdapter {
 
   final Interpreter _interpreter;
   double _currentMemoryMB = 0;
+  double _currentGPUMemoryMB = 0;
   bool _isDegraded = false;
 
   /// Creates a [TFLiteAdapter].
@@ -41,6 +42,9 @@ class TFLiteAdapter implements AIModelAdapter {
 
   @override
   double get currentMemoryMB => _currentMemoryMB;
+
+  @override
+  double get currentGPUMemoryMB => _currentGPUMemoryMB;
 
   @override
   bool get isDegraded => _isDegraded;
@@ -87,15 +91,25 @@ class TFLiteAdapter implements AIModelAdapter {
   }
 
   @override
+  Future<void> simulateGPUMemoryPressure(int mb) async {
+    _currentGPUMemoryMB += mb.toDouble();
+    if (_currentGPUMemoryMB > 150) {
+      _isDegraded = true;
+    }
+    await Future.delayed(Duration(milliseconds: 10));
+  }
+
+  @override
   Future<void> reset() async {
     _currentMemoryMB = 0;
+    _currentGPUMemoryMB = 0;
     _isDegraded = false;
     await Future.delayed(Duration(milliseconds: 10));
   }
 
   @override
   Future<bool> isHealthy() async {
-    return !_isDegraded && _currentMemoryMB < 150;
+    return !_isDegraded && _currentMemoryMB < 150 && _currentGPUMemoryMB < 150;
   }
 
   /// Closes the underlying interpreter.
