@@ -60,6 +60,7 @@ class OnnxAdapter implements AIModelAdapter {
   final OrtSession _session;
 
   double _currentMemoryMB = 0;
+  double _currentGPUMemoryMB = 0;
   bool _isDegraded = false;
 
   @override
@@ -67,6 +68,9 @@ class OnnxAdapter implements AIModelAdapter {
 
   @override
   double get currentMemoryMB => _currentMemoryMB;
+
+  @override
+  double get currentGPUMemoryMB => _currentGPUMemoryMB;
 
   @override
   bool get isDegraded => _isDegraded;
@@ -149,10 +153,24 @@ class OnnxAdapter implements AIModelAdapter {
     await Future.delayed(const Duration(milliseconds: 10));
   }
 
+  /// Increases the simulated GPU memory footprint by [mb] megabytes.
+  ///
+  /// When [currentGPUMemoryMB] exceeds 150 MB the adapter is marked [isDegraded]
+  /// and will reject further inference calls until [reset] is called.
+  @override
+  Future<void> simulateGPUMemoryPressure(int mb) async {
+    _currentGPUMemoryMB += mb.toDouble();
+    if (_currentGPUMemoryMB > 150) {
+      _isDegraded = true;
+    }
+    await Future.delayed(const Duration(milliseconds: 10));
+  }
+
   /// Resets the adapter to a healthy, non-degraded state.
   @override
   Future<void> reset() async {
     _currentMemoryMB = 0;
+    _currentGPUMemoryMB = 0;
     _isDegraded = false;
     await Future.delayed(const Duration(milliseconds: 10));
   }
@@ -160,7 +178,7 @@ class OnnxAdapter implements AIModelAdapter {
   /// Returns `true` when the adapter can safely accept inference calls.
   @override
   Future<bool> isHealthy() async {
-    return !_isDegraded && _currentMemoryMB < 150;
+    return !_isDegraded && _currentMemoryMB < 150 && _currentGPUMemoryMB < 150;
   }
 
   /// Releases all ONNX Runtime resources held by this adapter.

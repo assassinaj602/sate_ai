@@ -40,6 +40,9 @@ enum FaultType {
 
   /// Validates that model confidence score stays above threshold.
   confidenceValidation,
+
+  /// Simulates GPU memory pressure.
+  gpuMemoryPressure,
 }
 
 /// Extension helpers on [FaultType].
@@ -63,6 +66,8 @@ extension FaultTypeX on FaultType {
         return 'Model Swap';
       case FaultType.confidenceValidation:
         return 'Confidence Validation';
+      case FaultType.gpuMemoryPressure:
+        return 'GPU Memory Pressure';
     }
   }
 
@@ -85,6 +90,8 @@ extension FaultTypeX on FaultType {
         return '🔄';
       case FaultType.confidenceValidation:
         return '🎯';
+      case FaultType.gpuMemoryPressure:
+        return '🎮';
     }
   }
 }

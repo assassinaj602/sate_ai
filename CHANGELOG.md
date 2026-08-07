@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-08-07
+
+### Added
+- GPU Memory Pressure Injector (`GpuMemoryPressureInjector`) (Issue #23)
+  - Simulates GPU memory pressure with configurable limit (`limitMb`)
+  - Extended `AIModelAdapter` interface with `simulateGPUMemoryPressure(int mb)` and `currentGPUMemoryMB`
+  - Added `FaultType.gpuMemoryPressure` enum value, display name, and icon
+  - Added 8 unit tests (now 172 total)
+
+### Changed
+- Breaking: `AIModelAdapter` now requires implementing `simulateGPUMemoryPressure` and `currentGPUMemoryMB`
+
 ## [0.7.1] - 2026-08-02
 
 ### Fixed
