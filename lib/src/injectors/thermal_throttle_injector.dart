@@ -124,6 +124,13 @@ class ThermalThrottleInjector implements FaultInjector {
     }
   }
 
+  /// Applies the injector to a model adapter.
+  ///
+  /// Simulates battery drain and thermal throttling on [targetModel].
+  Future<void> applyTo(AIModelAdapter targetModel) async {
+    await inject();
+  }
+
   @override
   Future<void> reset() async {
     _currentTemperature = 25;
