@@ -25,6 +25,12 @@ class ThermalThrottleInjector implements FaultInjector {
   /// Simulated delay to apply during throttled state (in milliseconds).
   final int extraDelayMs;
 
+  /// Battery percentage threshold below which low-battery throttling triggers.
+  final int batteryThreshold;
+
+  /// Battery percentage drop per injection step.
+  final double batteryDropStep;
+
   /// The model adapter to stress.
   final AIModelAdapter model;
 
@@ -33,22 +39,33 @@ class ThermalThrottleInjector implements FaultInjector {
   int _throttleCount = 0;
   final List<int> _temperatureHistory = [];
 
+  int _batteryLevel = 100;
+  bool _isBatteryLow = false;
+
   /// Creates a [ThermalThrottleInjector].
   ///
   /// [model] is the model adapter instance to apply the thermal simulation to.
   /// [temperatureStep] is the temperature increase per injection.
   /// [maxTemperature] is the threshold above which throttling triggers.
   /// [throttledDelayMs] and [extraDelayMs] are the simulated latencies applied.
+  /// [batteryThreshold] is the low-battery threshold (default 20%).
+  /// [batteryDropStep] is the battery percentage drop per step (default 5.0).
   ThermalThrottleInjector({
     required this.model,
     this.temperatureStep = 10,
     this.maxTemperature = 85,
     this.throttledDelayMs = 200,
     this.extraDelayMs = 500,
+    this.batteryThreshold = 20,
+    this.batteryDropStep = 5.0,
   })  : assert(temperatureStep > 0 && temperatureStep <= 50,
             'temperatureStep must be between 1 and 50'),
         assert(maxTemperature >= 40 && maxTemperature <= 120,
-            'maxTemperature must be between 40 and 120');
+            'maxTemperature must be between 40 and 120'),
+        assert(batteryThreshold >= 5 && batteryThreshold <= 50,
+            'batteryThreshold must be between 5 and 50'),
+        assert(batteryDropStep > 0 && batteryDropStep <= 50,
+            'batteryDropStep must be between 0 and 50');
 
   @override
   FaultType get type => FaultType.thermalThrottle;
@@ -97,12 +114,20 @@ class ThermalThrottleInjector implements FaultInjector {
     _isThrottling = false;
     _throttleCount = 0;
     _temperatureHistory.clear();
+    _batteryLevel = 100;
+    _isBatteryLow = false;
     await model.reset();
     await Future.delayed(const Duration(milliseconds: 10));
   }
 
   /// Current simulated temperature in Celsius.
   int get currentTemperature => _currentTemperature;
+
+  /// Current simulated battery level percentage (0 - 100).
+  int get batteryLevel => _batteryLevel;
+
+  /// Whether the battery is currently in a low state (<= [batteryThreshold]).
+  bool get isBatteryLow => _isBatteryLow;
 
   /// Whether the injector is currently throttling.
   bool get isThrottling => _isThrottling;
@@ -117,13 +142,13 @@ class ThermalThrottleInjector implements FaultInjector {
   int get injectionSteps => _temperatureHistory.length;
 
   /// Whether the model should be considered degraded.
-  bool get isDegraded => _isThrottling;
+  bool get isDegraded => _isThrottling || _isBatteryLow;
 
   /// Convenience method to get the throttling status as a readable string.
   String getStatus() {
     if (_isThrottling) {
-      return 'THROTTLING (temperature: $_currentTemperature°C, count: $_throttleCount)';
+      return 'THROTTLING (temperature: $_currentTemperature°C, battery: $_batteryLevel%, count: $_throttleCount)';
     }
-    return 'Normal (temperature: $_currentTemperature°C)';
+    return 'Normal (temperature: $_currentTemperature°C, battery: $_batteryLevel%)';
   }
 }
