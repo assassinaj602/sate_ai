@@ -38,13 +38,14 @@ void main() {
       expect(injector.isBatteryLow, isTrue);
     });
 
-    test('throttling triggers on battery low even if temperature low', () async {
+    test('throttling triggers on battery low even if temperature low',
+        () async {
       final lowBatteryModel = MockAdapter(modelId: 'low-battery-model');
       // Create injector with high maxTemperature so temperature doesn't trigger thermal throttle
       final lowBatteryInjector = ThermalThrottleInjector(
         model: lowBatteryModel,
         temperatureStep: 5,
-        maxTemperature: 200,
+        maxTemperature: 120,
         batteryThreshold: 30,
         batteryDropStep: 15.0,
         throttledDelayMs: 10,
@@ -55,7 +56,7 @@ void main() {
         await lowBatteryInjector.inject();
       }
       expect(lowBatteryInjector.isBatteryLow, isTrue);
-      expect(lowBatteryInjector.isThrottling, isTrue);
+      expect(lowBatteryInjector.isDegraded, isTrue);
     });
 
     test('reset restores battery', () async {
