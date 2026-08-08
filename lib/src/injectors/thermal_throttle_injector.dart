@@ -88,7 +88,13 @@ class ThermalThrottleInjector implements FaultInjector {
     _currentTemperature += temperatureStep;
     _temperatureHistory.add(_currentTemperature);
 
-    if (_currentTemperature >= maxTemperature) {
+    // Battery drain simulation
+    _batteryLevel = (_batteryLevel - batteryDropStep).clamp(0.0, 100.0).toInt();
+    if (_batteryLevel <= batteryThreshold) {
+      _isBatteryLow = true;
+    }
+
+    if (_currentTemperature >= maxTemperature || _isBatteryLow) {
       _isThrottling = true;
       _throttleCount++;
     }
@@ -98,11 +104,21 @@ class ThermalThrottleInjector implements FaultInjector {
     final memoryToSimulate = (_currentTemperature / 10).round();
     await model.simulateMemoryPressure(memoryToSimulate);
 
+    if (_isBatteryLow) {
+      await model.simulateMemoryPressure(30);
+    }
+
     if (_isThrottling) {
       await model.simulateMemoryPressure(20);
-      await Future.delayed(
-        Duration(milliseconds: throttledDelayMs + extraDelayMs),
-      );
+      if (_isBatteryLow) {
+        await Future.delayed(
+          Duration(milliseconds: throttledDelayMs + extraDelayMs + 200),
+        );
+      } else {
+        await Future.delayed(
+          Duration(milliseconds: throttledDelayMs + extraDelayMs),
+        );
+      }
     } else {
       await Future.delayed(const Duration(milliseconds: 50));
     }
