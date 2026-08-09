@@ -21,6 +21,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Adds extra memory pressure when battery is low
   - Configurable `batteryThreshold` and `batteryDropStep`
   - 8 new unit tests (now 180 total)
+- Network Latency / Drop Injector (`NetworkLatencyDropInjector`) (Issue #25)
+  - Simulates network latency, timeouts, and disconnections
+  - Configurable failure type, latency, and timeout
+  - 13 new unit tests (now 193 total)
+  - Works with any adapter (adapter can check network state)
 
 ### Changed
 - Breaking: `AIModelAdapter` now requires implementing `simulateGPUMemoryPressure` and `currentGPUMemoryMB`
