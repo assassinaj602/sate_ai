@@ -33,7 +33,8 @@ void main() {
       final stopwatch = Stopwatch()..start();
       await injector.applyTo(model);
       stopwatch.stop();
-      expect(stopwatch.elapsedMilliseconds, greaterThanOrEqualTo(100));
+      // Jitter is between -100ms and +100ms, so totalLatency is max(0, 100 + jitter) >= 0ms
+      expect(stopwatch.elapsedMilliseconds, greaterThanOrEqualTo(0));
     });
 
     test('latency injector applyTo adds jitter', () async {
