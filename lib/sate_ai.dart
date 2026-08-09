@@ -39,6 +39,7 @@ export 'src/injectors/latency_injector.dart';
 export 'src/injectors/model_swap_injector.dart';
 export 'src/injectors/confidence_threshold_injector.dart';
 export 'src/injectors/gpu_memory_pressure_injector.dart';
+export 'src/injectors/network_latency_drop_injector.dart';
 
 /// Top-level convenience API for running SATE AI stress tests.
 ///
