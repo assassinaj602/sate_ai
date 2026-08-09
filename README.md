@@ -67,10 +67,11 @@ The paper covers:
 - `MockAdapter` for testing without real AI models
 - `MemoryPressureInjector` for RAM out-of-memory simulation
 - `GpuMemoryPressureInjector` for GPU VRAM pressure simulation
+- `NetworkLatencyDropInjector` for simulating network latency, timeouts, and disconnections
 - `MalformedInputInjector` for input validation testing (empty, oversized, binary garbage)
 - `SateAI.stress()` convenience API for one-call test execution
 - Extensible adapter interface for wrapping any on-device AI runtime
-- 172 unit tests with full coverage of core modules
+- 193 unit tests with full coverage of core modules
 - Web dashboard for visualizing stress test reports with charts and exports
 
 ---
