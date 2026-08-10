@@ -43,6 +43,9 @@ enum FaultType {
 
   /// Simulates GPU memory pressure.
   gpuMemoryPressure,
+
+  /// Simulates input data corruption (image noise, missing pixels, audio glitches).
+  dataCorruption,
 }
 
 /// Extension helpers on [FaultType].
@@ -68,6 +71,8 @@ extension FaultTypeX on FaultType {
         return 'Confidence Validation';
       case FaultType.gpuMemoryPressure:
         return 'GPU Memory Pressure';
+      case FaultType.dataCorruption:
+        return 'Data Corruption';
     }
   }
 
@@ -92,6 +97,8 @@ extension FaultTypeX on FaultType {
         return '🎯';
       case FaultType.gpuMemoryPressure:
         return '🎮';
+      case FaultType.dataCorruption:
+        return '🔧';
     }
   }
 }
