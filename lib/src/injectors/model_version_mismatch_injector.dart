@@ -32,8 +32,8 @@ class ModelVersionMismatchInjector implements FaultInjector {
   /// Creates a [ModelVersionMismatchInjector].
   ModelVersionMismatchInjector({
     this.mismatchType = VersionMismatchType.olderVersion,
-    this.expectedVersion = "2.0.0",
-    this.actualVersion = "1.0.0",
+    this.expectedVersion = '2.0.0',
+    this.actualVersion = '1.0.0',
     this.attemptFallback = false,
   })  : assert(expectedVersion.isNotEmpty, 'expectedVersion must not be empty'),
         assert(actualVersion.isNotEmpty, 'actualVersion must not be empty');
@@ -123,7 +123,6 @@ class ModelVersionMismatchInjector implements FaultInjector {
   /// 1. Detecting the mismatch.
   /// 2. Optionally attempting fallback.
   /// 3. If mismatch persists, failing the test.
-  @override
   Future<void> applyTo(AIModelAdapter model) async {
     _injectionCount++;
     // Simulate version detection
