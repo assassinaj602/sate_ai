@@ -26,6 +26,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Configurable failure type, latency, and timeout
   - 13 new unit tests (now 193 total)
   - Works with any adapter (adapter can check network state)
+- Data Corruption Injector (`DataCorruptionInjector`) (Issue #26)
+  - Simulates corrupted input data (image noise, blur, occlusion, salt & pepper, audio glitch)
+  - Configurable corruption type and intensity
+  - 16 new unit tests (now 209 total)
+  - Utility method `corruptData()` for testing data corruption effects
 
 ### Changed
 - Breaking: `AIModelAdapter` now requires implementing `simulateGPUMemoryPressure` and `currentGPUMemoryMB`
