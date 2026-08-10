@@ -68,10 +68,11 @@ The paper covers:
 - `MemoryPressureInjector` for RAM out-of-memory simulation
 - `GpuMemoryPressureInjector` for GPU VRAM pressure simulation
 - `NetworkLatencyDropInjector` for simulating network latency, timeouts, and disconnections
+- `DataCorruptionInjector` for simulating corrupted input data (noise, blur, occlusion, glitches)
 - `MalformedInputInjector` for input validation testing (empty, oversized, binary garbage)
 - `SateAI.stress()` convenience API for one-call test execution
 - Extensible adapter interface for wrapping any on-device AI runtime
-- 193 unit tests with full coverage of core modules
+- 209 unit tests with full coverage of core modules
 - Web dashboard for visualizing stress test reports with charts and exports
 
 ---
