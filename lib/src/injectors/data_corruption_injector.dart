@@ -88,7 +88,7 @@ class DataCorruptionInjector implements FaultInjector {
   @override
   Future<void> reset() async {
     _injectionCount = 0;
-    await Future.delayed(const Duration.zero);
+    await Future.delayed(Duration.zero);
   }
 
   /// Applies corruption to the input data.
@@ -176,10 +176,16 @@ class DataCorruptionInjector implements FaultInjector {
 
       case DataCorruptionType.audioGlitch:
         // Simulate audio glitch: random pops and clicks
+        var glitched = false;
         for (var i = 0; i < result.length; i++) {
-          if (rng.nextDouble() < intensity * 0.1) {
+          if (rng.nextDouble() < intensity * 0.5) {
             result[i] = rng.nextDouble() * 2 - 1; // random spike
+            glitched = true;
           }
+        }
+        if (!glitched && result.isNotEmpty) {
+          final idx = rng.nextInt(result.length);
+          result[idx] = rng.nextDouble() * 2 - 1;
         }
         break;
     }
