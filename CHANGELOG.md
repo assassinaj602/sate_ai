@@ -31,6 +31,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Configurable corruption type and intensity
   - 16 new unit tests (now 209 total)
   - Utility method `corruptData()` for testing data corruption effects
+- Model Version Mismatch Injector (`ModelVersionMismatchInjector`) (Issue #27)
+  - Simulates loading older/newer/incompatible model versions
+  - Configurable expected and actual versions
+  - Optional fallback simulation
+  - 18 new unit tests (now 227 total)
 
 ### Changed
 - Breaking: `AIModelAdapter` now requires implementing `simulateGPUMemoryPressure` and `currentGPUMemoryMB`
