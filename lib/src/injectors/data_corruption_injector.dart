@@ -6,10 +6,10 @@ import 'package:sate_ai/src/core/fault_type.dart';
 /// Random Gaussian extension helper.
 extension _RandomGaussian on Random {
   double nextGaussian() {
-    double u1 = nextDouble();
-    double u2 = nextDouble();
-    while (u1 <= 1e-15) {
-      u1 = nextDouble();
+    final u1 = nextDouble();
+    final u2 = nextDouble();
+    if (u1 <= 1e-15) {
+      return 0.0;
     }
     return sqrt(-2.0 * log(u1)) * cos(2.0 * pi * u2);
   }
