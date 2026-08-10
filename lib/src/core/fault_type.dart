@@ -46,6 +46,9 @@ enum FaultType {
 
   /// Simulates input data corruption (image noise, missing pixels, audio glitches).
   dataCorruption,
+
+  /// Simulates model version mismatch (older/newer/incompatible versions loaded).
+  modelVersionMismatch,
 }
 
 /// Extension helpers on [FaultType].
@@ -73,6 +76,8 @@ extension FaultTypeX on FaultType {
         return 'GPU Memory Pressure';
       case FaultType.dataCorruption:
         return 'Data Corruption';
+      case FaultType.modelVersionMismatch:
+        return 'Model Version Mismatch';
     }
   }
 
@@ -99,6 +104,8 @@ extension FaultTypeX on FaultType {
         return '🎮';
       case FaultType.dataCorruption:
         return '🔧';
+      case FaultType.modelVersionMismatch:
+        return '📦';
     }
   }
 }
