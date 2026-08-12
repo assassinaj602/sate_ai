@@ -98,8 +98,7 @@ void main() {
     });
 
     test('runInference returns AIOutput', () async {
-      final output =
-          await adapter.runInference(AIInput(text: 'Hello, world!'));
+      final output = await adapter.runInference(AIInput(text: 'Hello, world!'));
       expect(output, isA<AIOutput>());
       expect(output.text, isNotEmpty);
       expect(output.inferenceTime, greaterThan(Duration.zero));
