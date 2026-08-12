@@ -12,18 +12,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.24.0'
 
-      - name: Accept Android SDK licenses
+      - name: Accept Android SDK licenses and Install NDK
         run: |
-          yes | sdkmanager --licenses
-        shell: bash
-
-      - name: Install Android NDK
-        run: |
-          sdkmanager "ndk;28.0.12433566"
+          SDKMANAGER="${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager"
+          if [ ! -f "$SDKMANAGER" ]; then
+            SDKMANAGER="${ANDROID_HOME}/tools/bin/sdkmanager"
+          fi
+          yes | $SDKMANAGER --licenses
+          $SDKMANAGER "ndk;28.0.12433566"
+          echo "ANDROID_NDK_HOME=${ANDROID_HOME}/ndk/28.0.12433566" >> $GITHUB_ENV
         shell: bash
 
       - name: Install dependencies
