@@ -77,6 +77,9 @@ jobs:
         run: flutter pub get
         working-directory: example
 
+      - name: Accept Android SDK Licenses
+        run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses || true
+
       - name: Build APK (debug)
         run: flutter build apk --debug
         working-directory: example
