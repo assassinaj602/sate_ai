@@ -33,12 +33,13 @@ runs:
       shell: bash
 
     - name: Activate SATE AI CLI Globally
-      run: flutter pub global activate --source=path .
+      run: |
+        flutter pub global activate --source=path .
+        echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
       shell: bash
 
     - name: Run SATE AI Stress Test
       run: |
-        export PATH="$PATH":"$HOME/.pub-cache/bin"
         REPORT_EXT="json"
         MARKDOWN_FLAG=""
         if [ "${{ inputs.output-format }}" = "markdown" ]; then
