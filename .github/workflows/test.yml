@@ -28,7 +28,7 @@ jobs:
           if [ ! -f "$SDKMANAGER" ]; then
             SDKMANAGER="${ANDROID_HOME}/tools/bin/sdkmanager"
           fi
-          yes | $SDKMANAGER --licenses
+          yes | $SDKMANAGER --licenses || true
           $SDKMANAGER "ndk;28.0.12433566" "cmake;3.22.1"
           echo "ANDROID_NDK_HOME=${ANDROID_HOME}/ndk/28.0.12433566" >> $GITHUB_ENV
         shell: bash
