@@ -3,6 +3,8 @@ name: CI
 on:
   push:
     branches: [ main ]
+    tags:
+      - 'v*'
   pull_request:
     branches: [ main ]
 
@@ -13,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Setup Java 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
@@ -28,7 +30,7 @@ jobs:
           if [ ! -f "$SDKMANAGER" ]; then
             SDKMANAGER="${ANDROID_HOME}/tools/bin/sdkmanager"
           fi
-          yes | $SDKMANAGER --licenses
+          yes | $SDKMANAGER --licenses || true
           $SDKMANAGER "ndk;28.0.12433566"
           echo "ANDROID_NDK_HOME=${ANDROID_HOME}/ndk/28.0.12433566" >> $GITHUB_ENV
         shell: bash
@@ -44,3 +46,25 @@ jobs:
           cd example
           flutter pub get
           flutter build apk --debug
+
+  publish:
+    needs: test
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Publish package
+        run: dart pub publish --force
