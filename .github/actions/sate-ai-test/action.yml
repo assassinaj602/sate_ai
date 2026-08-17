@@ -25,15 +25,17 @@ runs:
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.22.3'
+        flutter-version: '3.24.0'
         channel: 'stable'
 
     - name: Install Dependencies
       run: flutter pub get
       shell: bash
 
-    - name: Activate SATE AI CLI
-      run: flutter pub global activate --source=path .
+    - name: Activate SATE AI CLI Globally
+      run: |
+        flutter pub global activate --source=path .
+        echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
       shell: bash
 
     - name: Run SATE AI Stress Test
