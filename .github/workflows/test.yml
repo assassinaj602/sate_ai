@@ -24,13 +24,33 @@ jobs:
         with:
           flutter-version: '3.24.0'
 
-      - name: Accept Android SDK licenses and Install NDK
+      - name: Install CMake 3.31.0
+        run: |
+          wget -q https://github.com/Kitware/CMake/releases/download/v3.31.0/cmake-3.31.0-linux-x86_64.tar.gz
+          tar -xzf cmake-3.31.0-linux-x86_64.tar.gz
+          sudo mv cmake-3.31.0-linux-x86_64 /opt/cmake-3.31.0
+          echo "/opt/cmake-3.31.0/bin" >> $GITHUB_PATH
+        shell: bash
+
+      - name: Verify CMake version
+        run: cmake --version
+        shell: bash
+
+      - name: Accept Android SDK licenses
         run: |
           SDKMANAGER="${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager"
           if [ ! -f "$SDKMANAGER" ]; then
             SDKMANAGER="${ANDROID_HOME}/tools/bin/sdkmanager"
           fi
           yes | $SDKMANAGER --licenses || true
+        shell: bash
+
+      - name: Install Android NDK
+        run: |
+          SDKMANAGER="${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager"
+          if [ ! -f "$SDKMANAGER" ]; then
+            SDKMANAGER="${ANDROID_HOME}/tools/bin/sdkmanager"
+          fi
           $SDKMANAGER "ndk;28.0.12433566"
           echo "ANDROID_NDK_HOME=${ANDROID_HOME}/ndk/28.0.12433566" >> $GITHUB_ENV
         shell: bash
