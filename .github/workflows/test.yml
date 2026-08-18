@@ -14,12 +14,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Java 17
-        uses: actions/setup-java@v5
-        with:
-          distribution: temurin
-          java-version: '17'
-
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.24.0'
@@ -36,23 +30,32 @@ jobs:
         run: cmake --version
         shell: bash
 
-      - name: Accept Android SDK licenses
+      - name: Install Android cmdline-tools
         run: |
-          SDKMANAGER="${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager"
-          if [ ! -f "$SDKMANAGER" ]; then
-            SDKMANAGER="${ANDROID_HOME}/tools/bin/sdkmanager"
-          fi
-          yes | $SDKMANAGER --licenses || true
+          mkdir -p $HOME/android-sdk/cmdline-tools
+          cd $HOME/android-sdk/cmdline-tools
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdline-tools.zip
+          unzip -q cmdline-tools.zip
+          mv cmdline-tools latest
+          chmod +x $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager
+          echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
+          echo "$HOME/android-sdk/cmdline-tools/latest/bin" >> $GITHUB_PATH
+        shell: bash
+
+      - name: Accept Android SDK licenses (FAILSAFE)
+        run: |
+          yes | sdkmanager --licenses --no_https 2>/dev/null || true
+          yes | sdkmanager --licenses 2>/dev/null || true
+          sdkmanager --list 2>/dev/null || true
+        env:
+          ANDROID_HOME: $HOME/android-sdk
         shell: bash
 
       - name: Install Android NDK
         run: |
-          SDKMANAGER="${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager"
-          if [ ! -f "$SDKMANAGER" ]; then
-            SDKMANAGER="${ANDROID_HOME}/tools/bin/sdkmanager"
-          fi
-          $SDKMANAGER "ndk;28.0.12433566"
-          echo "ANDROID_NDK_HOME=${ANDROID_HOME}/ndk/28.0.12433566" >> $GITHUB_ENV
+          sdkmanager "ndk;28.0.12433566"
+        env:
+          ANDROID_HOME: $HOME/android-sdk
         shell: bash
 
       - name: Install dependencies
@@ -66,6 +69,8 @@ jobs:
           cd example
           flutter pub get
           flutter build apk --debug
+        env:
+          ANDROID_HOME: $HOME/android-sdk
 
   publish:
     needs: test
