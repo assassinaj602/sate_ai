@@ -3,6 +3,8 @@ name: CI
 on:
   push:
     branches: [ main ]
+    tags:
+      - 'v*'
   pull_request:
     branches: [ main ]
 
@@ -16,25 +18,42 @@ jobs:
         with:
           flutter-version: '3.24.0'
 
-      - name: Set up Android SDK
+      - name: Install CMake 3.31.0
         run: |
-          sudo apt-get update
-          sudo apt-get install -y wget unzip
-          mkdir -p $ANDROID_HOME/cmdline-tools
+          wget -q https://github.com/Kitware/CMake/releases/download/v3.31.0/cmake-3.31.0-linux-x86_64.tar.gz
+          tar -xzf cmake-3.31.0-linux-x86_64.tar.gz
+          sudo mv cmake-3.31.0-linux-x86_64 /opt/cmake-3.31.0
+          echo "/opt/cmake-3.31.0/bin" >> $GITHUB_PATH
+        shell: bash
+
+      - name: Verify CMake version
+        run: cmake --version
+        shell: bash
+
+      - name: Install Android cmdline-tools (user-writable)
+        run: |
+          mkdir -p $HOME/android-sdk/cmdline-tools
+          cd $HOME/android-sdk/cmdline-tools
           wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdline-tools.zip
-          unzip -q cmdline-tools.zip -d $ANDROID_HOME/cmdline-tools
-          mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
-          chmod +x $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager
+          unzip -q cmdline-tools.zip
+          mv cmdline-tools latest
+          chmod +x $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager
+          echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
+          echo "$HOME/android-sdk/cmdline-tools/latest/bin" >> $GITHUB_PATH
         shell: bash
 
       - name: Accept Android SDK licenses
         run: |
-          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+          yes | sdkmanager --licenses
+        env:
+          ANDROID_HOME: $HOME/android-sdk
         shell: bash
 
       - name: Install Android NDK
         run: |
-          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "ndk;28.0.12433566"
+          sdkmanager "ndk;28.0.12433566"
+        env:
+          ANDROID_HOME: $HOME/android-sdk
         shell: bash
 
       - name: Install dependencies
@@ -48,3 +67,27 @@ jobs:
           cd example
           flutter pub get
           flutter build apk --debug
+        env:
+          ANDROID_HOME: $HOME/android-sdk
+
+  publish:
+    needs: test
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Publish package
+        run: dart pub publish --force

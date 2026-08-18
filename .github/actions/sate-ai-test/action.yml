@@ -22,29 +22,32 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    # Flutter is required for `pub get` because pubspec.yaml depends on the
-    # Flutter SDK. However, the CLI binary itself (bin/sate_ai.dart) only
-    # imports pure-Dart code via sate_ai_cli.dart, so `dart run` works fine
-    # and never triggers Flutter framework compilation.
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.22.3'
+        flutter-version: '3.24.0'
         channel: 'stable'
 
     - name: Install Dependencies
       run: flutter pub get
       shell: bash
 
+    - name: Activate SATE AI CLI Globally
+      run: |
+        flutter pub global activate --source=path .
+        echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
+      shell: bash
+
     - name: Run SATE AI Stress Test
       run: |
+        export PATH="$PATH":"$HOME/.pub-cache/bin"
         REPORT_EXT="json"
         MARKDOWN_FLAG=""
         if [ "${{ inputs.output-format }}" = "markdown" ]; then
           REPORT_EXT="md"
           MARKDOWN_FLAG="--markdown"
         fi
-        dart run bin/sate_ai.dart \
+        sate_ai stress \
           --model "${{ inputs.model-path }}" \
           --injectors "${{ inputs.injectors }}" \
           --timeout "${{ inputs.timeout }}" \

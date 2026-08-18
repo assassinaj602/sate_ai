@@ -36,6 +36,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Configurable expected and actual versions
   - Optional fallback simulation
   - 18 new unit tests (now 227 total)
+- FllamaAdapter for running Llama, Phi, Gemma models via llama.cpp (Issue #28)
+  - Supports GGUF models via `fllama` package
+  - Configurable context size, threads, tokens, temperature, top-p
+  - Full `AIModelAdapter` implementation
+  - 19 new unit tests (now 246 total)
 
 ### Changed
 - Breaking: `AIModelAdapter` now requires implementing `simulateGPUMemoryPressure` and `currentGPUMemoryMB`
