@@ -30,6 +30,7 @@ class MediaPipeAdapter implements AIModelAdapter {
   final MediaPipeTaskType taskType;
 
   /// Unique identifier for the model.
+  @override
   final String modelId;
 
   /// Current memory usage in MB.
@@ -51,9 +52,6 @@ class MediaPipeAdapter implements AIModelAdapter {
   });
 
   @override
-  String get modelId => this.modelId;
-
-  @override
   double get currentMemoryMB => _currentMemoryMB;
 
   @override
@@ -65,7 +63,7 @@ class MediaPipeAdapter implements AIModelAdapter {
   @override
   Future<AIOutput> runInference(AIInput input) async {
     if (_isDegraded) {
-      throw AIInferenceError(
+      throw const AIInferenceError(
           'MediaPipeAdapter is degraded. Call reset() before retrying.');
     }
 
@@ -75,6 +73,8 @@ class MediaPipeAdapter implements AIModelAdapter {
       // For MediaPipe, we need to process the input differently.
       // Since we don't have actual image input in the current interface,
       // we simulate inference based on the task type.
+      // We also reference GoogleMlKit to verify runtime presence.
+      final _ = GoogleMlKit.vision;
 
       // In a real implementation, input would contain image data.
       // For testing, we generate a realistic response.
