@@ -1,10 +1,10 @@
-import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:sate_ai/src/adapters/model_adapter.dart';
 
 /// Adapter for MediaPipe solutions (face detection, pose estimation, etc.).
 ///
-/// This adapter wraps Google ML Kit (which includes MediaPipe) to support
-/// on-device vision tasks like face detection, pose estimation, and more.
+/// This is a simulation adapter that mimics MediaPipe behavior without
+/// requiring the actual Google ML Kit package. It returns simulated
+/// outputs for various vision tasks.
 ///
 /// ## Supported Tasks
 /// - Face Detection
@@ -70,16 +70,7 @@ class MediaPipeAdapter implements AIModelAdapter {
     final stopwatch = Stopwatch()..start();
 
     try {
-      // For MediaPipe, we need to process the input differently.
-      // Since we don't have actual image input in the current interface,
-      // we simulate inference based on the task type.
-      // We also reference GoogleMlKit to verify runtime presence.
-      final _ = GoogleMlKit.vision;
-
-      // In a real implementation, input would contain image data.
-      // For testing, we generate a realistic response.
       final result = await _simulateInference(input);
-
       stopwatch.stop();
 
       final confidence = (0.95 - (_currentMemoryMB / 1000.0)).clamp(0.0, 1.0);
@@ -89,7 +80,7 @@ class MediaPipeAdapter implements AIModelAdapter {
         inferenceTime: stopwatch.elapsed,
         confidence: confidence,
         metadata: {
-          'runtime': 'Google ML Kit (MediaPipe)',
+          'runtime': 'MediaPipe (Simulated)',
           'taskType': taskType.name,
           'modelId': modelId,
           'memoryMB': _currentMemoryMB,
@@ -104,25 +95,28 @@ class MediaPipeAdapter implements AIModelAdapter {
 
   /// Simulates inference based on the task type.
   Future<String> _simulateInference(AIInput input) async {
-    // Simulate processing time based on task complexity
     final processingTime = _getProcessingTime();
     await Future.delayed(processingTime);
 
+    // Use the input to generate a realistic response
+    final inputText = input.text ?? 'input';
+    final trimmed =
+        inputText.length > 20 ? inputText.substring(0, 20) : inputText;
+
     switch (taskType) {
       case MediaPipeTaskType.faceDetection:
-        return 'Face detection: 2 faces detected at positions (120, 45), (300, 200)';
+        return 'Face detection on "$trimmed": 2 faces detected at positions (120, 45), (300, 200)';
       case MediaPipeTaskType.poseEstimation:
-        return 'Pose estimation: 17 keypoints detected, confidence: 0.92';
+        return 'Pose estimation on "$trimmed": 17 keypoints detected, confidence: 0.92';
       case MediaPipeTaskType.objectDetection:
-        return 'Object detection: person (0.95), car (0.87), dog (0.76)';
+        return 'Object detection on "$trimmed": person (0.95), car (0.87), dog (0.76)';
       case MediaPipeTaskType.imageLabeling:
-        return 'Image labeling: cat (0.98), pet (0.92), animal (0.89)';
+        return 'Image labeling on "$trimmed": cat (0.98), pet (0.92), animal (0.89)';
       case MediaPipeTaskType.textRecognition:
-        return 'Text recognition: "Hello World" detected at (50, 100)';
+        return 'Text recognition on "$trimmed": "Hello World" detected at (50, 100)';
     }
   }
 
-  /// Returns processing time based on task complexity.
   Duration _getProcessingTime() {
     switch (taskType) {
       case MediaPipeTaskType.faceDetection:

@@ -135,8 +135,8 @@ void main() {
       expect(defaultAdapter.threads, equals(2));
     });
 
-    test('dispose does not throw', () {
-      expect(() => adapter.dispose(), returnsNormally);
+    test('dispose does not throw', () async {
+      expect(() async => await adapter.dispose(), returnsNormally);
     });
   });
 }

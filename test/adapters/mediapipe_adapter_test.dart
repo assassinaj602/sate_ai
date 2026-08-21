@@ -134,7 +134,7 @@ void main() {
     test('runInference returns metadata', () async {
       final output = await adapter.runInference(AIInput(text: 'test'));
       expect(output.metadata != null, isTrue);
-      expect(output.metadata!['runtime'], equals('Google ML Kit (MediaPipe)'));
+      expect(output.metadata!['runtime'], equals('MediaPipe (Simulated)'));
       expect(output.metadata!['taskType'], equals('faceDetection'));
       expect(output.metadata!['modelId'], equals('test-face-detector'));
     });
