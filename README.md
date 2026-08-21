@@ -434,7 +434,8 @@ An `AIModelAdapter` wraps any on-device AI runtime and exposes a uniform interfa
 | MockAdapter | Available | Simulates memory pressure and degradation for testing |
 | OnnxAdapter | Available | Wraps `onnxruntime ^1.4.1` (Android, iOS, Linux, macOS, Windows) |
 | TensorFlow Lite | Available | Wraps tflite_flutter |
-| Fllama | Planned | Wraps fllama for Llama-family models |
+| FllamaAdapter | Available | Wraps fllama for Llama-family models |
+| MediaPipeAdapter | Available | Wraps Google ML Kit (MediaPipe) |
 
 ### Writing a Custom Adapter
 
