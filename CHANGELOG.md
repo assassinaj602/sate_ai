@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-08-21
+
+### Added
+- MediaPipeAdapter for on-device vision tasks (Issue #29)
+  - Supports face detection, pose estimation, object detection, image labeling, text recognition
+  - Configurable task type via `MediaPipeTaskType`
+  - Full AIModelAdapter implementation
+  - 8+ unit tests
+
+### Changed
+- Adapters table in README updated with MediaPipeAdapter
+
 ## [0.8.0] - 2026-08-07
 
 ### Added

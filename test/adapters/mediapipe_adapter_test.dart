@@ -2,17 +2,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sate_ai/sate_ai.dart';
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
-  group('FllamaAdapter', () {
-    late FllamaAdapter adapter;
+  group('MediaPipeAdapter', () {
+    late MediaPipeAdapter adapter;
 
     setUp(() {
-      adapter = FllamaAdapter(
-        modelPath: 'assets/models/phi-2.Q4_K_M.gguf',
-        modelId: 'test-phi-2',
-        contextSize: 256,
-        threads: 1,
-        tokens: 32,
+      adapter = MediaPipeAdapter(
+        taskType: MediaPipeTaskType.faceDetection,
+        modelId: 'test-face-detector',
       );
     });
 
@@ -23,7 +19,7 @@ void main() {
     });
 
     test('modelId matches constructor value', () {
-      expect(adapter.modelId, equals('test-phi-2'));
+      expect(adapter.modelId, equals('test-face-detector'));
     });
 
     test('modelId is non-empty', () {
@@ -92,51 +88,74 @@ void main() {
     test('runInference throws when degraded', () async {
       await adapter.simulateMemoryPressure(160);
       await expectLater(
-        adapter.runInference(AIInput(text: 'Hello')),
+        adapter.runInference(AIInput(text: 'test')),
         throwsA(isA<AIInferenceError>()),
       );
     });
 
     test('runInference returns AIOutput', () async {
-      final output = await adapter.runInference(AIInput(text: 'Hello, world!'));
+      final output = await adapter.runInference(AIInput(text: 'test image'));
       expect(output, isA<AIOutput>());
       expect(output.text, isNotEmpty);
       expect(output.inferenceTime, greaterThan(Duration.zero));
     });
 
-    test('runInference handles empty input', () async {
-      final output = await adapter.runInference(AIInput(text: ''));
-      expect(output.text, isNotEmpty);
+    test('runInference returns correct output for face detection', () async {
+      final output = await adapter.runInference(AIInput(text: 'face image'));
+      expect(output.text.toLowerCase(), contains('face detection'));
+    });
+
+    test('runInference returns correct output for pose estimation', () async {
+      final poseAdapter = MediaPipeAdapter(
+        taskType: MediaPipeTaskType.poseEstimation,
+        modelId: 'pose-model',
+      );
+      final output =
+          await poseAdapter.runInference(AIInput(text: 'pose image'));
+      expect(output.text.toLowerCase(), contains('pose estimation'));
+    });
+
+    test('runInference returns correct output for object detection', () async {
+      final objectAdapter = MediaPipeAdapter(
+        taskType: MediaPipeTaskType.objectDetection,
+        modelId: 'object-model',
+      );
+      final output =
+          await objectAdapter.runInference(AIInput(text: 'object image'));
+      expect(output.text.toLowerCase(), contains('object detection'));
     });
 
     test('runInference returns confidence', () async {
-      final output = await adapter.runInference(AIInput(text: 'Hello'));
+      final output = await adapter.runInference(AIInput(text: 'test'));
       expect(output.confidence, greaterThanOrEqualTo(0.0));
       expect(output.confidence, lessThanOrEqualTo(1.0));
     });
 
     test('runInference returns metadata', () async {
-      final output = await adapter.runInference(AIInput(text: 'Hello'));
+      final output = await adapter.runInference(AIInput(text: 'test'));
       expect(output.metadata != null, isTrue);
-      expect(output.metadata!['runtime'], equals('Fllama (llama.cpp)'));
-      expect(output.metadata!['modelId'], equals('test-phi-2'));
-      expect(output.metadata!['memoryMB'], equals(0.0));
+      expect(output.metadata!['runtime'], equals('MediaPipe (Simulated)'));
+      expect(output.metadata!['taskType'], equals('faceDetection'));
+      expect(output.metadata!['modelId'], equals('test-face-detector'));
     });
 
     // --- Edge cases ---
 
     test('constructor with default values works', () {
-      final defaultAdapter = FllamaAdapter(
-        modelPath: 'model.gguf',
-        modelId: 'default',
-      );
-      expect(defaultAdapter.modelId, equals('default'));
-      expect(defaultAdapter.contextSize, equals(512));
-      expect(defaultAdapter.threads, equals(2));
+      final defaultAdapter = MediaPipeAdapter();
+      expect(defaultAdapter.modelId, equals('mediapipe-model'));
+      expect(defaultAdapter.taskType, equals(MediaPipeTaskType.faceDetection));
     });
 
-    test('dispose does not throw', () async {
-      expect(() async => await adapter.dispose(), returnsNormally);
+    test('all task types work', () async {
+      for (final taskType in MediaPipeTaskType.values) {
+        final testAdapter = MediaPipeAdapter(
+          taskType: taskType,
+          modelId: 'test-$taskType',
+        );
+        final output = await testAdapter.runInference(AIInput(text: 'test'));
+        expect(output.text, isNotEmpty);
+      }
     });
   });
 }

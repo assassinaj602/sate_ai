@@ -189,9 +189,9 @@ class FllamaAdapter implements AIModelAdapter {
   }
 
   /// Disposes of the Fllama resources.
-  void dispose() {
+  Future<void> dispose() async {
     try {
-      _fllama?.releaseAllContexts();
+      await _fllama?.releaseAllContexts();
     } catch (_) {
       // Ignore platform channel unhandled exceptions during unit tests
     }

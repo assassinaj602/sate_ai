@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.example.sate_ai_example"
-    compileSdk = 36
+    compileSdk = 34
     ndkVersion = "28.0.12433566"
 
     compileOptions {
