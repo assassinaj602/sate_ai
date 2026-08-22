@@ -63,7 +63,8 @@ The paper covers:
 
 - Core fault injection engine with a composable `FaultInjector` interface
 - `StressRunner` for orchestrating multiple injectors with timeout support
-- `StressReport` with JSON and Markdown serialization
+- `StressReport` with JSON, Markdown, and self-contained HTML page serialization (`toHtml()`)
+- HTML report export with Chart.js charts and detailed results filtering
 - `MockAdapter` for testing without real AI models
 - `FllamaAdapter` for running Llama, Phi, Gemma models via llama.cpp (Fllama)
 - `MemoryPressureInjector` for RAM out-of-memory simulation
