@@ -289,13 +289,14 @@ class StressReport {
     buffer.writeln('  <div class="container">');
     buffer.writeln('    <header>');
     buffer.writeln('      <h1>SATE AI Stress Report</h1>');
-    buffer.writeln('      <p class="subtitle">Model: <strong>$modelId</strong></p>');
+    buffer.writeln(
+        '      <p class="subtitle">Model: <strong>$modelId</strong></p>');
     buffer.writeln('    </header>');
 
-    // Status banner
-    buffer.writeln('    <div class="status-banner ${passed ? "pass" : "fail}">');
-    buffer.writeln(
-        '      ${passed ? "✅ All tests passed" : "❌ Tests failed"}');
+    final statusClass = passed ? 'pass' : 'fail';
+    final statusText = passed ? '✅ All tests passed' : '❌ Tests failed';
+    buffer.writeln('    <div class="status-banner $statusClass">');
+    buffer.writeln('      $statusText');
     buffer.writeln('    </div>');
 
     // Summary cards
