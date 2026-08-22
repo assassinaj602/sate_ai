@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import '../adapters/model_adapter.dart';
 import 'fault_type.dart';
@@ -252,6 +253,12 @@ class StressReport {
       }
     }
     return buf.toString();
+  }
+
+  /// Writes the HTML report to a file.
+  Future<void> writeHtmlToFile(String filePath) async {
+    final html = toHtml();
+    await File(filePath).writeAsString(html);
   }
 
   /// Generates a self-contained HTML page for the report.
