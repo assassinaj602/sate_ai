@@ -20,6 +20,8 @@ void main(List<String> arguments) async {
     ..addOption('output',
         abbr: 'o', help: 'Output file path for the report (JSON or Markdown)')
     ..addFlag('markdown', help: 'Output in Markdown format (instead of JSON)')
+    ..addFlag('html',
+        help: 'Output in HTML format (generates a self-contained HTML page)')
     ..addOption('timeout',
         abbr: 't', help: 'Timeout in seconds for each test', defaultsTo: '30')
     ..addFlag('help', abbr: 'h', help: 'Show this help', negatable: false);
@@ -38,6 +40,7 @@ void main(List<String> arguments) async {
     final timeoutSeconds = int.parse(results['timeout'] as String);
     final outputFile = results['output'] as String?;
     final useMarkdown = results['markdown'] as bool;
+    final useHtml = results['html'] as bool;
 
     final injectorNames = injectorsStr.split(',').map((s) => s.trim()).toList();
     final injectors = <FaultInjector>[];
@@ -83,12 +86,18 @@ void main(List<String> arguments) async {
     );
 
     if (outputFile != null) {
-      final content = useMarkdown ? report.toMarkdown() : report.toJsonString();
+      final content = useMarkdown
+          ? report.toMarkdown()
+          : useHtml
+              ? report.toHtml()
+              : report.toJsonString();
       await File(outputFile).writeAsString(content);
       log('Report written to $outputFile');
     } else {
       if (useMarkdown) {
         log(report.toMarkdown());
+      } else if (useHtml) {
+        log(report.toHtml());
       } else {
         log(report.toJsonString());
       }

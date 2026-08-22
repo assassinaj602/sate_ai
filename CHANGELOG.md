@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.9.0] - 2026-08-21
 
 ### Added
+- HTML report export with charts and filtering (Issue #32)
+  - New `toHtml()` method in `StressReport`
+  - `writeHtmlToFile()` for saving HTML reports
+  - Chart.js integration for inference time and memory usage charts
+  - Self-contained HTML page with dark theme
+  - CLI `--html` flag for HTML output
 - MediaPipeAdapter for on-device vision tasks (Issue #29)
   - Supports face detection, pose estimation, object detection, image labeling, text recognition
   - Configurable task type via `MediaPipeTaskType`
