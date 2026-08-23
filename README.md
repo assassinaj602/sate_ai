@@ -437,6 +437,7 @@ An `AIModelAdapter` wraps any on-device AI runtime and exposes a uniform interfa
 | TensorFlow Lite | Available | Wraps tflite_flutter |
 | FllamaAdapter | Available | Wraps fllama for Llama-family models |
 | MediaPipeAdapter | Available | Wraps Google ML Kit (MediaPipe) |
+| CoreMLAdapter | Available | Wraps Apple Core ML (iOS) |
 
 ### Writing a Custom Adapter
 

@@ -20,6 +20,8 @@ dependencies:
   args: ^2.4.0
   tflite_flutter: ^0.12.0
   fllama: ^0.0.1
+  # google_ml_kit: ^0.19.0  # Commented out (MediaPipe adapter uses simulation)
+  # coreml_flutter: ^0.1.0  # Core ML support (iOS only; CoreMLAdapter uses simulation)
 
 dev_dependencies:
   flutter_test:
