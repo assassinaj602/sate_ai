@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.9.0] - 2026-08-21
 
 ### Added
+- Core ML Adapter for iOS (Issue #30)
+  - `CoreMLAdapter` implementing `AIModelAdapter`
+  - Simulation mode for testing on all platforms
+  - Support for image classification, text classification, numeric prediction
+  - iOS native support (placeholder for future implementation)
+  - 8+ unit tests
 - HTML report export with charts and filtering (Issue #32)
   - New `toHtml()` method in `StressReport`
   - `writeHtmlToFile()` for saving HTML reports
