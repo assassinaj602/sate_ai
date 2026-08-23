@@ -124,8 +124,7 @@ void main() {
     });
 
     test('runInference handles text input', () async {
-      final output =
-          await adapter.runInference(AIInput(text: 'text sentence'));
+      final output = await adapter.runInference(AIInput(text: 'text sentence'));
       expect(output.text, contains('text classification'));
     });
 

@@ -102,7 +102,7 @@ class CoreMLAdapter implements AIModelAdapter {
     }
 
     if (_isDegraded) {
-      throw AIInferenceError(
+      throw const AIInferenceError(
           'CoreMLAdapter is degraded. Call reset() before retrying.');
     }
 
