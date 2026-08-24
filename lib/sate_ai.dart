@@ -34,6 +34,7 @@ export 'src/adapters/tflite_adapter.dart';
 export 'src/adapters/fllama_adapter.dart';
 export 'src/adapters/mediapipe_adapter.dart';
 export 'src/adapters/coreml_adapter.dart';
+export 'src/adapters/google_mlkit_adapter.dart';
 export 'src/injectors/memory_pressure_injector.dart';
 export 'src/injectors/malformed_input_injector.dart';
 export 'src/injectors/quantization_drift_injector.dart';
