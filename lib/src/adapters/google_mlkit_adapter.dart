@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:sate_ai/src/adapters/model_adapter.dart';
 
 /// Adapter for Google ML Kit's on-device APIs.
