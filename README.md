@@ -438,6 +438,7 @@ An `AIModelAdapter` wraps any on-device AI runtime and exposes a uniform interfa
 | FllamaAdapter | Available | Wraps fllama for Llama-family models |
 | MediaPipeAdapter | Available | Wraps Google ML Kit (MediaPipe) |
 | CoreMLAdapter | Available | Wraps Apple Core ML (iOS) |
+| GoogleMLKitAdapter | Available | Wraps Google ML Kit (Simulated) |
 
 ### Writing a Custom Adapter
 

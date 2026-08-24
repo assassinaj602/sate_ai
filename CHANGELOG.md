@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.9.0] - 2026-08-21
 
 ### Added
+- Google ML Kit Adapter (Issue #31)
+  - `GoogleMLKitAdapter` implementing `AIModelAdapter`
+  - Simulation-based (no external dependencies)
+  - Supports: text recognition, face detection, image labeling, object detection, language identification, translation, pose detection
+  - 10+ unit tests
 - Core ML Adapter for iOS (Issue #30)
   - `CoreMLAdapter` implementing `AIModelAdapter`
   - Simulation mode for testing on all platforms
