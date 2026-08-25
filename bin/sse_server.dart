@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_print, prefer_const_constructors
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -6,10 +7,12 @@ import 'package:sate_ai/sate_ai.dart';
 
 /// Simple HTTP server for Server-Sent Events (SSE) streaming.
 class SSEServer {
+  /// Port to listen on.
   final int port;
   HttpServer? _server;
   final List<HttpResponse> _clients = [];
 
+  /// Creates a new [SSEServer] instance.
   SSEServer({this.port = 8080});
 
   /// Starts the SSE server.

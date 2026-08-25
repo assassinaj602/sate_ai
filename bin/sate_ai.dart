@@ -1,5 +1,4 @@
 // ignore_for_file: avoid_print, prefer_const_constructors
-import 'dart:async';
 import 'dart:io';
 import 'package:args/args.dart';
 import 'package:sate_ai/sate_ai_cli.dart';
