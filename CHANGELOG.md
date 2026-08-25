@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.9.0] - 2026-08-25
 
 ### Added
+- Real-time monitoring dashboard with Server-Sent Events (Issue #33)
+  - Live progress streaming to web dashboard
+  - Event stream with test started, injector progress, and finished events
+  - HTTP server with SSE endpoint
+  - CLI `serve` command for launching dashboard
+  - Live logs and results display
+  - Auto-reconnect on connection loss
 - MediaPipeAdapter for on-device vision tasks (Issue #29)
   - Supports face detection, pose estimation, object detection, image labeling, text recognition
   - Configurable task type via `MediaPipeTaskType`
