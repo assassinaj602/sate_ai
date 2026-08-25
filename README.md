@@ -416,6 +416,23 @@ sate_ai \
 sate_ai --model model.gguf --injectors memoryPressure --markdown
 ```
 
+### Real-Time Monitoring Dashboard
+
+SATE AI includes a real-time monitoring dashboard for long-running tests:
+
+```bash
+# Start the monitoring server
+sate_ai --serve --port 8080
+
+# Open http://localhost:8080 in your browser
+```
+
+The dashboard shows:
+- Live progress bar
+- Real-time logs
+- Pass/fail counts
+- Individual results as they complete
+
 ### Best Practices
 
 1. **Start Simple**: Begin with 1-2 injectors and gradually add more.

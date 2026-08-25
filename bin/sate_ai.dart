@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:sate_ai/sate_ai_cli.dart';
 
+import 'sse_server.dart';
+
 void log(String message) {
   print(message);
 }
@@ -12,7 +14,7 @@ void main(List<String> arguments) async {
     ..addOption('model',
         abbr: 'm',
         help: 'Path to the model file (e.g., model.gguf)',
-        mandatory: true)
+        defaultsTo: 'cli-model')
     ..addOption('injectors',
         abbr: 'i',
         help: 'Comma-separated list of injectors to use',
@@ -22,6 +24,11 @@ void main(List<String> arguments) async {
     ..addFlag('markdown', help: 'Output in Markdown format (instead of JSON)')
     ..addFlag('html',
         help: 'Output in HTML format (generates a self-contained HTML page)')
+    ..addFlag('serve', help: 'Start the real-time monitoring server (SSE)')
+    ..addOption('port',
+        abbr: 'p',
+        help: 'Port for the SSE server (default: 8080)',
+        defaultsTo: '8080')
     ..addOption('timeout',
         abbr: 't', help: 'Timeout in seconds for each test', defaultsTo: '30')
     ..addFlag('help', abbr: 'h', help: 'Show this help', negatable: false);
@@ -33,6 +40,16 @@ void main(List<String> arguments) async {
       log('');
       log(parser.usage);
       exit(0);
+    }
+
+    if (results['serve'] as bool) {
+      final port = int.parse(results['port'] as String);
+      final server = SSEServer(port: port);
+      await server.start();
+      print('Press Ctrl+C to stop...');
+      await ProcessSignal.sigint.watch().first;
+      await server.close();
+      return;
     }
 
     final _ = results['model'] as String;
