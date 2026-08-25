@@ -7,34 +7,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.9.0] - 2026-08-21
+## [0.9.0] - 2026-08-25
 
 ### Added
+- MediaPipeAdapter for on-device vision tasks (Issue #29)
+  - Supports face detection, pose estimation, object detection, image labeling, text recognition
+  - Configurable task type via `MediaPipeTaskType`
+  - 8+ unit tests
+
+- Core ML Adapter for iOS (Issue #30)
+  - `CoreMLAdapter` implementing `AIModelAdapter`
+  - Simulation mode for testing on all platforms
+  - Support for image classification, text classification, numeric prediction
+  - 8+ unit tests
+
 - Google ML Kit Adapter (Issue #31)
   - `GoogleMLKitAdapter` implementing `AIModelAdapter`
   - Simulation-based (no external dependencies)
   - Supports: text recognition, face detection, image labeling, object detection, language identification, translation, pose detection
   - 10+ unit tests
-- Core ML Adapter for iOS (Issue #30)
-  - `CoreMLAdapter` implementing `AIModelAdapter`
-  - Simulation mode for testing on all platforms
-  - Support for image classification, text classification, numeric prediction
-  - iOS native support (placeholder for future implementation)
-  - 8+ unit tests
-- HTML report export with charts and filtering (Issue #32)
+
+- HTML Report Export with charts and filtering (Issue #32)
   - New `toHtml()` method in `StressReport`
   - `writeHtmlToFile()` for saving HTML reports
   - Chart.js integration for inference time and memory usage charts
   - Self-contained HTML page with dark theme
   - CLI `--html` flag for HTML output
-- MediaPipeAdapter for on-device vision tasks (Issue #29)
-  - Supports face detection, pose estimation, object detection, image labeling, text recognition
-  - Configurable task type via `MediaPipeTaskType`
-  - Full AIModelAdapter implementation
-  - 8+ unit tests
 
 ### Changed
-- Adapters table in README updated with MediaPipeAdapter
+- Adapters table in README updated with all new adapters
+- Documentation updated with HTML report usage
+- All adapters now support GPU memory pressure simulation
+
+### Fixed
+- Build issues with fllama plugin resolved (NDK, CMake, SDK versions)
+- CI workflow now properly installs CMake 3.31.0 and Android NDK
+- Example app builds successfully on CI
 
 ## [0.8.0] - 2026-08-07
 
