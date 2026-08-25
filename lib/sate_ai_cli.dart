@@ -11,6 +11,7 @@ library sate_ai_cli;
 export 'src/core/fault_type.dart';
 export 'src/core/fault_injector.dart';
 export 'src/core/stress_runner.dart';
+export 'src/core/event_stream.dart';
 export 'src/core/report.dart';
 export 'src/adapters/model_adapter.dart';
 export 'src/adapters/mock_adapter.dart';
