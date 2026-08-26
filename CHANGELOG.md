@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.9.0] - 2026-08-25
 
 ### Added
+- Stress test scheduling with cron expressions (Issue #34)
+  - `StressScheduler` class with cron support
+  - `--schedule` CLI flag for automated testing
+  - Report history and comparison with baseline
+  - Configurable report directory
+  - 8+ unit tests
 - Real-time monitoring dashboard with Server-Sent Events (Issue #33)
   - Live progress streaming to web dashboard
   - Event stream with test started, injector progress, and finished events
