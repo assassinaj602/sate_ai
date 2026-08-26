@@ -9,6 +9,44 @@ void log(String message) {
   print(message);
 }
 
+List<FaultInjector> _buildInjectors(
+    ArgResults results, AIModelAdapter model) {
+  final injectorsStr = results['injectors'] as String;
+  final injectorNames = injectorsStr.split(',').map((s) => s.trim()).toList();
+  final injectors = <FaultInjector>[];
+
+  for (final name in injectorNames) {
+    switch (name.toLowerCase()) {
+      case 'memorypressure':
+        injectors.add(MemoryPressureInjector(model: model, limitMb: 150));
+        break;
+      case 'malformedinput':
+        injectors.add(MalformedInputInjector());
+        break;
+      case 'quantizationdrift':
+        injectors.add(QuantizationDriftInjector(model: model));
+        break;
+      case 'thermalthrottle':
+        injectors.add(ThermalThrottleInjector(model: model));
+        break;
+      case 'latency':
+        injectors.add(LatencyInjector(model: model));
+        break;
+      case 'modelswap':
+        injectors.add(ModelSwapInjector(model: model));
+        break;
+      case 'confidencevalidation':
+        injectors
+            .add(ConfidenceThresholdInjector(model: model, threshold: 0.5));
+        break;
+      default:
+        log('Unknown injector: $name');
+        exit(1);
+    }
+  }
+  return injectors;
+}
+
 void main(List<String> arguments) async {
   final parser = ArgParser()
     ..addOption('model',
@@ -29,6 +67,12 @@ void main(List<String> arguments) async {
         abbr: 'p',
         help: 'Port for the SSE server (default: 8080)',
         defaultsTo: '8080')
+    ..addOption('schedule',
+        help:
+            'Cron expression for scheduling automated tests (e.g., "0 2 * * *" for daily at 2am)')
+    ..addOption('report-dir',
+        help: 'Directory to store scheduled test reports',
+        defaultsTo: 'stress_reports')
     ..addOption('timeout',
         abbr: 't', help: 'Timeout in seconds for each test', defaultsTo: '30')
     ..addFlag('help', abbr: 'h', help: 'Show this help', negatable: false);
@@ -52,47 +96,36 @@ void main(List<String> arguments) async {
       return;
     }
 
-    final _ = results['model'] as String;
-    final injectorsStr = results['injectors'] as String;
+    if (results['schedule'] != null) {
+      final schedule = results['schedule'] as String;
+      final reportDir = results['report-dir'] as String;
+      final timeoutSeconds = int.parse(results['timeout'] as String);
+
+      final model = MockAdapter(modelId: 'scheduled-model');
+      final injectors = _buildInjectors(results, model);
+
+      final scheduler = StressScheduler(
+        cronExpression: schedule,
+        model: model,
+        injectors: injectors,
+        timeout: Duration(seconds: timeoutSeconds),
+        reportDirectory: reportDir,
+      );
+
+      await scheduler.start();
+      print('Press Ctrl+C to stop scheduler...');
+      await ProcessSignal.sigint.watch().first;
+      scheduler.stop();
+      return;
+    }
+
     final timeoutSeconds = int.parse(results['timeout'] as String);
     final outputFile = results['output'] as String?;
     final useMarkdown = results['markdown'] as bool;
     final useHtml = results['html'] as bool;
 
-    final injectorNames = injectorsStr.split(',').map((s) => s.trim()).toList();
-    final injectors = <FaultInjector>[];
-
     final model = MockAdapter(modelId: 'cli-model');
-
-    for (final name in injectorNames) {
-      switch (name.toLowerCase()) {
-        case 'memorypressure':
-          injectors.add(MemoryPressureInjector(model: model, limitMb: 150));
-          break;
-        case 'malformedinput':
-          injectors.add(MalformedInputInjector());
-          break;
-        case 'quantizationdrift':
-          injectors.add(QuantizationDriftInjector(model: model));
-          break;
-        case 'thermalthrottle':
-          injectors.add(ThermalThrottleInjector(model: model));
-          break;
-        case 'latency':
-          injectors.add(LatencyInjector(model: model));
-          break;
-        case 'modelswap':
-          injectors.add(ModelSwapInjector(model: model));
-          break;
-        case 'confidencevalidation':
-          injectors
-              .add(ConfidenceThresholdInjector(model: model, threshold: 0.5));
-          break;
-        default:
-          log('Unknown injector: $name');
-          exit(1);
-      }
-    }
+    final injectors = _buildInjectors(results, model);
 
     log('Running stress test with injectors: ${injectors.map((i) => i.name).join(', ')}');
 
