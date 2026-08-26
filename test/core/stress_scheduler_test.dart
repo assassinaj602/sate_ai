@@ -11,7 +11,7 @@ void main() {
       model = MockAdapter(modelId: 'test-model');
       injectors = [
         MemoryPressureInjector(model: model, limitMb: 100),
-        MalformedInputInjector(),
+        const MalformedInputInjector(),
       ];
       scheduler = StressScheduler(
         cronExpression: '0 2 * * *',

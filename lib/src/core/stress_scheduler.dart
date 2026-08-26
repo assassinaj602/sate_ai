@@ -46,7 +46,8 @@ class StressScheduler {
   /// Validates the cron expression.
   void _validateCronExpression() {
     try {
-      final parts = cronExpression.split(' ').where((s) => s.isNotEmpty).toList();
+      final parts =
+          cronExpression.split(' ').where((s) => s.isNotEmpty).toList();
       if (parts.length != 5 && parts.length != 6) {
         throw ArgumentError(
           'Invalid cron expression: "$cronExpression". '

@@ -9,8 +9,7 @@ void log(String message) {
   print(message);
 }
 
-List<FaultInjector> _buildInjectors(
-    ArgResults results, AIModelAdapter model) {
+List<FaultInjector> _buildInjectors(ArgResults results, AIModelAdapter model) {
   final injectorsStr = results['injectors'] as String;
   final injectorNames = injectorsStr.split(',').map((s) => s.trim()).toList();
   final injectors = <FaultInjector>[];
