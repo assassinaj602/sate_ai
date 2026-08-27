@@ -433,6 +433,24 @@ The dashboard shows:
 - Pass/fail counts
 - Individual results as they complete
 
+### Stress Test Scheduling
+
+SATE AI can run stress tests automatically on a schedule using cron expressions:
+
+```bash
+# Run stress tests daily at 2 AM
+sate_ai --schedule "0 2 * * *" --report-dir ./reports
+
+# Run stress tests every hour
+sate_ai --schedule "0 * * * *" --model model.gguf --injectors memoryPressure
+```
+
+The scheduler:
+- Runs tests at specified intervals
+- Saves reports to a directory
+- Compares results with previous successful runs
+- Detects regressions automatically
+
 ### Best Practices
 
 1. **Start Simple**: Begin with 1-2 injectors and gradually add more.
