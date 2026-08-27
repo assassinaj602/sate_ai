@@ -60,8 +60,8 @@ class BaselineManager {
     }
 
     // Get the most recent file
-    files.sort(
-        (a, b) => a.statSync().modified.compareTo(b.statSync().modified));
+    files
+        .sort((a, b) => a.statSync().modified.compareTo(b.statSync().modified));
     final latestFile = files.last as File;
     final content = await latestFile.readAsString();
     final json = jsonDecode(content) as Map<String, dynamic>;
@@ -134,8 +134,7 @@ class BaselineManager {
 
       // Compare memory usage
       if (current.memoryUsageMB != null && previous.memoryUsageMB != null) {
-        final diffMB =
-            (current.memoryUsageMB! - previous.memoryUsageMB!).abs();
+        final diffMB = (current.memoryUsageMB! - previous.memoryUsageMB!).abs();
         final diffPercent = previous.memoryUsageMB! > 0
             ? (diffMB / previous.memoryUsageMB!) * 100
             : 0.0;

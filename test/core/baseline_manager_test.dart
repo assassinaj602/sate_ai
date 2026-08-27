@@ -94,13 +94,13 @@ void main() {
 
 StressReport _createSampleReport() {
   final results = [
-    FaultResult(
+    const FaultResult(
       injectorType: FaultType.memoryPressure,
       passed: true,
       inferenceTime: Duration(milliseconds: 120),
       memoryUsageMB: 120.0,
     ),
-    FaultResult(
+    const FaultResult(
       injectorType: FaultType.malformedInput,
       passed: true,
       inferenceTime: Duration(milliseconds: 80),
@@ -111,23 +111,23 @@ StressReport _createSampleReport() {
     modelId: 'test-model',
     passed: true,
     results: results,
-    failures: [],
+    failures: const [],
     startTime: DateTime.now(),
-    endTime: DateTime.now().add(Duration(seconds: 1)),
-    totalDuration: Duration(seconds: 1),
+    endTime: DateTime.now().add(const Duration(seconds: 1)),
+    totalDuration: const Duration(seconds: 1),
   );
 }
 
 StressReport _createDifferentReport() {
   final results = [
-    FaultResult(
+    const FaultResult(
       injectorType: FaultType.memoryPressure,
       passed: false,
       inferenceTime: Duration(milliseconds: 250),
       memoryUsageMB: 180.0,
       errorMessage: 'Memory limit exceeded',
     ),
-    FaultResult(
+    const FaultResult(
       injectorType: FaultType.malformedInput,
       passed: true,
       inferenceTime: Duration(milliseconds: 90),
@@ -138,14 +138,14 @@ StressReport _createDifferentReport() {
     modelId: 'test-model',
     passed: false,
     results: results,
-    failures: [
+    failures: const [
       Failure(
         injectorType: FaultType.memoryPressure,
         message: 'Memory limit exceeded',
       ),
     ],
     startTime: DateTime.now(),
-    endTime: DateTime.now().add(Duration(seconds: 1)),
-    totalDuration: Duration(seconds: 1),
+    endTime: DateTime.now().add(const Duration(seconds: 1)),
+    totalDuration: const Duration(seconds: 1),
   );
 }
