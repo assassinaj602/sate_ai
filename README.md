@@ -451,6 +451,26 @@ The scheduler:
 - Compares results with previous successful runs
 - Detects regressions automatically
 
+### Golden Baseline Comparisons
+
+SATE AI can detect regressions by comparing test results against a baseline:
+
+```bash
+# Save current report as baseline
+sate_ai --model model.gguf --injectors memoryPressure --baseline
+
+# Compare against baseline (fails if regressions detected)
+sate_ai --model model.gguf --injectors memoryPressure --compare
+
+# Set custom tolerance (default 10%)
+sate_ai --model model.gguf --injectors memoryPressure --compare --tolerance 5.0
+```
+
+The baseline comparison:
+- Detects changes in inference time, memory usage, and pass/fail status
+- Generates detailed markdown reports on deviations
+- Exits with code 1 if regressions are detected (CI-friendly)
+
 ### Best Practices
 
 1. **Start Simple**: Begin with 1-2 injectors and gradually add more.

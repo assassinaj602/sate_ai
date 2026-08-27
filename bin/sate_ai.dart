@@ -72,6 +72,13 @@ void main(List<String> arguments) async {
     ..addOption('report-dir',
         help: 'Directory to store scheduled test reports',
         defaultsTo: 'stress_reports')
+    ..addFlag('baseline', help: 'Save the current report as a golden baseline')
+    ..addFlag('compare',
+        help: 'Compare the current report against the golden baseline')
+    ..addOption('tolerance',
+        abbr: 'tol',
+        help: 'Tolerance percentage for baseline comparison',
+        defaultsTo: '10.0')
     ..addOption('timeout',
         abbr: 't', help: 'Timeout in seconds for each test', defaultsTo: '30')
     ..addFlag('help', abbr: 'h', help: 'Show this help', negatable: false);
@@ -149,6 +156,33 @@ void main(List<String> arguments) async {
         log(report.toHtml());
       } else {
         log(report.toJsonString());
+      }
+    }
+
+    final saveBaseline = results['baseline'] as bool;
+    final compareBaseline = results['compare'] as bool;
+    final tolerance = double.parse(results['tolerance'] as String);
+
+    final baselineManager = BaselineManager(tolerancePercent: tolerance);
+
+    if (saveBaseline) {
+      final path = await baselineManager.saveBaseline(report);
+      log('✅ Baseline saved to: $path');
+    }
+
+    if (compareBaseline) {
+      final comparison = await baselineManager.checkAgainstBaseline(report);
+      if (comparison == null) {
+        log('ℹ️ No baseline found. Saved current report as baseline.');
+      } else {
+        if (comparison.passed) {
+          log('✅ Baseline comparison passed. No regressions detected.');
+        } else {
+          log('❌ Baseline comparison failed. Regressions detected!');
+          log('');
+          log(comparison.toMarkdown());
+          exit(1);
+        }
       }
     }
 
