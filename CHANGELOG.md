@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.9.0] - 2026-08-25
 
 ### Added
+- Golden baseline comparisons for regression detection (Issue #35)
+  - `BaselineManager` class for baseline management
+  - Compare current reports against baselines
+  - Detect deviations in inference time, memory usage, and status
+  - CLI flags: `--baseline`, `--compare`, `--tolerance`
+  - Markdown report generation for comparisons
+  - 9+ unit tests
 - Stress test scheduling with cron expressions (Issue #34)
   - `StressScheduler` class with cron support
   - `--schedule` CLI flag for automated testing
