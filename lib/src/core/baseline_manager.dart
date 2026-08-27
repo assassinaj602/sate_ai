@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'fault_type.dart';
 import 'metric_deviation.dart';
 import 'report.dart';
 
