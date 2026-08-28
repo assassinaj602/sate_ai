@@ -12,6 +12,7 @@ export 'src/core/fault_type.dart';
 export 'src/core/fault_injector.dart';
 export 'src/core/stress_runner.dart';
 export 'src/core/stress_scheduler.dart';
+export 'src/core/batch_runner.dart';
 export 'src/core/baseline_manager.dart';
 export 'src/core/metric_deviation.dart';
 export 'src/core/event_stream.dart';

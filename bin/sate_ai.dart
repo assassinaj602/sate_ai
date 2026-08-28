@@ -56,6 +56,12 @@ void main(List<String> arguments) async {
         abbr: 'i',
         help: 'Comma-separated list of injectors to use',
         defaultsTo: 'memoryPressure,malformedInput')
+    ..addOption('models',
+        help:
+            'Comma-separated list of model paths for batch mode (e.g., model1.gguf,model2.gguf)')
+    ..addFlag('parallel', help: 'Run batch tests in parallel')
+    ..addOption('batch-output',
+        help: 'Output file for batch report (JSON or Markdown)')
     ..addOption('output',
         abbr: 'o', help: 'Output file path for the report (JSON or Markdown)')
     ..addFlag('markdown', help: 'Output in Markdown format (instead of JSON)')
@@ -100,6 +106,47 @@ void main(List<String> arguments) async {
       await ProcessSignal.sigint.watch().first;
       await server.close();
       return;
+    }
+
+    final modelsStr = results['models'] as String?;
+    if (modelsStr != null) {
+      final modelPaths = modelsStr.split(',').map((s) => s.trim()).toList();
+      final parallel = results['parallel'] as bool;
+      final outputFile = results['batch-output'] as String?;
+
+      final items = <BatchItem>[];
+      for (var i = 0; i < modelPaths.length; i++) {
+        final path = modelPaths[i];
+        final model = MockAdapter(modelId: 'model-${i + 1}');
+        final injectors = _buildInjectors(results, model);
+        items.add(BatchItem(
+          modelId: path.split(Platform.pathSeparator).last,
+          modelType: 'unknown',
+          model: model,
+          injectors: injectors,
+        ));
+      }
+
+      final batchRunner = BatchRunner(
+        items: items,
+        parallel: parallel,
+        onProgress: (progress) {
+          log('Progress: ${progress.completed}/${progress.total}');
+        },
+      );
+
+      log('Starting batch test on ${items.length} models...');
+      final report = await batchRunner.run();
+
+      if (outputFile != null) {
+        final content = report.toMarkdown();
+        await File(outputFile).writeAsString(content);
+        log('Batch report written to $outputFile');
+      } else {
+        log(report.toMarkdown());
+      }
+
+      exit(report.allPassed ? 0 : 1);
     }
 
     if (results['schedule'] != null) {
