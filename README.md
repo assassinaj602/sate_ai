@@ -471,6 +471,27 @@ The baseline comparison:
 - Generates detailed markdown reports on deviations
 - Exits with code 1 if regressions are detected (CI-friendly)
 
+### Batch Mode for Multiple Models
+
+SATE AI can run stress tests on multiple models in a single command:
+
+```bash
+# Run tests on multiple models sequentially
+sate_ai --models model1.gguf,model2.gguf,model3.gguf --injectors memoryPressure,malformedInput
+
+# Run tests in parallel
+sate_ai --models model1.gguf,model2.gguf --injectors memoryPressure --parallel
+
+# Save batch report
+sate_ai --models model1.gguf,model2.gguf --injectors memoryPressure --batch-output batch-report.md
+```
+
+The batch runner:
+- Supports sequential or parallel execution
+- Generates aggregated reports
+- Tracks individual model results
+- Exits with code 1 if any model fails
+
 ### Best Practices
 
 1. **Start Simple**: Begin with 1-2 injectors and gradually add more.

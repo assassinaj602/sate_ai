@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.9.0] - 2026-08-25
 
 ### Added
+- Batch mode for multiple models (Issue #36)
+  - `BatchRunner` class for sequential/parallel execution
+  - CLI `--models` flag for specifying multiple models
+  - `--parallel` flag for parallel execution
+  - Aggregated batch reports with Markdown output
+  - Progress tracking during batch execution
+  - 9+ unit tests
 - Golden baseline comparisons for regression detection (Issue #35)
   - `BaselineManager` class for baseline management
   - Compare current reports against baselines
