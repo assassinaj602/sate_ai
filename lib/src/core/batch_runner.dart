@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import '../adapters/model_adapter.dart';
 import 'fault_injector.dart';
