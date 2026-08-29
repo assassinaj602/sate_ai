@@ -86,8 +86,8 @@ void main() {
       );
 
       expect(report.passed, isFalse);
-      expect(report.results.first.passed, isFalse);
-      expect(report.results.first.errorMessage,
+      expect(report.failures, isNotEmpty);
+      expect(report.failures.first.message,
           contains('Confidence threshold breached'));
     });
 
