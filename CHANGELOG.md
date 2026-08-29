@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-08-29
+
+### Added
+- Stress test retry and flaky test detection (Issue #73)
+  - `retryCount` parameter in `SateAI.stress()` for automatic retries
+  - `flakyThreshold` parameter to mark tests as flaky
+  - `flaky` flag in `FaultResult` for flaky test detection
+  - CLI flags: `--retry` and `--flaky-threshold`
+  - 8+ unit tests
+
+### Changed
+- Documentation updated with retry and flaky detection
+
 ## [0.9.0] - 2026-08-25
 
 ### Added
