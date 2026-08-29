@@ -492,6 +492,33 @@ The batch runner:
 - Tracks individual model results
 - Exits with code 1 if any model fails
 
+### Stress Test Retry & Flaky Detection
+
+SATE AI can automatically retry failed tests and detect flaky (intermittent) failures:
+
+```dart
+final report = await SateAI.stress(
+  model: myModel,
+  injectors: [
+    MemoryPressureInjector(limitMb: 150),
+    MalformedInputInjector(),
+  ],
+  retryCount: 3,          // Retry failed tests up to 3 times
+  flakyThreshold: 2,      // Mark as flaky if 2 failures out of 3
+);
+
+for (final result in report.results) {
+  if (result.flaky) {
+    print('⚠️ ${result.injectorType} is flaky!');
+  }
+}
+```
+
+CLI usage:
+```bash
+sate_ai --model model.gguf --injectors memoryPressure --retry 3 --flaky-threshold 2
+```
+
 ### Best Practices
 
 1. **Start Simple**: Begin with 1-2 injectors and gradually add more.

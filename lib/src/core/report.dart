@@ -14,6 +14,7 @@ class FaultResult {
     this.output,
     this.errorMessage,
     this.memoryUsageMB,
+    this.flaky = false,
   });
 
   /// Which fault type was tested.
@@ -34,6 +35,9 @@ class FaultResult {
   /// Model memory usage in megabytes at the time of this result.
   final double? memoryUsageMB;
 
+  /// Whether the result was intermittent (failed some attempts but passed overall).
+  final bool flaky;
+
   /// Serialises to a JSON-compatible map.
   Map<String, dynamic> toJson() => {
         'injectorType': injectorType.name,
@@ -42,6 +46,7 @@ class FaultResult {
         'output': output?.toJson(),
         'errorMessage': errorMessage,
         'memoryUsageMB': memoryUsageMB,
+        'flaky': flaky,
       };
 
   /// Deserialises from a JSON map.
@@ -59,14 +64,20 @@ class FaultResult {
           : null,
       errorMessage: json['errorMessage'] as String?,
       memoryUsageMB: (json['memoryUsageMB'] as num?)?.toDouble(),
+      flaky: (json['flaky'] as bool?) ?? false,
     );
   }
 
   /// Renders this result as a Markdown section.
   String toMarkdown() {
     final buf = StringBuffer()
-      ..writeln('### ${injectorType.icon} ${injectorType.displayName}')
-      ..writeln('- **Status**: ${passed ? "✅ PASS" : "❌ FAIL"}');
+      ..writeln('### ${injectorType.icon} ${injectorType.displayName}');
+    if (flaky) {
+      buf.writeln(
+          '- **Status**: ⚠️ FLAKY (${errorMessage ?? "intermittent failure"})');
+    } else {
+      buf.writeln('- **Status**: ${passed ? "✅ PASS" : "❌ FAIL"}');
+    }
     if (inferenceTime != null) {
       buf.writeln('- **Inference time**: ${inferenceTime!.inMilliseconds} ms');
     }
@@ -74,7 +85,7 @@ class FaultResult {
       buf.writeln(
           '- **Memory usage**: ${memoryUsageMB!.toStringAsFixed(1)} MB');
     }
-    if (errorMessage != null) {
+    if (errorMessage != null && !flaky) {
       buf.writeln('- **Error**: `$errorMessage`');
     }
     return buf.toString();

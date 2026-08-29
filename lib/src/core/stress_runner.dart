@@ -31,6 +31,8 @@ class StressRunner {
     required this.model,
     required this.injectors,
     this.timeout = const Duration(seconds: 30),
+    this.retryCount = 1,
+    this.flakyThreshold = 0,
     this.onEvent,
   }) : _eventController =
             onEvent != null ? null : StreamController<StressEvent>.broadcast();
@@ -43,6 +45,12 @@ class StressRunner {
 
   /// Maximum time allowed per injector cycle before it is aborted.
   final Duration timeout;
+
+  /// Number of retry attempts per injector cycle.
+  final int retryCount;
+
+  /// Number of failures allowed to mark a test as flaky.
+  final int flakyThreshold;
 
   /// Optional event callback.
   final EventCallback? onEvent;
@@ -155,42 +163,94 @@ class StressRunner {
     _eventController?.add(event);
   }
 
-  /// Runs one inject → infer → check cycle with a timeout guard.
+  /// Runs one or more inject → infer → check cycles with retry and flaky detection logic.
   Future<FaultResult> _runCycle(FaultInjector injector) async {
-    try {
-      // Activate fault
-      await injector.inject().timeout(timeout);
+    var attempts = 0;
+    var failures = 0;
+    FaultResult? lastResult;
 
-      // Measure inference under fault conditions
-      final inferenceStart = DateTime.now();
-      final output = await model
-          .runInference(AIInput(text: 'stress-test-probe'))
-          .timeout(timeout);
-      final inferenceTime = DateTime.now().difference(inferenceStart);
+    final maxAttempts = retryCount > 0 ? retryCount : 1;
 
-      final degraded = model.isDegraded;
-      final memoryMB = model.currentMemoryMB;
+    while (attempts < maxAttempts) {
+      attempts++;
+      try {
+        await injector.inject().timeout(timeout);
+      } on TimeoutException {
+        failures++;
+        lastResult = FaultResult(
+          injectorType: injector.type,
+          passed: false,
+          errorMessage:
+              'Timeout after ${timeout.inSeconds}s (attempt $attempts)',
+        );
+        continue;
+      }
 
+      try {
+        final inferenceStart = DateTime.now();
+        final output = await model
+            .runInference(AIInput(text: 'stress-test-probe'))
+            .timeout(timeout);
+        final inferenceTime = DateTime.now().difference(inferenceStart);
+
+        final degraded = model.isDegraded;
+        final memoryMB = model.currentMemoryMB;
+
+        final result = FaultResult(
+          injectorType: injector.type,
+          passed: !degraded,
+          inferenceTime: inferenceTime,
+          output: output,
+          errorMessage: degraded ? 'Model entered degraded state' : null,
+          memoryUsageMB: memoryMB > 0 ? memoryMB : null,
+        );
+
+        if (result.passed) {
+          lastResult = result;
+          break;
+        } else {
+          failures++;
+          lastResult = result;
+        }
+      } on TimeoutException {
+        failures++;
+        lastResult = FaultResult(
+          injectorType: injector.type,
+          passed: false,
+          errorMessage:
+              'Timeout after ${timeout.inSeconds}s (attempt $attempts)',
+        );
+      } on AIInferenceError catch (e) {
+        failures++;
+        lastResult = FaultResult(
+          injectorType: injector.type,
+          passed: false,
+          errorMessage: e.toString(),
+        );
+      } finally {
+        try {
+          await injector.reset();
+        } catch (_) {}
+      }
+    }
+
+    if (flakyThreshold > 0 && failures > 0 && failures <= flakyThreshold) {
       return FaultResult(
         injectorType: injector.type,
-        passed: !degraded,
-        inferenceTime: inferenceTime,
-        output: output,
-        errorMessage: degraded ? 'Model entered degraded state' : null,
-        memoryUsageMB: memoryMB > 0 ? memoryMB : null,
-      );
-    } on TimeoutException {
-      return FaultResult(
-        injectorType: injector.type,
-        passed: false,
-        errorMessage: 'Timed out after ${timeout.inSeconds}s',
-      );
-    } on AIInferenceError catch (e) {
-      return FaultResult(
-        injectorType: injector.type,
-        passed: false,
-        errorMessage: e.toString(),
+        passed: true,
+        inferenceTime: lastResult?.inferenceTime,
+        output: lastResult?.output,
+        errorMessage: 'Flaky: failed $failures/$attempts attempts',
+        memoryUsageMB: lastResult?.memoryUsageMB,
+        flaky: true,
       );
     }
+
+    return lastResult ??
+        FaultResult(
+          injectorType: injector.type,
+          passed: false,
+          errorMessage: 'All $maxAttempts attempts failed',
+        );
   }
 }

@@ -77,11 +77,15 @@ class SateAI {
     required AIModelAdapter model,
     required List<FaultInjector> injectors,
     Duration timeout = const Duration(seconds: 30),
+    int retryCount = 1,
+    int flakyThreshold = 0,
   }) {
     return StressRunner(
       model: model,
       injectors: injectors,
       timeout: timeout,
+      retryCount: retryCount,
+      flakyThreshold: flakyThreshold,
     ).run();
   }
 }

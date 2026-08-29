@@ -85,6 +85,11 @@ void main(List<String> arguments) async {
         abbr: 'tol',
         help: 'Tolerance percentage for baseline comparison',
         defaultsTo: '10.0')
+    ..addOption('retry',
+        help: 'Number of retry attempts for failed tests', defaultsTo: '1')
+    ..addOption('flaky-threshold',
+        help: 'Number of failures to mark test as flaky (0 = disabled)',
+        defaultsTo: '0')
     ..addOption('timeout',
         abbr: 't', help: 'Timeout in seconds for each test', defaultsTo: '30')
     ..addFlag('help', abbr: 'h', help: 'Show this help', negatable: false);
@@ -173,6 +178,8 @@ void main(List<String> arguments) async {
     }
 
     final timeoutSeconds = int.parse(results['timeout'] as String);
+    final retryCount = int.parse(results['retry'] as String);
+    final flakyThreshold = int.parse(results['flaky-threshold'] as String);
     final outputFile = results['output'] as String?;
     final useMarkdown = results['markdown'] as bool;
     final useHtml = results['html'] as bool;
@@ -186,6 +193,8 @@ void main(List<String> arguments) async {
       model: model,
       injectors: injectors,
       timeout: Duration(seconds: timeoutSeconds),
+      retryCount: retryCount,
+      flakyThreshold: flakyThreshold,
     );
 
     if (outputFile != null) {
