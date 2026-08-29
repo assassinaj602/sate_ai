@@ -73,7 +73,7 @@ void main() {
     });
 
     test('FaultResult toJson includes flaky flag', () {
-      final result = FaultResult(
+      const result = FaultResult(
         injectorType: FaultType.memoryPressure,
         passed: true,
         flaky: true,
@@ -108,7 +108,7 @@ void main() {
     });
 
     test('FaultResult toMarkdown includes flaky indicator', () {
-      final result = FaultResult(
+      const result = FaultResult(
         injectorType: FaultType.memoryPressure,
         passed: true,
         flaky: true,

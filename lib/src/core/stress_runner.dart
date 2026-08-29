@@ -175,7 +175,18 @@ class StressRunner {
       attempts++;
       try {
         await injector.inject().timeout(timeout);
+      } on TimeoutException {
+        failures++;
+        lastResult = FaultResult(
+          injectorType: injector.type,
+          passed: false,
+          errorMessage:
+              'Timeout after ${timeout.inSeconds}s (attempt $attempts)',
+        );
+        continue;
+      }
 
+      try {
         final inferenceStart = DateTime.now();
         final output = await model
             .runInference(AIInput(text: 'stress-test-probe'))
@@ -209,7 +220,7 @@ class StressRunner {
           errorMessage:
               'Timeout after ${timeout.inSeconds}s (attempt $attempts)',
         );
-      } catch (e) {
+      } on AIInferenceError catch (e) {
         failures++;
         lastResult = FaultResult(
           injectorType: injector.type,
