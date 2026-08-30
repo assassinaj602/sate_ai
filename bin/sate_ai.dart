@@ -62,6 +62,13 @@ void main(List<String> arguments) async {
     ..addFlag('parallel', help: 'Run batch tests in parallel')
     ..addOption('batch-output',
         help: 'Output file for batch report (JSON or Markdown)')
+    ..addOption('compare-reports',
+        help:
+            'Compare two report files (e.g., --compare-reports report1.json,report2.json)')
+    ..addOption('diff-output',
+        help: 'Output file for the diff report (Markdown or HTML)')
+    ..addFlag('diff-html',
+        help: 'Generate HTML diff report instead of Markdown')
     ..addOption('output',
         abbr: 'o', help: 'Output file path for the report (JSON or Markdown)')
     ..addFlag('markdown', help: 'Output in Markdown format (instead of JSON)')
@@ -111,6 +118,37 @@ void main(List<String> arguments) async {
       await ProcessSignal.sigint.watch().first;
       await server.close();
       return;
+    }
+
+    final compareReports = results['compare-reports'] as String?;
+    if (compareReports != null) {
+      final paths = compareReports.split(',').map((s) => s.trim()).toList();
+      if (paths.length != 2) {
+        log('Error: --compare-reports requires exactly 2 file paths.');
+        exit(1);
+      }
+
+      final content1 = await File(paths[0]).readAsString();
+      final content2 = await File(paths[1]).readAsString();
+      final report1 = StressReport.fromJson(jsonDecode(content1));
+      final report2 = StressReport.fromJson(jsonDecode(content2));
+
+      final tolerance = double.parse(results['tolerance'] as String);
+      final comparator = ReportComparator(tolerancePercent: tolerance);
+      final diff = comparator.compare(report1, report2);
+
+      final outputFile = results['diff-output'] as String?;
+      final useHtml = results['diff-html'] as bool;
+
+      if (outputFile != null) {
+        final content = useHtml ? diff.toHtml() : diff.toMarkdown();
+        await File(outputFile).writeAsString(content);
+        log('Diff report written to $outputFile');
+      } else {
+        log(diff.toMarkdown());
+      }
+
+      exit(diff.hasChanges ? 1 : 0);
     }
 
     final modelsStr = results['models'] as String?;
