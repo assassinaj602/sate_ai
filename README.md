@@ -138,6 +138,32 @@ Future<void> main() async {
 }
 ```
 
+### Report Comparison & Diff View
+
+SATE AI can compare two stress reports and show differences in metrics:
+
+```dart
+final comparator = ReportComparator(tolerancePercent: 10.0);
+final diff = comparator.compare(report1, report2);
+
+if (diff.hasChanges) {
+  print('⚠️ Changes detected: ${diff.totalDiffs} changes');
+  print(diff.toMarkdown());
+}
+```
+
+CLI usage:
+```bash
+# Compare two reports (exits with code 1 if changes detected)
+sate_ai --compare-reports report1.json,report2.json
+
+# Save diff as Markdown
+sate_ai --compare-reports report1.json,report2.json --diff-output diff.md
+
+# Generate HTML diff report
+sate_ai --compare-reports report1.json,report2.json --diff-html --diff-output diff.html
+```
+
 ### Advanced: Using Multiple Injectors
 
 ```dart

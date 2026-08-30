@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.10.0] - 2026-08-29
 
 ### Added
+- Report comparison and diff view (Issue #74)
+  - `ReportComparator` class for comparing two stress reports
+  - `MetricDiff` and `ReportDiff` for detailed comparison
+  - Detect changes in: inference time, memory usage, pass/fail status
+  - Markdown and HTML diff report output
+  - CLI flag `--compare-reports report1.json report2.json`
+  - 8+ unit tests
 - Stress test retry and flaky test detection (Issue #73)
   - `retryCount` parameter in `SateAI.stress()` for automatic retries
   - `flakyThreshold` parameter to mark tests as flaky
@@ -18,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - 8+ unit tests
 
 ### Changed
-- Documentation updated with retry and flaky detection
+- Documentation updated with report comparison and retry usage
 
 ## [0.9.0] - 2026-08-25
 
