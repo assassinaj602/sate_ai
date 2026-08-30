@@ -1,3 +1,4 @@
+import 'fault_type.dart';
 import 'report.dart';
 
 /// Status of a metric difference.
@@ -163,9 +164,11 @@ class ReportDiff {
         buffer.writeln(
             '      <div class="diff-item" style="border-left: 4px solid $color;">');
         buffer.writeln('        <h3>${diff.metric}</h3>');
-        buffer.writeln('        <p><strong>Before:</strong> ${diff.before}</p>');
+        buffer
+            .writeln('        <p><strong>Before:</strong> ${diff.before}</p>');
         buffer.writeln('        <p><strong>After:</strong> ${diff.after}</p>');
-        buffer.writeln('        <p><strong>Message:</strong> ${diff.message}</p>');
+        buffer.writeln(
+            '        <p><strong>Message:</strong> ${diff.message}</p>');
         buffer.writeln('      </div>');
       }
     }
@@ -269,8 +272,8 @@ class ReportComparator {
 
       // Compare inference time
       if (r1.inferenceTime != null && r2.inferenceTime != null) {
-        final diffMs = r2.inferenceTime!.inMilliseconds -
-            r1.inferenceTime!.inMilliseconds;
+        final diffMs =
+            r2.inferenceTime!.inMilliseconds - r1.inferenceTime!.inMilliseconds;
         final diffPercent = r1.inferenceTime!.inMilliseconds > 0
             ? (diffMs / r1.inferenceTime!.inMilliseconds) * 100
             : 0.0;
@@ -309,9 +312,8 @@ class ReportComparator {
       // Compare memory usage
       if (r1.memoryUsageMB != null && r2.memoryUsageMB != null) {
         final diffMB = r2.memoryUsageMB! - r1.memoryUsageMB!;
-        final diffPercent = r1.memoryUsageMB! > 0
-            ? (diffMB / r1.memoryUsageMB!) * 100
-            : 0.0;
+        final diffPercent =
+            r1.memoryUsageMB! > 0 ? (diffMB / r1.memoryUsageMB!) * 100 : 0.0;
 
         final status = diffPercent.abs() > tolerancePercent
             ? DiffStatus.changed
