@@ -3,7 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:sate_ai/sate_ai.dart';
+import 'package:sate_ai/sate_ai_cli.dart';
 
 /// Simple HTTP server for Server-Sent Events (SSE) streaming.
 class SSEServer {

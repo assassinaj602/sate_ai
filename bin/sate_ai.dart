@@ -90,7 +90,7 @@ void main(List<String> arguments) async {
     ..addFlag('compare',
         help: 'Compare the current report against the golden baseline')
     ..addOption('tolerance',
-        abbr: 'tol',
+        abbr: 'l',
         help: 'Tolerance percentage for baseline comparison',
         defaultsTo: '10.0')
     ..addOption('retry',
