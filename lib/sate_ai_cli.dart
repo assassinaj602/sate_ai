@@ -15,6 +15,7 @@ export 'src/core/stress_scheduler.dart';
 export 'src/core/batch_runner.dart';
 export 'src/core/baseline_manager.dart';
 export 'src/core/metric_deviation.dart';
+export 'src/core/report_comparator.dart';
 export 'src/core/event_stream.dart';
 export 'src/core/report.dart';
 export 'src/adapters/model_adapter.dart';
