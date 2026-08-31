@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import '../adapters/model_adapter.dart';
 import 'benchmark_report.dart';
 import 'fault_type.dart';
 

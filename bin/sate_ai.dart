@@ -98,10 +98,8 @@ void main(List<String> arguments) async {
     ..addOption('flaky-threshold',
         help: 'Number of failures to mark test as flaky (0 = disabled)',
         defaultsTo: '0')
-    ..addFlag('benchmark',
-        help: 'Run in benchmark mode (no fault injection)')
-    ..addOption('benchmark-output',
-        help: 'Output file for benchmark report')
+    ..addFlag('benchmark', help: 'Run in benchmark mode (no fault injection)')
+    ..addOption('benchmark-output', help: 'Output file for benchmark report')
     ..addOption('benchmark-runs',
         help: 'Number of benchmark runs', defaultsTo: '10')
     ..addOption('timeout',

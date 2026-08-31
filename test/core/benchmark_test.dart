@@ -88,8 +88,7 @@ void main() {
       expect(report.benchmarkReport, isNotNull);
     });
 
-    test(
-        'StressRunner without benchmark flag does not create benchmark report',
+    test('StressRunner without benchmark flag does not create benchmark report',
         () async {
       final runner = StressRunner(
         model: model,
