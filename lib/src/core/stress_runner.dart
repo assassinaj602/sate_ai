@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import '../adapters/model_adapter.dart';
+import 'benchmark_report.dart';
 import 'event_stream.dart';
 import 'fault_injector.dart';
+import 'fault_type.dart';
 import 'report.dart';
 
 /// Orchestrates a sequence of [FaultInjector] runs against an [AIModelAdapter].
@@ -33,6 +35,7 @@ class StressRunner {
     this.timeout = const Duration(seconds: 30),
     this.retryCount = 1,
     this.flakyThreshold = 0,
+    this.benchmark = false,
     this.onEvent,
   }) : _eventController =
             onEvent != null ? null : StreamController<StressEvent>.broadcast();
@@ -52,6 +55,9 @@ class StressRunner {
   /// Number of failures allowed to mark a test as flaky.
   final int flakyThreshold;
 
+  /// Whether to run in performance benchmarking mode without fault injection.
+  final bool benchmark;
+
   /// Optional event callback.
   final EventCallback? onEvent;
 
@@ -66,6 +72,61 @@ class StressRunner {
   /// Injectors run sequentially. Each injector's [FaultInjector.reset] is
   /// always called in a `finally` block so subsequent injectors start clean.
   Future<StressReport> run() async {
+    if (benchmark) {
+      return _runBenchmark();
+    }
+    return _runStressTest();
+  }
+
+  Future<StressReport> _runBenchmark() async {
+    final startTime = DateTime.now();
+    final inferenceTimes = <double>[];
+    final memoryUsages = <double>[];
+    final results = <FaultResult>[];
+    final failures = <Failure>[];
+
+    const numRuns = 10;
+    for (var i = 0; i < numRuns; i++) {
+      final inferenceStart = DateTime.now();
+      final output = await model
+          .runInference(AIInput(text: 'benchmark-probe'))
+          .timeout(timeout);
+      final inferenceTime = DateTime.now().difference(inferenceStart);
+      inferenceTimes.add(inferenceTime.inMilliseconds.toDouble());
+      memoryUsages.add(model.currentMemoryMB);
+
+      results.add(FaultResult(
+        injectorType: FaultType.benchmark,
+        passed: true,
+        inferenceTime: inferenceTime,
+        output: output,
+        memoryUsageMB: model.currentMemoryMB,
+      ));
+    }
+
+    final endTime = DateTime.now();
+    final totalDuration = endTime.difference(startTime);
+
+    final benchmarkReport = BenchmarkReport(
+      modelId: model.modelId,
+      inferenceTimes: inferenceTimes,
+      memoryUsages: memoryUsages,
+      numRuns: numRuns,
+    );
+
+    return StressReport(
+      modelId: model.modelId,
+      passed: true,
+      results: results,
+      failures: failures,
+      startTime: startTime,
+      endTime: endTime,
+      totalDuration: totalDuration,
+      benchmarkReport: benchmarkReport,
+    );
+  }
+
+  Future<StressReport> _runStressTest() async {
     final startTime = DateTime.now();
     final results = <FaultResult>[];
     final failures = <Failure>[];
