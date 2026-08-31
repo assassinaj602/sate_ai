@@ -5,3 +5,7 @@
 ## 2024-10-25 - File sorting synchronous I/O issue
 **Learning:** In Dart, calling synchronous I/O methods like `statSync()` inside a `sort()` comparator causes repeated blocking disk accesses evaluated O(N log N) times, which can severely degrade performance.
 **Action:** Always map files to cache their modification times asynchronously before sorting (O(N) operations), then extract the sorted keys.
+
+## 2024-10-25 - Android minSdk Dependency Issue
+**Learning:** When using ML dependencies like `fllama` in the example app, the Android `minSdk` must be set explicitly to a higher value (e.g., 23) in `build.gradle.kts`. Defaulting to `flutter.minSdkVersion` (which defaults to 21) causes an AndroidManifest merge conflict during the CI build process.
+**Action:** Always ensure `minSdk` meets the minimum requirements of all ML dependencies included in the example app.
