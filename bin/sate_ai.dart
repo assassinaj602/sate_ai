@@ -98,6 +98,12 @@ void main(List<String> arguments) async {
     ..addOption('flaky-threshold',
         help: 'Number of failures to mark test as flaky (0 = disabled)',
         defaultsTo: '0')
+    ..addFlag('benchmark',
+        help: 'Run in benchmark mode (no fault injection)')
+    ..addOption('benchmark-output',
+        help: 'Output file for benchmark report')
+    ..addOption('benchmark-runs',
+        help: 'Number of benchmark runs', defaultsTo: '10')
     ..addOption('timeout',
         abbr: 't', help: 'Timeout in seconds for each test', defaultsTo: '30')
     ..addFlag('help', abbr: 'h', help: 'Show this help', negatable: false);
@@ -226,6 +232,9 @@ void main(List<String> arguments) async {
     final model = MockAdapter(modelId: 'cli-model');
     final injectors = _buildInjectors(results, model);
 
+    final benchmark = results['benchmark'] as bool;
+    final benchmarkOutput = results['benchmark-output'] as String?;
+
     log('Running stress test with injectors: ${injectors.map((i) => i.name).join(', ')}');
 
     final report = await SateAI.stress(
@@ -234,7 +243,18 @@ void main(List<String> arguments) async {
       timeout: Duration(seconds: timeoutSeconds),
       retryCount: retryCount,
       flakyThreshold: flakyThreshold,
+      benchmark: benchmark,
     );
+
+    if (benchmark && report.benchmarkReport != null) {
+      if (benchmarkOutput != null) {
+        final content = report.benchmarkReport!.toMarkdown();
+        await File(benchmarkOutput).writeAsString(content);
+        log('Benchmark report written to $benchmarkOutput');
+      } else {
+        log(report.benchmarkReport!.toMarkdown());
+      }
+    }
 
     if (outputFile != null) {
       final content = useMarkdown
