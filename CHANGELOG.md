@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.10.0] - 2026-08-29
 
 ### Added
+- Performance benchmarking mode (Issue #75)
+  - `benchmark` parameter in `SateAI.stress()`
+  - `BenchmarkReport` class with percentiles (p50, p90, p99)
+  - CLI flags: `--benchmark`, `--benchmark-output`, `--benchmark-runs`
+  - 8+ unit tests
 - Report comparison and diff view (Issue #74)
   - `ReportComparator` class for comparing two stress reports
   - `MetricDiff` and `ReportDiff` for detailed comparison

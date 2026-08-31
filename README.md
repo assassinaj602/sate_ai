@@ -164,6 +164,32 @@ sate_ai --compare-reports report1.json,report2.json --diff-output diff.md
 sate_ai --compare-reports report1.json,report2.json --diff-html --diff-output diff.html
 ```
 
+### Performance Benchmarking Mode
+
+SATE AI can measure baseline performance without fault injection:
+
+```dart
+final report = await SateAI.stress(
+  model: myModel,
+  injectors: [],
+  benchmark: true,
+);
+
+final benchmark = report.benchmarkReport!;
+print('p50: ${benchmark.p50}ms');
+print('p90: ${benchmark.p90}ms');
+print('p99: ${benchmark.p99}ms');
+```
+
+CLI usage:
+```bash
+# Run benchmark with 20 inference passes
+sate_ai --model model.gguf --benchmark --benchmark-runs 20
+
+# Save benchmark report
+sate_ai --model model.gguf --benchmark --benchmark-output benchmark.md
+```
+
 ### Advanced: Using Multiple Injectors
 
 ```dart
