@@ -59,10 +59,18 @@ class BaselineManager {
       return null;
     }
 
+    // ⚡ Bolt: Cache file modification times to avoid O(N log N) synchronous disk I/O
+    // statSync() in a sort comparator causes repeated disk access.
+    // Instead, we stat asynchronously once per file and sort the cached results.
+    final filesWithStats = await Future.wait(files.map((file) async {
+      final stat = await file.stat();
+      return MapEntry(file as File, stat.modified);
+    }));
+
     // Get the most recent file
-    files
-        .sort((a, b) => a.statSync().modified.compareTo(b.statSync().modified));
-    final latestFile = files.last as File;
+    filesWithStats.sort((a, b) => a.value.compareTo(b.value));
+
+    final latestFile = filesWithStats.last.key;
     final content = await latestFile.readAsString();
     final json = jsonDecode(content) as Map<String, dynamic>;
     return StressReport.fromJson(json);
