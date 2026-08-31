@@ -31,6 +31,7 @@ export 'src/core/batch_runner.dart';
 export 'src/core/baseline_manager.dart';
 export 'src/core/metric_deviation.dart';
 export 'src/core/report_comparator.dart';
+export 'src/core/benchmark_report.dart';
 export 'src/core/event_stream.dart';
 export 'src/core/report.dart';
 export 'src/adapters/model_adapter.dart';
@@ -80,13 +81,16 @@ class SateAI {
     Duration timeout = const Duration(seconds: 30),
     int retryCount = 1,
     int flakyThreshold = 0,
-  }) {
-    return StressRunner(
+    bool benchmark = false,
+  }) async {
+    final runner = StressRunner(
       model: model,
       injectors: injectors,
       timeout: timeout,
       retryCount: retryCount,
       flakyThreshold: flakyThreshold,
-    ).run();
+      benchmark: benchmark,
+    );
+    return runner.run();
   }
 }

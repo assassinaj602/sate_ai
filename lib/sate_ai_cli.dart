@@ -16,6 +16,7 @@ export 'src/core/batch_runner.dart';
 export 'src/core/baseline_manager.dart';
 export 'src/core/metric_deviation.dart';
 export 'src/core/report_comparator.dart';
+export 'src/core/benchmark_report.dart';
 export 'src/core/event_stream.dart';
 export 'src/core/report.dart';
 export 'src/adapters/model_adapter.dart';
@@ -50,6 +51,7 @@ class SateAI {
     Duration timeout = const Duration(seconds: 30),
     int retryCount = 1,
     int flakyThreshold = 0,
+    bool benchmark = false,
   }) {
     return StressRunner(
       model: model,
@@ -57,6 +59,7 @@ class SateAI {
       timeout: timeout,
       retryCount: retryCount,
       flakyThreshold: flakyThreshold,
+      benchmark: benchmark,
     ).run();
   }
 }
