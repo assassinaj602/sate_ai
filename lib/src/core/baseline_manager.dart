@@ -60,9 +60,13 @@ class BaselineManager {
     }
 
     // Get the most recent file
-    files
-        .sort((a, b) => a.statSync().modified.compareTo(b.statSync().modified));
-    final latestFile = files.last as File;
+    // Cache file stats asynchronously before sorting to avoid blocking I/O inside sort O(N log N)
+    final fileStats = await Future.wait(
+      files.map((f) async => (file: f as File, stat: await f.stat())),
+    );
+    fileStats.sort((a, b) => a.stat.modified.compareTo(b.stat.modified));
+
+    final latestFile = fileStats.last.file;
     final content = await latestFile.readAsString();
     final json = jsonDecode(content) as Map<String, dynamic>;
     return StressReport.fromJson(json);
