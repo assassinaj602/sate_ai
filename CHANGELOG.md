@@ -7,30 +7,67 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.10.0] - 2026-08-29
+## [0.10.0] - 2026-09-01
 
 ### Added
-- Performance benchmarking mode (Issue #75)
+- **VS Code Extension** (Issue #37)
+  - Run stress tests directly from editor
+  - Save baselines and view reports
+  - Status bar integration
+  - Context menu for model files
+
+- **Report Comparison & Diff View** (Issue #74)
+  - `ReportComparator` class for comparing two stress reports
+  - Detect changes in: inference time, memory usage, pass/fail status
+  - Markdown and HTML diff report output
+  - CLI flag `--compare-reports`
+
+- **Performance Benchmarking Mode** (Issue #75)
   - `benchmark` parameter in `SateAI.stress()`
   - `BenchmarkReport` class with percentiles (p50, p90, p99)
   - CLI flags: `--benchmark`, `--benchmark-output`, `--benchmark-runs`
-  - 8+ unit tests
-- Report comparison and diff view (Issue #74)
-  - `ReportComparator` class for comparing two stress reports
-  - `MetricDiff` and `ReportDiff` for detailed comparison
-  - Detect changes in: inference time, memory usage, pass/fail status
-  - Markdown and HTML diff report output
-  - CLI flag `--compare-reports report1.json report2.json`
-  - 8+ unit tests
-- Stress test retry and flaky test detection (Issue #73)
-  - `retryCount` parameter in `SateAI.stress()` for automatic retries
+
+- **Stress Test Retry & Flaky Detection** (Issue #73)
+  - `retryCount` parameter for automatic retries
   - `flakyThreshold` parameter to mark tests as flaky
-  - `flaky` flag in `FaultResult` for flaky test detection
-  - CLI flags: `--retry` and `--flaky-threshold`
-  - 8+ unit tests
+  - `flaky` flag in `FaultResult`
+
+- **HTML Report Export** (Issue #32)
+  - `toHtml()` method in `StressReport`
+  - Chart.js integration for inference time and memory usage
+  - CLI `--html` flag
+
+- **Real-time Monitoring Dashboard** (Issue #33)
+  - Server-Sent Events (SSE) streaming
+  - Live progress, logs, and results
+  - CLI `serve` command
+
+- **Golden Baseline Comparisons** (Issue #35)
+  - `BaselineManager` class
+  - CLI flags: `--baseline`, `--compare`, `--tolerance`
+
+- **Batch Mode** (Issue #36)
+  - `BatchRunner` class
+  - CLI `--models` and `--parallel` flags
+
+- **MediaPipeAdapter** (Issue #29)
+  - Face detection, pose estimation, object detection, image labeling, text recognition
+
+- **Core ML Adapter** (Issue #30)
+  - iOS Core ML support with simulation mode
+
+- **Google ML Kit Adapter** (Issue #31)
+  - 7 task types: OCR, face detection, image labeling, object detection, language identification, translation, pose detection
 
 ### Changed
-- Documentation updated with report comparison and retry usage
+- Documentation updated with all new features
+- All adapters now support GPU memory pressure simulation
+- Improved error handling in StressRunner
+
+### Fixed
+- Build issues with fllama plugin resolved
+- CI workflow now properly installs CMake 3.31.0 and Android NDK
+- Example app builds successfully on CI
 
 ## [0.9.0] - 2026-08-25
 
