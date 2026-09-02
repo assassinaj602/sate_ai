@@ -59,9 +59,15 @@ class BaselineManager {
       return null;
     }
 
-    // Get the most recent file
-    files
-        .sort((a, b) => a.statSync().modified.compareTo(b.statSync().modified));
+    // Get the most recent file by asynchronously fetching file stats
+    final statMap = <File, DateTime>{};
+    for (final file in files) {
+      final f = file as File;
+      final stat = await f.stat();
+      statMap[f] = stat.modified;
+    }
+
+    files.sort((a, b) => statMap[a as File]!.compareTo(statMap[b as File]!));
     final latestFile = files.last as File;
     final content = await latestFile.readAsString();
     final json = jsonDecode(content) as Map<String, dynamic>;
