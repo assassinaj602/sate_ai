@@ -43,12 +43,12 @@ class _SateAIScreenState extends State<SateAIScreen> {
                   ),
                   decoration: BoxDecoration(
                     color: _isRunning
-                        ? Colors.amber.withOpacity(0.2)
+                        ? Colors.amber.withValues(alpha: 0.2)
                         : _lastReport != null
                             ? _lastReport!.passed
-                                ? Colors.green.withOpacity(0.2)
-                                : Colors.red.withOpacity(0.2)
-                            : Colors.grey.withOpacity(0.2),
+                                ? Colors.green.withValues(alpha: 0.2)
+                                : Colors.red.withValues(alpha: 0.2)
+                            : Colors.grey.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: _isRunning
@@ -159,7 +159,7 @@ class _SateAIScreenState extends State<SateAIScreen> {
 
       final injectors = [
         MemoryPressureInjector(model: model, limitMb: 150),
-        MalformedInputInjector(),
+        const MalformedInputInjector(),
       ];
 
       final runner = StressRunner(
