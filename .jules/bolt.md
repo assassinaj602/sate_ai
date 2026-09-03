@@ -5,3 +5,7 @@
 ## 2026-09-02 - File System Sorting Performance
 **Learning:** In Dart, calling synchronous I/O methods like `statSync()` inside a `sort()` comparator causes O(N log N) blocking disk accesses, leading to UI/app lockups.
 **Action:** Always fetch file stats asynchronously in a loop and store them in a Map prior to sorting. Then sort the list based on the cached map values.
+
+## 2026-09-02 - List Sorting Memoization in Data Classes
+**Learning:** When calculating multiple percentiles (p50, p90, p99) from lists of metrics in Dart, naively running `List<double>.from(array)..sort()` per calculation invokes the O(N log N) sorting algorithm multiple times.
+**Action:** Use `late final` variables in Dart data transfer/report objects to cache sorted arrays lazily. This ensures sorting happens only once, turning subsequent percentile extractions into fast O(1) array accesses, without needing to pre-calculate values if they are never accessed.

@@ -64,16 +64,19 @@ class BenchmarkReport {
     return sqrt(variance);
   }
 
+  // ⚡ Bolt: Cache sorted array for O(1) repeated access instead of sorting O(N log N) each time
+  late final List<double> _sortedInferenceTimes =
+      List<double>.from(inferenceTimes)..sort();
+
   /// Calculates the specified percentile.
   double _percentile(int p) {
     if (inferenceTimes.isEmpty) return 0.0;
-    final sorted = List<double>.from(inferenceTimes)..sort();
-    final index = (p / 100.0) * (sorted.length - 1);
+    final index = (p / 100.0) * (_sortedInferenceTimes.length - 1);
     if (index % 1 == 0) {
-      return sorted[index.toInt()];
+      return _sortedInferenceTimes[index.toInt()];
     }
-    final lower = sorted[index.floor()];
-    final upper = sorted[index.ceil()];
+    final lower = _sortedInferenceTimes[index.floor()];
+    final upper = _sortedInferenceTimes[index.ceil()];
     return lower + (upper - lower) * (index - index.floor());
   }
 
@@ -99,15 +102,18 @@ class BenchmarkReport {
       ? memoryUsages.reduce((a, b) => a + b) / memoryUsages.length
       : 0.0;
 
+  // ⚡ Bolt: Cache sorted array for O(1) repeated access instead of sorting O(N log N) each time
+  late final List<double> _sortedMemoryUsages = List<double>.from(memoryUsages)
+    ..sort();
+
   double _memoryPercentile(int p) {
     if (memoryUsages.isEmpty) return 0.0;
-    final sorted = List<double>.from(memoryUsages)..sort();
-    final index = (p / 100.0) * (sorted.length - 1);
+    final index = (p / 100.0) * (_sortedMemoryUsages.length - 1);
     if (index % 1 == 0) {
-      return sorted[index.toInt()];
+      return _sortedMemoryUsages[index.toInt()];
     }
-    final lower = sorted[index.floor()];
-    final upper = sorted[index.ceil()];
+    final lower = _sortedMemoryUsages[index.floor()];
+    final upper = _sortedMemoryUsages[index.ceil()];
     return lower + (upper - lower) * (index - index.floor());
   }
 
