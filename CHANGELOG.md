@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-09-05
+
+### Added
+- CLI code generation for custom injectors (Issue #39)
+  - `sate_ai create injector <name>` command
+  - Generates injector class with all required methods
+  - Generates test file with 8+ test cases
+  - Adds custom FaultType for generated injectors
+
+### Changed
+- Documentation updated with CLI code generation usage
+
 ## [0.10.0] - 2026-09-01
 
 ### Added
