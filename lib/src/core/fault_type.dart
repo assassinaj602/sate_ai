@@ -52,6 +52,9 @@ enum FaultType {
 
   /// Benchmark run without fault injection.
   benchmark,
+
+  /// Custom user-generated injector.
+  custom,
 }
 
 /// Extension helpers on [FaultType].
@@ -83,6 +86,8 @@ extension FaultTypeX on FaultType {
         return 'Model Version Mismatch';
       case FaultType.benchmark:
         return 'Benchmark';
+      case FaultType.custom:
+        return 'Custom';
     }
   }
 
@@ -113,6 +118,8 @@ extension FaultTypeX on FaultType {
         return '🔀';
       case FaultType.benchmark:
         return '📊';
+      case FaultType.custom:
+        return '🛠️';
     }
   }
 }
