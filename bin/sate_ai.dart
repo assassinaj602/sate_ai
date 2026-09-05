@@ -22,8 +22,8 @@ void _createInjector(String name) {
   final libDir = Directory('${projectDir.path}/lib');
   final testDir = Directory('${projectDir.path}/test');
 
-  if (!libDir.existsSync()) {
-    log('Error: lib/ directory not found. Run this command from the project root.');
+  if (!libDir.existsSync() || !testDir.existsSync()) {
+    log('Error: lib/ or test/ directory not found. Run this command from the project root.');
     exit(1);
   }
 
