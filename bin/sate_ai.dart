@@ -3,11 +3,58 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:args/args.dart';
 import 'package:sate_ai/sate_ai_cli.dart';
+import 'package:sate_ai/src/cli/templates.dart';
 
 import 'sse_server.dart';
 
 void log(String message) {
   print(message);
+}
+
+void _createInjector(String name) {
+  // Validate name
+  if (!RegExp(r'^[A-Z][a-zA-Z0-9]*$').hasMatch(name)) {
+    log('Error: Injector name must start with uppercase letter and contain only alphanumeric characters.');
+    exit(1);
+  }
+
+  final projectDir = Directory.current;
+  final libDir = Directory('${projectDir.path}/lib');
+  final testDir = Directory('${projectDir.path}/test');
+
+  if (!libDir.existsSync()) {
+    log('Error: lib/ directory not found. Run this command from the project root.');
+    exit(1);
+  }
+
+  // Create injector file
+  final injectorPath = 'lib/src/injectors/${name.toLowerCase()}_injector.dart';
+  final injectorFile = File(injectorPath);
+  if (injectorFile.existsSync()) {
+    log('Error: Injector file already exists: $injectorPath');
+    exit(1);
+  }
+
+  // Create test file
+  final testPath = 'test/injectors/${name.toLowerCase()}_injector_test.dart';
+  final testFile = File(testPath);
+  if (testFile.existsSync()) {
+    log('Error: Test file already exists: $testPath');
+    exit(1);
+  }
+
+  // Write files
+  injectorFile.writeAsStringSync(InjectorTemplates.injectorFile(name));
+  testFile.writeAsStringSync(InjectorTemplates.testFile(name));
+
+  log('✅ Created injector: $injectorPath');
+  log('✅ Created test: $testPath');
+  log('');
+  log('Next steps:');
+  log('1. Implement your injection logic in $injectorPath');
+  log('2. Add tests in $testPath');
+  log('3. Run: flutter test test/injectors/${name.toLowerCase()}_injector_test.dart');
+  log('4. Export the injector in lib/sate_ai.dart');
 }
 
 List<FaultInjector> _buildInjectors(ArgResults results, AIModelAdapter model) {
@@ -48,6 +95,21 @@ List<FaultInjector> _buildInjectors(ArgResults results, AIModelAdapter model) {
 }
 
 void main(List<String> arguments) async {
+  if (arguments.isNotEmpty && arguments.first == 'create') {
+    final createArgs = arguments.sublist(1);
+    if (createArgs.isEmpty || createArgs.first != 'injector') {
+      log('Usage: sate_ai create injector <name>');
+      exit(1);
+    }
+    final nameArgs = createArgs.sublist(1);
+    if (nameArgs.isEmpty) {
+      log('Usage: sate_ai create injector <name>');
+      exit(1);
+    }
+    _createInjector(nameArgs.first);
+    return;
+  }
+
   final parser = ArgParser()
     ..addOption('model',
         abbr: 'm',
