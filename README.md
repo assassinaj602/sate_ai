@@ -190,6 +190,25 @@ sate_ai --model model.gguf --benchmark --benchmark-runs 20
 sate_ai --model model.gguf --benchmark --benchmark-output benchmark.md
 ```
 
+### CLI Code Generation
+
+SATE AI can generate boilerplate code for custom injectors:
+
+```bash
+# Generate a custom injector
+sate_ai create injector MyCustomInjector
+
+# This creates:
+# - lib/src/injectors/my_custom_injector.dart
+# - test/injectors/my_custom_injector_test.dart
+```
+
+The generated injector includes:
+- Full `FaultInjector` implementation
+- `applyTo` method for model interaction
+- 8+ test cases
+- TODOs for custom implementation
+
 ### Advanced: Using Multiple Injectors
 
 ```dart
