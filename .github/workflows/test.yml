@@ -36,6 +36,12 @@ jobs:
           sdkmanager --version
         shell: bash
 
+      - name: Accept Android SDK licenses
+        run: |
+          export ANDROID_HOME=$HOME/android-sdk
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+        shell: bash
+
       - name: Install CMake 3.31.0
         run: |
           wget -q https://github.com/Kitware/CMake/releases/download/v3.31.0/cmake-3.31.0-linux-x86_64.tar.gz
@@ -46,15 +52,6 @@ jobs:
 
       - name: Verify CMake version
         run: cmake --version
-        shell: bash
-
-      - name: Accept Android SDK licenses (FAILSAFE)
-        run: |
-          yes | sdkmanager --licenses --no_https 2>/dev/null || true
-          yes | sdkmanager --licenses 2>/dev/null || true
-          sdkmanager --list 2>/dev/null || true
-        env:
-          ANDROID_HOME: $HOME/android-sdk
         shell: bash
 
       - name: Install Android NDK
