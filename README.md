@@ -802,7 +802,7 @@ Options:
 This project is licensed under the MIT License. See the [LICENSE](https://github.com/assassinaj602/sate_ai/blob/main/LICENSE) file for the full text.
 
 ---
-
+eee
 ## Links
 
 - [GitHub Repository](https://github.com/assassinaj602/sate_ai)
@@ -810,4 +810,4 @@ This project is licensed under the MIT License. See the [LICENSE](https://github
 - [Discussions](https://github.com/assassinaj602/sate_ai/discussions)
 - [pub.dev Package](https://pub.dev/packages/sate_ai)
 - [Changelog](https://github.com/assassinaj602/sate_ai/blob/main/CHANGELOG.md)
-- [Contributors](https://github.com/assassinaj602/sate_ai/graphs/contributors)
+- [Contributors](https://github.com/assassinaj602/sate_ai/graphs/contributors)
