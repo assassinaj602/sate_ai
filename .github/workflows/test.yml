@@ -11,6 +11,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      ANDROID_HOME: $HOME/android-sdk
     steps:
       - uses: actions/checkout@v4
 
@@ -20,9 +22,8 @@ jobs:
 
       - name: Setup Android SDK
         run: |
-          mkdir -p $HOME/android-sdk
-          export ANDROID_HOME=$HOME/android-sdk
-          echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
+          mkdir -p $ANDROID_HOME
+          echo "$ANDROID_HOME/cmdline-tools/latest/bin" >> $GITHUB_PATH
 
           wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdline-tools.zip
           unzip -q cmdline-tools.zip -d $ANDROID_HOME/cmdline-tools
@@ -32,21 +33,15 @@ jobs:
           rm -rf $ANDROID_HOME/cmdline-tools/cmdline-tools
 
           chmod +x $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager
-          echo "$ANDROID_HOME/cmdline-tools/latest/bin" >> $GITHUB_PATH
-          echo "$ANDROID_HOME/platform-tools" >> $GITHUB_PATH
         shell: bash
 
       - name: Accept Android SDK licenses
         run: |
-          export ANDROID_HOME=$HOME/android-sdk
-          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$PATH"
           yes | sdkmanager --licenses || true
         shell: bash
 
       - name: Install Android NDK
         run: |
-          export ANDROID_HOME=$HOME/android-sdk
-          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$PATH"
           sdkmanager "ndk;28.0.12433566"
           echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/28.0.12433566" >> $GITHUB_ENV
         shell: bash
@@ -61,9 +56,14 @@ jobs:
 
       - name: Verify Android SDK
         run: |
-          export ANDROID_HOME=$HOME/android-sdk
-          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$PATH"
+          echo "ANDROID_HOME: $ANDROID_HOME"
           sdkmanager --list | head -10
+        shell: bash
+
+      - name: Create local.properties for Android SDK
+        run: |
+          echo "sdk.dir=$ANDROID_HOME" > example/android/local.properties
+          cat example/android/local.properties
         shell: bash
 
       - name: Install dependencies
@@ -77,8 +77,7 @@ jobs:
           cd example
           flutter pub get
           flutter build apk --debug
-        env:
-          ANDROID_HOME: $HOME/android-sdk
+        shell: bash
 
   publish:
     needs: test
