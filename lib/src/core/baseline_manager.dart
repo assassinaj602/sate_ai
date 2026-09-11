@@ -1,27 +1,23 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'fault_type.dart';
 import 'metric_deviation.dart';
 import 'report.dart';
 
-/// Manages golden baseline comparisons for stress test reports.
+/// Manages golden baseline reports for regression detection.
 ///
-/// A golden baseline is a previous passing run that serves as a reference
-/// for detecting regressions. This class handles:
-/// - Saving reports as baselines
-/// - Comparing new reports against baselines
-/// - Detecting deviations in metrics (inference time, memory usage)
+/// Saves and loads reference stress test reports, and compares new test
+/// runs against baselines to catch performance regressions and unexpected failures.
 class BaselineManager {
-  /// Directory where baselines are stored.
+  /// Directory where baseline files are stored.
   final String baselineDirectory;
 
-  /// Tolerance for metric deviations (percentage).
+  /// Tolerance percentage for metric comparisons before flagging a regression.
   final double tolerancePercent;
 
-  /// Constructs a [BaselineManager].
+  /// Creates a [BaselineManager].
   BaselineManager({
-    this.baselineDirectory = 'baselines',
+    this.baselineDirectory = '.sate_ai/baselines',
     this.tolerancePercent = 10.0,
   });
 
@@ -33,7 +29,9 @@ class BaselineManager {
     }
   }
 
-  /// Saves a report as a golden baseline.
+  /// Saves a stress report as a golden baseline for its model.
+  ///
+  /// Returns the file path where the baseline was saved.
   Future<String> saveBaseline(StressReport report) async {
     await _ensureDirectory();
     final timestamp = DateTime.now().toIso8601String().replaceAll(':', '-');
@@ -59,16 +57,18 @@ class BaselineManager {
       return null;
     }
 
-    // Get the most recent file by asynchronously fetching file stats
-    final statMap = <File, DateTime>{};
-    for (final file in files) {
-      final f = file as File;
-      final stat = await f.stat();
-      statMap[f] = stat.modified;
-    }
+    // ⚡ Bolt: Cache file modification times to avoid O(N log N) synchronous disk I/O
+    // statSync() in a sort comparator causes repeated disk access.
+    // Instead, we stat asynchronously once per file and sort the cached results.
+    final filesWithStats = await Future.wait(files.map((file) async {
+      final stat = await file.stat();
+      return MapEntry(file as File, stat.modified);
+    }));
 
-    files.sort((a, b) => statMap[a as File]!.compareTo(statMap[b as File]!));
-    final latestFile = files.last as File;
+    // Get the most recent file
+    filesWithStats.sort((a, b) => a.value.compareTo(b.value));
+
+    final latestFile = filesWithStats.last.key;
     final content = await latestFile.readAsString();
     final json = jsonDecode(content) as Map<String, dynamic>;
     return StressReport.fromJson(json);

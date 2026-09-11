@@ -2,9 +2,13 @@
 **Learning:** Pure Dart CLI execution encounters Flutter framework compilation errors (`velocity_tracker`/`dart:ui` issues) when executed via `dart run` if they have dependencies containing Flutter code. The SATE AI CLI must exclude `dart:ui` dependents directly in `bin/sate_ai.dart`.
 **Action:** For CLI execution and CI testing, always activate the package globally using `flutter pub global activate --source=path .` and run the `sate_ai` executable directly to prevent these compilation errors. Ensure that `bin/sate_ai.dart` only imports `sate_ai_cli.dart` and excludes adapters like `OnnxAdapter` and `TFLiteAdapter` that rely on Flutter UI libraries.
 
-## 2026-09-02 - File System Sorting Performance
-**Learning:** In Dart, calling synchronous I/O methods like `statSync()` inside a `sort()` comparator causes O(N log N) blocking disk accesses, leading to UI/app lockups.
-**Action:** Always fetch file stats asynchronously in a loop and store them in a Map prior to sorting. Then sort the list based on the cached map values.
+## 2024-10-25 - File sorting synchronous I/O issue
+**Learning:** In Dart, calling synchronous I/O methods like `statSync()` inside a `sort()` comparator causes repeated blocking disk accesses evaluated O(N log N) times, which can severely degrade performance.
+**Action:** Always map files to cache their modification times asynchronously before sorting (O(N) operations), then extract the sorted keys.
+
+## 2024-10-25 - Android minSdk Dependency Issue
+**Learning:** When using ML dependencies like `fllama` in the example app, the Android `minSdk` must be set explicitly to a higher value (e.g., 23) in `build.gradle.kts`. Defaulting to `flutter.minSdkVersion` (which defaults to 21) causes an AndroidManifest merge conflict during the CI build process.
+**Action:** Always ensure `minSdk` meets the minimum requirements of all ML dependencies included in the example app.
 
 ## 2026-09-02 - List Sorting Memoization in Data Classes
 **Learning:** When calculating multiple percentiles (p50, p90, p99) from lists of metrics in Dart, naively running `List<double>.from(array)..sort()` per calculation invokes the O(N log N) sorting algorithm multiple times.
