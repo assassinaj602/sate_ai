@@ -49,6 +49,12 @@ enum FaultType {
 
   /// Simulates model version mismatch (older/newer/incompatible versions loaded).
   modelVersionMismatch,
+
+  /// Benchmark run without fault injection.
+  benchmark,
+
+  /// Custom user-generated injector.
+  custom,
 }
 
 /// Extension helpers on [FaultType].
@@ -61,9 +67,9 @@ extension FaultTypeX on FaultType {
       case FaultType.malformedInput:
         return 'Malformed Input';
       case FaultType.latency:
-        return 'Latency';
+        return 'Artificial Latency';
       case FaultType.thermalThrottle:
-        return 'Thermal Throttle';
+        return 'Thermal Throttling';
       case FaultType.networkFailure:
         return 'Network Failure';
       case FaultType.quantizationDrift:
@@ -78,20 +84,24 @@ extension FaultTypeX on FaultType {
         return 'Data Corruption';
       case FaultType.modelVersionMismatch:
         return 'Model Version Mismatch';
+      case FaultType.benchmark:
+        return 'Benchmark';
+      case FaultType.custom:
+        return 'Custom';
     }
   }
 
-  /// Emoji icon for terminal / Markdown output.
+  /// Visual icon character for terminal and Markdown logs.
   String get icon {
     switch (this) {
       case FaultType.memoryPressure:
-        return '🧠';
+        return '⚡';
       case FaultType.malformedInput:
-        return '📥';
+        return '⚠️';
       case FaultType.latency:
-        return '⏱';
+        return '⏱️';
       case FaultType.thermalThrottle:
-        return '🌡';
+        return '🔥';
       case FaultType.networkFailure:
         return '🌐';
       case FaultType.quantizationDrift:
@@ -101,11 +111,15 @@ extension FaultTypeX on FaultType {
       case FaultType.confidenceValidation:
         return '🎯';
       case FaultType.gpuMemoryPressure:
-        return '🎮';
+        return '🖥️';
       case FaultType.dataCorruption:
-        return '🔧';
+        return '👾';
       case FaultType.modelVersionMismatch:
-        return '📦';
+        return '🔀';
+      case FaultType.benchmark:
+        return '📊';
+      case FaultType.custom:
+        return '🛠️';
     }
   }
 }

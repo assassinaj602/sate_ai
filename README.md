@@ -164,6 +164,51 @@ sate_ai --compare-reports report1.json,report2.json --diff-output diff.md
 sate_ai --compare-reports report1.json,report2.json --diff-html --diff-output diff.html
 ```
 
+### Performance Benchmarking Mode
+
+SATE AI can measure baseline performance without fault injection:
+
+```dart
+final report = await SateAI.stress(
+  model: myModel,
+  injectors: [],
+  benchmark: true,
+);
+
+final benchmark = report.benchmarkReport!;
+print('p50: ${benchmark.p50}ms');
+print('p90: ${benchmark.p90}ms');
+print('p99: ${benchmark.p99}ms');
+```
+
+CLI usage:
+```bash
+# Run benchmark with 20 inference passes
+sate_ai --model model.gguf --benchmark --benchmark-runs 20
+
+# Save benchmark report
+sate_ai --model model.gguf --benchmark --benchmark-output benchmark.md
+```
+
+### CLI Code Generation
+
+SATE AI can generate boilerplate code for custom injectors:
+
+```bash
+# Generate a custom injector
+sate_ai create injector MyCustomInjector
+
+# This creates:
+# - lib/src/injectors/my_custom_injector.dart
+# - test/injectors/my_custom_injector_test.dart
+```
+
+The generated injector includes:
+- Full `FaultInjector` implementation
+- `applyTo` method for model interaction
+- 8+ test cases
+- TODOs for custom implementation
+
 ### Advanced: Using Multiple Injectors
 
 ```dart
@@ -757,7 +802,7 @@ Options:
 This project is licensed under the MIT License. See the [LICENSE](https://github.com/assassinaj602/sate_ai/blob/main/LICENSE) file for the full text.
 
 ---
-
+eee
 ## Links
 
 - [GitHub Repository](https://github.com/assassinaj602/sate_ai)
@@ -765,4 +810,5 @@ This project is licensed under the MIT License. See the [LICENSE](https://github
 - [Discussions](https://github.com/assassinaj602/sate_ai/discussions)
 - [pub.dev Package](https://pub.dev/packages/sate_ai)
 - [Changelog](https://github.com/assassinaj602/sate_ai/blob/main/CHANGELOG.md)
-- [Contributors](https://github.com/assassinaj602/sate_ai/graphs/contributors)
+- [Contributors](https://github.com/assassinaj602/sate_ai/graphs/contributors)
+Jjjj

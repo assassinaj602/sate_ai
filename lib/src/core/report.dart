@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import '../adapters/model_adapter.dart';
+import 'benchmark_report.dart';
 import 'fault_type.dart';
 
 /// The result of a single fault injection + inference cycle.
@@ -144,6 +145,7 @@ class StressReport {
     required this.startTime,
     required this.endTime,
     required this.totalDuration,
+    this.benchmarkReport,
   });
 
   /// Identifier of the model under test.
@@ -166,6 +168,9 @@ class StressReport {
 
   /// Wall-clock duration of the entire run.
   final Duration totalDuration;
+
+  /// Optional performance benchmark report when run in benchmark mode.
+  final BenchmarkReport? benchmarkReport;
 
   // ---------------------------------------------------------------------------
   // Derived metrics
@@ -199,6 +204,7 @@ class StressReport {
           'failed': failureCount,
           'unexpectedErrors': failures.length,
         },
+        'benchmarkReport': benchmarkReport?.toJson(),
       };
 
   /// Deserialises from a JSON map.
@@ -215,6 +221,10 @@ class StressReport {
       startTime: DateTime.parse(json['startTime'] as String),
       endTime: DateTime.parse(json['endTime'] as String),
       totalDuration: Duration(milliseconds: json['totalDurationMs'] as int),
+      benchmarkReport: json['benchmarkReport'] != null
+          ? BenchmarkReport.fromJson(
+              json['benchmarkReport'] as Map<String, dynamic>)
+          : null,
     );
   }
 

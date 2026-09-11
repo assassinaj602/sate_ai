@@ -1,27 +1,23 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'fault_type.dart';
 import 'metric_deviation.dart';
 import 'report.dart';
 
-/// Manages golden baseline comparisons for stress test reports.
+/// Manages golden baseline reports for regression detection.
 ///
-/// A golden baseline is a previous passing run that serves as a reference
-/// for detecting regressions. This class handles:
-/// - Saving reports as baselines
-/// - Comparing new reports against baselines
-/// - Detecting deviations in metrics (inference time, memory usage)
+/// Saves and loads reference stress test reports, and compares new test
+/// runs against baselines to catch performance regressions and unexpected failures.
 class BaselineManager {
-  /// Directory where baselines are stored.
+  /// Directory where baseline files are stored.
   final String baselineDirectory;
 
-  /// Tolerance for metric deviations (percentage).
+  /// Tolerance percentage for metric comparisons before flagging a regression.
   final double tolerancePercent;
 
-  /// Constructs a [BaselineManager].
+  /// Creates a [BaselineManager].
   BaselineManager({
-    this.baselineDirectory = 'baselines',
+    this.baselineDirectory = '.sate_ai/baselines',
     this.tolerancePercent = 10.0,
   });
 
@@ -33,7 +29,9 @@ class BaselineManager {
     }
   }
 
-  /// Saves a report as a golden baseline.
+  /// Saves a stress report as a golden baseline for its model.
+  ///
+  /// Returns the file path where the baseline was saved.
   Future<String> saveBaseline(StressReport report) async {
     await _ensureDirectory();
     final timestamp = DateTime.now().toIso8601String().replaceAll(':', '-');
