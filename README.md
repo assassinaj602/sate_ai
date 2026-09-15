@@ -730,6 +730,17 @@ sate_ai/
 
 ## CI/CD Integration
 
+### Automated Publishing to pub.dev (OIDC)
+
+The included GitHub Action workflow (`.github/workflows/test.yml`) is configured to publish automatically to pub.dev on new version tags (`v*`). This uses OIDC, meaning **no `PUB_CREDENTIALS` secret is required**.
+
+To enable this for your fork/project:
+1. Go to your package on pub.dev (e.g., https://pub.dev/packages/sate_ai/admin).
+2. Ensure you are logged in as the package owner.
+3. Under the **Automated Publishing** section, select **GitHub Actions**.
+4. Enter your repository name (e.g., `assassinaj602/sate_ai`) and save.
+
+
 SATE AI is designed to run in CI/CD pipelines. Use the JSON output to fail a build when a model regresses under stress:
 
 ```dart

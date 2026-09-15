@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.example.sate_ai_example"
-    compileSdk = 34
+    compileSdk = 36
     ndkVersion = "28.0.12433566"
 
     compileOptions {
@@ -21,7 +21,7 @@ android {
     defaultConfig {
         applicationId = "com.example.sate_ai_example"
         minSdk = 23
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
     }
