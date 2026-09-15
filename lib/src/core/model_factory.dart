@@ -47,7 +47,6 @@ class ModelFactory {
 
       case DetectedModelType.tensorflow:
       case DetectedModelType.unknown:
-      default:
         return MockAdapter(modelId: modelId);
     }
   }

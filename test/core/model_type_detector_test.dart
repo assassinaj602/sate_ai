@@ -4,8 +4,8 @@ import 'package:sate_ai/sate_ai.dart';
 void main() {
   group('ModelTypeDetector', () {
     test('detects ONNX from .onnx extension', () {
-      expect(
-          ModelTypeDetector.detect('model.onnx'), equals(DetectedModelType.onnx));
+      expect(ModelTypeDetector.detect('model.onnx'),
+          equals(DetectedModelType.onnx));
     });
 
     test('detects TFLite from .tflite extension', () {
@@ -14,8 +14,8 @@ void main() {
     });
 
     test('detects GGUF from .gguf extension', () {
-      expect(
-          ModelTypeDetector.detect('model.gguf'), equals(DetectedModelType.gguf));
+      expect(ModelTypeDetector.detect('model.gguf'),
+          equals(DetectedModelType.gguf));
     });
 
     test('detects CoreML from .mlmodel extension', () {
@@ -34,8 +34,8 @@ void main() {
     });
 
     test('handles uppercase extensions', () {
-      expect(
-          ModelTypeDetector.detect('model.ONNX'), equals(DetectedModelType.onnx));
+      expect(ModelTypeDetector.detect('model.ONNX'),
+          equals(DetectedModelType.onnx));
     });
 
     test('handles paths with directories', () {
