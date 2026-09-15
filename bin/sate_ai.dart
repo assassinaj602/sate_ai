@@ -122,6 +122,9 @@ void main(List<String> arguments) async {
     ..addOption('models',
         help:
             'Comma-separated list of model paths for batch mode (e.g., model1.gguf,model2.gguf)')
+    ..addFlag('auto-detect',
+        help: 'Auto-detect model types from file extensions in batch mode',
+        defaultsTo: true)
     ..addFlag('parallel', help: 'Run batch tests in parallel')
     ..addOption('batch-output',
         help: 'Output file for batch report (JSON or Markdown)')
@@ -222,19 +225,30 @@ void main(List<String> arguments) async {
     if (modelsStr != null) {
       final modelPaths = modelsStr.split(',').map((s) => s.trim()).toList();
       final parallel = results['parallel'] as bool;
+      final autoDetect = results['auto-detect'] as bool;
       final outputFile = results['batch-output'] as String?;
 
       final items = <BatchItem>[];
       for (var i = 0; i < modelPaths.length; i++) {
         final path = modelPaths[i];
-        final model = MockAdapter(modelId: 'model-${i + 1}');
+        final detected = ModelTypeDetector.detect(path);
+        final modelId = path.split(Platform.pathSeparator).last;
+
+        final model = ModelFactory.create(
+          filePath: path,
+          modelId: modelId,
+          autoDetect: autoDetect,
+        );
+
         final injectors = _buildInjectors(results, model);
-        items.add(BatchItem(
-          modelId: path.split(Platform.pathSeparator).last,
-          modelType: 'unknown',
+
+        items.add(BatchItem.autoDetect(
+          filePath: path,
           model: model,
           injectors: injectors,
         ));
+
+        log('Detected: $path -> ${detected.displayName}');
       }
 
       final batchRunner = BatchRunner(
