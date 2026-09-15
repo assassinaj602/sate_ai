@@ -209,6 +209,18 @@ The generated injector includes:
 - 8+ test cases
 - TODOs for custom implementation
 
+### 📚 Practical Cookbook & Recipes
+
+Explore our comprehensive [**SATE AI Cookbook**](docs/cookbook/README.md) featuring step-by-step recipes for real-world scenarios:
+
+- 💬 [Recipe 1: Testing a Chatbot Model](docs/cookbook/recipe-1-chatbot-testing.md) (Llama/Phi/Gemma, KV-cache memory pressure)
+- 🖼️ [Recipe 2: Testing an Image Classifier](docs/cookbook/recipe-2-image-classifier-testing.md) (MobileNet/ResNet, thermal throttling, latency)
+- 🎙️ [Recipe 3: Testing a Speech-to-Text Model](docs/cookbook/recipe-3-speech-to-text-testing.md) (Whisper/Vosk, malformed audio buffers, confidence thresholds)
+- ⚡ [Recipe 4: Testing with ONNX Runtime](docs/cookbook/recipe-4-onnx-runtime-testing.md) (OnnxAdapter, asset validation, tensor shapes)
+- 🤖 [Recipe 5: Testing with TensorFlow Lite](docs/cookbook/recipe-5-tflite-testing.md) (TFLiteAdapter, quantization drift, delegate fallbacks)
+
+See the [Cookbook Navigation & Integration Guide](docs/cookbook/index.md) for full details.
+
 ### Advanced: Using Multiple Injectors
 
 ```dart
