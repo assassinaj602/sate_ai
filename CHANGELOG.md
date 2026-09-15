@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **VS Code Extension** (Issue #37)
+  - Add webhook notifications for Slack, Discord, and Microsoft Teams on stress test completion
   - Run stress tests directly from editor
   - Save baselines and view reports
   - Status bar integration
