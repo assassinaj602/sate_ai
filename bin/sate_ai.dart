@@ -1,6 +1,7 @@
-// ignore_for_file: avoid_print, prefer_const_constructors
+﻿// ignore_for_file: avoid_print, prefer_const_constructors
 import 'dart:convert';
 import 'dart:io';
+import 'dart:convert';
 import 'package:args/args.dart';
 import 'package:sate_ai/sate_ai_cli.dart';
 import 'package:sate_ai/src/cli/templates.dart';
@@ -47,8 +48,8 @@ void _createInjector(String name) {
   injectorFile.writeAsStringSync(InjectorTemplates.injectorFile(name));
   testFile.writeAsStringSync(InjectorTemplates.testFile(name));
 
-  log('✅ Created injector: $injectorPath');
-  log('✅ Created test: $testPath');
+  log('âœ… Created injector: $injectorPath');
+  log('âœ… Created test: $testPath');
   log('');
   log('Next steps:');
   log('1. Implement your injection logic in $injectorPath');
@@ -92,6 +93,42 @@ List<FaultInjector> _buildInjectors(ArgResults results, AIModelAdapter model) {
     }
   }
   return injectors;
+}
+
+
+Future<void> _notifyWebhook(
+  String? webhookUrl,
+  String? webhookType,
+  StressReport report,
+) async {
+  if (webhookUrl == null || webhookUrl.isEmpty) return;
+  final resolvedType = webhookType ?? _inferWebhookType(webhookUrl);
+  if (resolvedType == null) {
+    stderr.writeln('Unknown webhook type for URL: $webhookUrl');
+    return;
+  }
+  final notifier = WebhookNotifier(
+    url: webhookUrl,
+    type: parseWebhookType(resolvedType),
+  );
+  try {
+    final ok = await notifier.send(report);
+    if (!ok) {
+      stderr.writeln('Webhook delivery failed for $webhookUrl');
+    }
+  } finally {
+    notifier.dispose();
+  }
+}
+
+String? _inferWebhookType(String url) {
+  final lower = url.toLowerCase();
+  if (lower.contains('hooks.slack.com')) return 'slack';
+  if (lower.contains('discord.com/api/webhooks')) return 'discord';
+  if (lower.contains('outlook.office.com') || lower.contains('webhook.office.com')) {
+    return 'teams';
+  }
+  return null;
 }
 
 void main(List<String> arguments) async {
@@ -342,18 +379,18 @@ void main(List<String> arguments) async {
 
     if (saveBaseline) {
       final path = await baselineManager.saveBaseline(report);
-      log('✅ Baseline saved to: $path');
+      log('âœ… Baseline saved to: $path');
     }
 
     if (compareBaseline) {
       final comparison = await baselineManager.checkAgainstBaseline(report);
       if (comparison == null) {
-        log('ℹ️ No baseline found. Saved current report as baseline.');
+        log('â„¹ï¸ No baseline found. Saved current report as baseline.');
       } else {
         if (comparison.passed) {
-          log('✅ Baseline comparison passed. No regressions detected.');
+          log('âœ… Baseline comparison passed. No regressions detected.');
         } else {
-          log('❌ Baseline comparison failed. Regressions detected!');
+          log('âŒ Baseline comparison failed. Regressions detected!');
           log('');
           log(comparison.toMarkdown());
           exit(1);
@@ -369,3 +406,4 @@ void main(List<String> arguments) async {
     exit(1);
   }
 }
+
