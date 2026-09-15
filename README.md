@@ -209,6 +209,22 @@ The generated injector includes:
 - 8+ test cases
 - TODOs for custom implementation
 
+### Auto-Detect Model Type
+
+SATE AI can automatically detect model types from file extensions:
+
+```bash
+# Batch mode with auto-detection
+sate_ai --models model1.onnx,model2.tflite,model3.gguf --auto-detect
+```
+
+**Supported extensions:**
+- `.onnx` → ONNX Runtime
+- `.tflite` → TensorFlow Lite
+- `.gguf` → Fllama (llama.cpp)
+- `.mlmodel` → Apple Core ML
+- `.pb`, `.bin` → TensorFlow
+
 ### 📚 Practical Cookbook & Recipes
 
 Explore our comprehensive [**SATE AI Cookbook**](docs/cookbook/README.md) featuring step-by-step recipes for real-world scenarios:

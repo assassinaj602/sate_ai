@@ -7,9 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.11.0] - 2026-09-05
+## [0.11.0] - 2026-09-15
 
 ### Added
+- Auto-detect model type in batch mode (Issue #88)
+  - `ModelTypeDetector` class for file extension detection
+  - `ModelFactory` for creating adapters from detected types
+  - Supports `.onnx`, `.tflite`, `.gguf`, `.mlmodel`, `.pb`
+  - CLI flag `--auto-detect` for automatic detection
+  - 10+ unit tests
 - CLI code generation for custom injectors (Issue #39)
   - `sate_ai create injector <name>` command
   - Generates injector class with all required methods
@@ -17,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Adds custom FaultType for generated injectors
 
 ### Changed
+- Batch mode now auto-detects model types by default
+- Documentation updated with auto-detection usage
 - Documentation updated with CLI code generation usage
 
 ## [0.10.0] - 2026-09-01
