@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 
 import '../adapters/model_adapter.dart';
 import 'fault_injector.dart';
+import 'model_type_detector.dart';
 import 'report.dart';
 import 'stress_runner.dart';
 
@@ -26,6 +28,21 @@ class BatchItem {
     required this.model,
     required this.injectors,
   });
+
+  /// Creates a BatchItem with auto-detected model type.
+  factory BatchItem.autoDetect({
+    required String filePath,
+    required AIModelAdapter model,
+    required List<FaultInjector> injectors,
+  }) {
+    final detected = ModelTypeDetector.detect(filePath);
+    return BatchItem(
+      modelId: filePath.split(Platform.pathSeparator).last,
+      modelType: detected.displayName,
+      model: model,
+      injectors: injectors,
+    );
+  }
 }
 
 /// Result of a single batch item execution.
