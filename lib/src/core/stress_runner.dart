@@ -37,9 +37,8 @@ class StressRunner {
     this.flakyThreshold = 0,
     this.benchmark = false,
     this.onEvent,
-  }) : _eventController = onEvent != null
-           ? null
-           : StreamController<StressEvent>.broadcast();
+  }) : _eventController =
+            onEvent != null ? null : StreamController<StressEvent>.broadcast();
 
   /// The model under test.
   final AIModelAdapter model;

@@ -40,10 +40,10 @@ class AIInput {
 
   /// Serialises to a JSON-compatible map.
   Map<String, dynamic> toJson() => {
-    'text': text,
-    'binary': binary != null ? base64Encode(binary!) : null,
-    'metadata': metadata,
-  };
+        'text': text,
+        'binary': binary != null ? base64Encode(binary!) : null,
+        'metadata': metadata,
+      };
 }
 
 /// Output produced by an AI model inference call.
@@ -80,11 +80,11 @@ class AIOutput {
 
   /// Serialises to a JSON-compatible map.
   Map<String, dynamic> toJson() => {
-    'text': text,
-    'inferenceTimeMs': inferenceTime.inMilliseconds,
-    'confidence': confidence,
-    'metadata': metadata,
-  };
+        'text': text,
+        'inferenceTimeMs': inferenceTime.inMilliseconds,
+        'confidence': confidence,
+        'metadata': metadata,
+      };
 }
 
 /// Thrown when an AI model inference call fails.

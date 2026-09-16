@@ -28,12 +28,12 @@ class MetricDeviation {
 
   /// Converts metric deviation to JSON map.
   Map<String, dynamic> toJson() => {
-    'metric': metric,
-    'expected': expected,
-    'actual': actual,
-    'deviationPercent': deviationPercent,
-    'message': message,
-  };
+        'metric': metric,
+        'expected': expected,
+        'actual': actual,
+        'deviationPercent': deviationPercent,
+        'message': message,
+      };
 }
 
 /// Result of comparing a report against a baseline.
@@ -100,8 +100,8 @@ class BaselineComparison {
 
   /// Converts comparison result to JSON map.
   Map<String, dynamic> toJson() => {
-    'passed': passed,
-    'comparisonTime': comparisonTime.toIso8601String(),
-    'deviations': deviations.map((d) => d.toJson()).toList(),
-  };
+        'passed': passed,
+        'comparisonTime': comparisonTime.toIso8601String(),
+        'deviations': deviations.map((d) => d.toJson()).toList(),
+      };
 }

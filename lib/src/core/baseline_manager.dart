@@ -103,11 +103,10 @@ class BaselineManager {
     // Compare total tests count
     if (report.results.length != baseline.results.length) {
       passed = false;
-      final diff =
-          ((report.results.length - baseline.results.length) /
-                  baseline.results.length *
-                  100)
-              .abs();
+      final diff = ((report.results.length - baseline.results.length) /
+              baseline.results.length *
+              100)
+          .abs();
       deviations.add(
         MetricDeviation(
           metric: 'test_count',
@@ -121,20 +120,17 @@ class BaselineManager {
     }
 
     // Compare individual injector results
-    for (
-      var i = 0;
-      i < report.results.length && i < baseline.results.length;
-      i++
-    ) {
+    for (var i = 0;
+        i < report.results.length && i < baseline.results.length;
+        i++) {
       final current = report.results[i];
       final previous = baseline.results[i];
 
       // Compare inference time
       if (current.inferenceTime != null && previous.inferenceTime != null) {
-        final diffMs =
-            (current.inferenceTime!.inMilliseconds -
-                    previous.inferenceTime!.inMilliseconds)
-                .abs();
+        final diffMs = (current.inferenceTime!.inMilliseconds -
+                previous.inferenceTime!.inMilliseconds)
+            .abs();
         final diffPercent =
             (diffMs / previous.inferenceTime!.inMilliseconds) * 100;
         if (diffPercent > tolerancePercent) {

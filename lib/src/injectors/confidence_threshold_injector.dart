@@ -19,10 +19,10 @@ class ConfidenceThresholdInjector implements FaultInjector {
 
   /// Creates a [ConfidenceThresholdInjector].
   ConfidenceThresholdInjector({required this.model, this.threshold = 0.5})
-    : assert(
-        threshold >= 0 && threshold <= 1.0,
-        'threshold must be between 0 and 1.0',
-      );
+      : assert(
+          threshold >= 0 && threshold <= 1.0,
+          'threshold must be between 0 and 1.0',
+        );
 
   @override
   FaultType get type => FaultType.confidenceValidation;

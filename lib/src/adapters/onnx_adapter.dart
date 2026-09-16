@@ -53,8 +53,8 @@ class OnnxAdapter implements AIModelAdapter {
     required Uint8List modelBytes,
     required String modelId,
     OrtSessionFactory? sessionFactory,
-  }) : _modelId = modelId,
-       _session = (sessionFactory ?? _defaultSessionFactory)(modelBytes);
+  })  : _modelId = modelId,
+        _session = (sessionFactory ?? _defaultSessionFactory)(modelBytes);
 
   final String _modelId;
   final OrtSession _session;
@@ -104,9 +104,8 @@ class OnnxAdapter implements AIModelAdapter {
       );
 
       final runOptions = OrtRunOptions();
-      final outputs = await _session
-          .runAsync(runOptions, {'input': inputTensor})
-          ?.timeout(const Duration(seconds: 3));
+      final outputs = await _session.runAsync(runOptions,
+          {'input': inputTensor})?.timeout(const Duration(seconds: 3));
 
       String outputText;
       if (outputs != null && outputs.isNotEmpty) {

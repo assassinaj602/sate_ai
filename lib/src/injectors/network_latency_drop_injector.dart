@@ -39,8 +39,8 @@ class NetworkLatencyDropInjector implements FaultInjector {
     this.failureType = NetworkFailureType.latency,
     this.latencyMs = 1000,
     this.timeoutMs = 5000,
-  }) : assert(latencyMs >= 0, 'latencyMs must be >= 0'),
-       assert(timeoutMs >= 0, 'timeoutMs must be >= 0');
+  })  : assert(latencyMs >= 0, 'latencyMs must be >= 0'),
+        assert(timeoutMs >= 0, 'timeoutMs must be >= 0');
 
   @override
   FaultType get type => FaultType.networkFailure;

@@ -130,9 +130,8 @@ class CoreMLAdapter implements AIModelAdapter {
         inferenceTime: stopwatch.elapsed,
         confidence: confidence,
         metadata: {
-          'runtime': Platform.isIOS
-              ? 'Core ML (Native)'
-              : 'Core ML (Simulated)',
+          'runtime':
+              Platform.isIOS ? 'Core ML (Native)' : 'Core ML (Simulated)',
           'modelId': modelId,
           'memoryMB': _currentMemoryMB,
           'gpuMemoryMB': _currentGPUMemoryMB,
@@ -150,9 +149,8 @@ class CoreMLAdapter implements AIModelAdapter {
     await Future.delayed(const Duration(milliseconds: 80));
 
     final inputText = input.text ?? 'input';
-    final trimmed = inputText.length > 30
-        ? inputText.substring(0, 30)
-        : inputText;
+    final trimmed =
+        inputText.length > 30 ? inputText.substring(0, 30) : inputText;
 
     // Simulate different prediction types based on input
     if (trimmed.toLowerCase().contains('image') ||

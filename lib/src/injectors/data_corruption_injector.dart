@@ -42,9 +42,9 @@ class DataCorruptionInjector implements FaultInjector {
     this.intensity = 0.1,
     this.seed,
   }) : assert(
-         intensity >= 0.0 && intensity <= 1.0,
-         'intensity must be between 0.0 and 1.0',
-       );
+          intensity >= 0.0 && intensity <= 1.0,
+          'intensity must be between 0.0 and 1.0',
+        );
 
   @override
   FaultType get type => FaultType.dataCorruption;

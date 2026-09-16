@@ -388,8 +388,8 @@ void main(List<String> arguments) async {
       final content = useMarkdown
           ? report.toMarkdown()
           : useHtml
-          ? report.toHtml()
-          : report.toJsonString();
+              ? report.toHtml()
+              : report.toJsonString();
       await File(outputFile).writeAsString(content);
       log('Report written to $outputFile');
     } else {

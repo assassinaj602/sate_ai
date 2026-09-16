@@ -40,7 +40,7 @@ jobs:
 
       - name: Install CMake 3.31.0
         run: |
-          yes | sdkmanager "cmake;3.31.0"
+          sdkmanager "cmake;3.31.0"
         shell: bash
 
       - name: Verify Android SDK

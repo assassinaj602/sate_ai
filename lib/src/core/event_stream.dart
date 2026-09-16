@@ -29,7 +29,7 @@ sealed class StressEvent {
 
   /// Constructs a [StressEvent].
   StressEvent({required this.type, DateTime? timestamp})
-    : timestamp = timestamp ?? DateTime.now();
+      : timestamp = timestamp ?? DateTime.now();
 
   /// Converts the event to a JSON map.
   Map<String, dynamic> toJson();
@@ -55,12 +55,12 @@ class StartedEvent extends StressEvent {
 
   @override
   Map<String, dynamic> toJson() => {
-    'type': type.name,
-    'timestamp': timestamp.toIso8601String(),
-    'modelId': modelId,
-    'injectorNames': injectorNames,
-    'totalInjectors': totalInjectors,
-  };
+        'type': type.name,
+        'timestamp': timestamp.toIso8601String(),
+        'modelId': modelId,
+        'injectorNames': injectorNames,
+        'totalInjectors': totalInjectors,
+      };
 }
 
 /// Event emitted when an injector starts.
@@ -83,12 +83,12 @@ class InjectorStartingEvent extends StressEvent {
 
   @override
   Map<String, dynamic> toJson() => {
-    'type': type.name,
-    'timestamp': timestamp.toIso8601String(),
-    'injectorName': injectorName,
-    'index': index,
-    'total': total,
-  };
+        'type': type.name,
+        'timestamp': timestamp.toIso8601String(),
+        'injectorName': injectorName,
+        'index': index,
+        'total': total,
+      };
 }
 
 /// Event emitted when an injector completes.
@@ -119,14 +119,14 @@ class InjectorCompleteEvent extends StressEvent {
 
   @override
   Map<String, dynamic> toJson() => {
-    'type': type.name,
-    'timestamp': timestamp.toIso8601String(),
-    'injectorName': injectorName,
-    'passed': passed,
-    'inferenceTimeMs': inferenceTimeMs,
-    'memoryUsageMB': memoryUsageMB,
-    'errorMessage': errorMessage,
-  };
+        'type': type.name,
+        'timestamp': timestamp.toIso8601String(),
+        'injectorName': injectorName,
+        'passed': passed,
+        'inferenceTimeMs': inferenceTimeMs,
+        'memoryUsageMB': memoryUsageMB,
+        'errorMessage': errorMessage,
+      };
 }
 
 /// Event emitted when an injector errors.
@@ -139,15 +139,15 @@ class InjectorErrorEvent extends StressEvent {
 
   /// Constructs an [InjectorErrorEvent].
   InjectorErrorEvent({required this.injectorName, required this.error})
-    : super(type: StressEventType.injectorError);
+      : super(type: StressEventType.injectorError);
 
   @override
   Map<String, dynamic> toJson() => {
-    'type': type.name,
-    'timestamp': timestamp.toIso8601String(),
-    'injectorName': injectorName,
-    'error': error,
-  };
+        'type': type.name,
+        'timestamp': timestamp.toIso8601String(),
+        'injectorName': injectorName,
+        'error': error,
+      };
 }
 
 /// Event emitted for log messages.
@@ -160,15 +160,15 @@ class LogEvent extends StressEvent {
 
   /// Constructs a [LogEvent].
   LogEvent({required this.message, this.level = 'info'})
-    : super(type: StressEventType.log);
+      : super(type: StressEventType.log);
 
   @override
   Map<String, dynamic> toJson() => {
-    'type': type.name,
-    'timestamp': timestamp.toIso8601String(),
-    'message': message,
-    'level': level,
-  };
+        'type': type.name,
+        'timestamp': timestamp.toIso8601String(),
+        'message': message,
+        'level': level,
+      };
 }
 
 /// Event emitted when the test finishes.
@@ -199,14 +199,14 @@ class FinishedEvent extends StressEvent {
 
   @override
   Map<String, dynamic> toJson() => {
-    'type': type.name,
-    'timestamp': timestamp.toIso8601String(),
-    'passed': passed,
-    'totalTests': totalTests,
-    'passedCount': passedCount,
-    'failedCount': failedCount,
-    'durationMs': durationMs,
-  };
+        'type': type.name,
+        'timestamp': timestamp.toIso8601String(),
+        'passed': passed,
+        'totalTests': totalTests,
+        'passedCount': passedCount,
+        'failedCount': failedCount,
+        'durationMs': durationMs,
+      };
 }
 
 /// Type alias for event stream callbacks.

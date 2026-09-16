@@ -58,22 +58,22 @@ class ThermalThrottleInjector implements FaultInjector {
     this.extraDelayMs = 500,
     this.batteryThreshold = 20,
     this.batteryDropStep = 5.0,
-  }) : assert(
-         temperatureStep > 0 && temperatureStep <= 50,
-         'temperatureStep must be between 1 and 50',
-       ),
-       assert(
-         maxTemperature >= 40 && maxTemperature <= 120,
-         'maxTemperature must be between 40 and 120',
-       ),
-       assert(
-         batteryThreshold >= 5 && batteryThreshold <= 50,
-         'batteryThreshold must be between 5 and 50',
-       ),
-       assert(
-         batteryDropStep > 0 && batteryDropStep <= 50,
-         'batteryDropStep must be between 0 and 50',
-       );
+  })  : assert(
+          temperatureStep > 0 && temperatureStep <= 50,
+          'temperatureStep must be between 1 and 50',
+        ),
+        assert(
+          maxTemperature >= 40 && maxTemperature <= 120,
+          'maxTemperature must be between 40 and 120',
+        ),
+        assert(
+          batteryThreshold >= 5 && batteryThreshold <= 50,
+          'batteryThreshold must be between 5 and 50',
+        ),
+        assert(
+          batteryDropStep > 0 && batteryDropStep <= 50,
+          'batteryDropStep must be between 0 and 50',
+        );
 
   @override
   FaultType get type => FaultType.thermalThrottle;

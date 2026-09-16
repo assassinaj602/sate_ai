@@ -154,31 +154,31 @@ class BenchmarkReport {
 
   /// Generates a JSON representation.
   Map<String, dynamic> toJson() => {
-    'modelId': modelId,
-    'numRuns': numRuns,
-    'timestamp': timestamp.toIso8601String(),
-    'inferenceTimes': inferenceTimes,
-    'memoryUsages': memoryUsages,
-    'stats': {
-      'inferenceTime': {
-        'min': min,
-        'max': max,
-        'avg': avg,
-        'stdDev': stdDev,
-        'p50': p50,
-        'p90': p90,
-        'p99': p99,
-      },
-      'memoryUsage': {
-        'min': memoryMin,
-        'max': memoryMax,
-        'avg': memoryAvg,
-        'p50': memoryP50,
-        'p90': memoryP90,
-        'p99': memoryP99,
-      },
-    },
-  };
+        'modelId': modelId,
+        'numRuns': numRuns,
+        'timestamp': timestamp.toIso8601String(),
+        'inferenceTimes': inferenceTimes,
+        'memoryUsages': memoryUsages,
+        'stats': {
+          'inferenceTime': {
+            'min': min,
+            'max': max,
+            'avg': avg,
+            'stdDev': stdDev,
+            'p50': p50,
+            'p90': p90,
+            'p99': p99,
+          },
+          'memoryUsage': {
+            'min': memoryMin,
+            'max': memoryMax,
+            'avg': memoryAvg,
+            'p50': memoryP50,
+            'p90': memoryP90,
+            'p99': memoryP99,
+          },
+        },
+      };
 
   /// Constructs a [BenchmarkReport] from a JSON map.
   factory BenchmarkReport.fromJson(Map<String, dynamic> json) {

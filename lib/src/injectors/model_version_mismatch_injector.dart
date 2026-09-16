@@ -35,8 +35,8 @@ class ModelVersionMismatchInjector implements FaultInjector {
     this.expectedVersion = '2.0.0',
     this.actualVersion = '1.0.0',
     this.attemptFallback = false,
-  }) : assert(expectedVersion.isNotEmpty, 'expectedVersion must not be empty'),
-       assert(actualVersion.isNotEmpty, 'actualVersion must not be empty');
+  })  : assert(expectedVersion.isNotEmpty, 'expectedVersion must not be empty'),
+        assert(actualVersion.isNotEmpty, 'actualVersion must not be empty');
 
   @override
   FaultType get type => FaultType.modelVersionMismatch;

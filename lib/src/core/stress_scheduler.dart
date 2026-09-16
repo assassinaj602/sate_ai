@@ -46,10 +46,8 @@ class StressScheduler {
   /// Validates the cron expression.
   void _validateCronExpression() {
     try {
-      final parts = cronExpression
-          .split(' ')
-          .where((s) => s.isNotEmpty)
-          .toList();
+      final parts =
+          cronExpression.split(' ').where((s) => s.isNotEmpty).toList();
       if (parts.length != 5 && parts.length != 6) {
         throw ArgumentError(
           'Invalid cron expression: "$cronExpression". '
@@ -222,10 +220,10 @@ class ReportComparison {
 
   /// Converts comparison to JSON map.
   Map<String, dynamic> toJson() => {
-    'currentPassed': currentPassed,
-    'currentTotal': currentTotal,
-    'previousPassed': previousPassed,
-    'previousTotal': previousTotal,
-    'passed': passed,
-  };
+        'currentPassed': currentPassed,
+        'currentTotal': currentTotal,
+        'previousPassed': previousPassed,
+        'previousTotal': previousTotal,
+        'passed': passed,
+      };
 }

@@ -18,7 +18,7 @@ class TFLiteAdapter implements AIModelAdapter {
   /// [modelId] is the unique name of the TFLite model.
   /// [_interpreter] is the initialized TensorFlow Lite interpreter.
   TFLiteAdapter({required this.modelId, required Interpreter interpreter})
-    : _interpreter = interpreter;
+      : _interpreter = interpreter;
 
   /// Load a TFLite model from assets.
   static Future<TFLiteAdapter> fromAsset(

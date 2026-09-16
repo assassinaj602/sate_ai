@@ -44,12 +44,12 @@ class MetricDiff {
 
   /// Serialises to a JSON-compatible map.
   Map<String, dynamic> toJson() => {
-    'metric': metric,
-    'before': before,
-    'after': after,
-    'status': status.name,
-    'message': message,
-  };
+        'metric': metric,
+        'before': before,
+        'after': after,
+        'status': status.name,
+        'message': message,
+      };
 }
 
 /// Result of comparing two stress reports.
@@ -110,10 +110,10 @@ class ReportDiff {
         final icon = diff.status == DiffStatus.same
             ? '✅'
             : diff.status == DiffStatus.changed
-            ? '⚠️'
-            : diff.status == DiffStatus.added
-            ? '➕'
-            : '➖';
+                ? '⚠️'
+                : diff.status == DiffStatus.added
+                    ? '➕'
+                    : '➖';
         buffer.writeln('### $icon ${diff.metric}');
         buffer.writeln('- **Before:** ${diff.before}');
         buffer.writeln('- **After:** ${diff.after}');
@@ -165,10 +165,10 @@ class ReportDiff {
         final color = diff.status == DiffStatus.same
             ? '#34d399'
             : diff.status == DiffStatus.changed
-            ? '#fbbf24'
-            : diff.status == DiffStatus.added
-            ? '#60a5fa'
-            : '#f87171';
+                ? '#fbbf24'
+                : diff.status == DiffStatus.added
+                    ? '#60a5fa'
+                    : '#f87171';
         buffer.writeln(
           '      <div class="diff-item" style="border-left: 4px solid $color;">',
         );
@@ -335,9 +335,8 @@ class ReportComparator {
       // Compare memory usage
       if (r1.memoryUsageMB != null && r2.memoryUsageMB != null) {
         final diffMB = r2.memoryUsageMB! - r1.memoryUsageMB!;
-        final diffPercent = r1.memoryUsageMB! > 0
-            ? (diffMB / r1.memoryUsageMB!) * 100
-            : 0.0;
+        final diffPercent =
+            r1.memoryUsageMB! > 0 ? (diffMB / r1.memoryUsageMB!) * 100 : 0.0;
 
         final status = diffPercent.abs() > tolerancePercent
             ? DiffStatus.changed

@@ -101,9 +101,8 @@ class MediaPipeAdapter implements AIModelAdapter {
 
     // Use the input to generate a realistic response
     final inputText = input.text ?? 'input';
-    final trimmed = inputText.length > 20
-        ? inputText.substring(0, 20)
-        : inputText;
+    final trimmed =
+        inputText.length > 20 ? inputText.substring(0, 20) : inputText;
 
     switch (taskType) {
       case MediaPipeTaskType.faceDetection:

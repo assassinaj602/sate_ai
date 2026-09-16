@@ -128,9 +128,8 @@ class GoogleMLKitAdapter implements AIModelAdapter {
     await Future.delayed(_getProcessingTime());
 
     final inputText = input.text ?? 'input';
-    final trimmed = inputText.length > 30
-        ? inputText.substring(0, 30)
-        : inputText;
+    final trimmed =
+        inputText.length > 30 ? inputText.substring(0, 30) : inputText;
 
     switch (taskType) {
       case MLKitTaskType.textRecognition:

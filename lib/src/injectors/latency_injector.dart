@@ -36,9 +36,9 @@ class LatencyInjector implements FaultInjector {
     this.baseDelayMs = 100,
     this.incrementMs = 50,
     this.maxLatencyMs = 1000,
-  }) : assert(baseDelayMs >= 0, 'baseDelayMs must be >= 0'),
-       assert(incrementMs >= 0, 'incrementMs must be >= 0'),
-       assert(maxLatencyMs > 0, 'maxLatencyMs must be > 0');
+  })  : assert(baseDelayMs >= 0, 'baseDelayMs must be >= 0'),
+        assert(incrementMs >= 0, 'incrementMs must be >= 0'),
+        assert(maxLatencyMs > 0, 'maxLatencyMs must be > 0');
 
   @override
   FaultType get type => FaultType.latency;

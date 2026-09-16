@@ -81,14 +81,14 @@ class BatchResult {
 
   /// Converts the batch result into a JSON map.
   Map<String, dynamic> toJson() => {
-    'modelId': modelId,
-    'modelType': modelType,
-    'passed': passed,
-    'durationMs': duration.inMilliseconds,
-    'error': error,
-    'injectors': injectors,
-    'report': report?.toJson(),
-  };
+        'modelId': modelId,
+        'modelType': modelType,
+        'passed': passed,
+        'durationMs': duration.inMilliseconds,
+        'error': error,
+        'injectors': injectors,
+        'report': report?.toJson(),
+      };
 }
 
 /// Progress update for batch execution.

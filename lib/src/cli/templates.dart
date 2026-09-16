@@ -1,8 +1,7 @@
 /// Templates for generating custom injectors.
 class InjectorTemplates {
   /// Generates the source code content for a custom injector.
-  static String injectorFile(String name) =>
-      '''
+  static String injectorFile(String name) => '''
 import 'dart:async';
 import 'package:sate_ai/src/adapters/model_adapter.dart';
 import 'package:sate_ai/src/core/fault_injector.dart';
@@ -56,8 +55,7 @@ class ${name}Injector implements FaultInjector {
 ''';
 
   /// Generates the unit test code content for a custom injector.
-  static String testFile(String name) =>
-      '''
+  static String testFile(String name) => '''
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sate_ai/sate_ai.dart';
 
@@ -113,8 +111,7 @@ void main() {
 ''';
 
   /// Generates export statement for a custom injector.
-  static String exportedFile(String name) =>
-      '''
+  static String exportedFile(String name) => '''
 export 'src/injectors/${name.toLowerCase()}_injector.dart';
 ''';
 }
