@@ -38,13 +38,19 @@ class ModelSwapInjector implements FaultInjector {
     this.initialQuality = 1.0,
     this.qualityDegradation = 0.1,
     this.qualityThreshold = 0.3,
-  })  : assert(initialQuality >= 0 && initialQuality <= 1.0,
-            'initialQuality must be between 0 and 1.0'),
-        assert(qualityDegradation > 0 && qualityDegradation <= 1.0,
-            'qualityDegradation must be between 0 and 1.0'),
-        assert(qualityThreshold >= 0 && qualityThreshold <= 1.0,
-            'qualityThreshold must be between 0 and 1.0'),
-        _currentQuality = initialQuality;
+  }) : assert(
+         initialQuality >= 0 && initialQuality <= 1.0,
+         'initialQuality must be between 0 and 1.0',
+       ),
+       assert(
+         qualityDegradation > 0 && qualityDegradation <= 1.0,
+         'qualityDegradation must be between 0 and 1.0',
+       ),
+       assert(
+         qualityThreshold >= 0 && qualityThreshold <= 1.0,
+         'qualityThreshold must be between 0 and 1.0',
+       ),
+       _currentQuality = initialQuality;
 
   @override
   FaultType get type => FaultType.modelSwap;

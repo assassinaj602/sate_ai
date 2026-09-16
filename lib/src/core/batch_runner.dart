@@ -81,14 +81,14 @@ class BatchResult {
 
   /// Converts the batch result into a JSON map.
   Map<String, dynamic> toJson() => {
-        'modelId': modelId,
-        'modelType': modelType,
-        'passed': passed,
-        'durationMs': duration.inMilliseconds,
-        'error': error,
-        'injectors': injectors,
-        'report': report?.toJson(),
-      };
+    'modelId': modelId,
+    'modelType': modelType,
+    'passed': passed,
+    'durationMs': duration.inMilliseconds,
+    'error': error,
+    'injectors': injectors,
+    'report': report?.toJson(),
+  };
 }
 
 /// Progress update for batch execution.
@@ -176,7 +176,8 @@ class BatchReport {
       final duration = item.duration.inMilliseconds;
       final injectors = item.injectors.join(', ');
       buffer.writeln(
-          '| ${item.modelId} | ${item.modelType} | $status | $duration | $injectors |');
+        '| ${item.modelId} | ${item.modelType} | $status | $duration | $injectors |',
+      );
     }
     buffer.writeln();
 
@@ -190,7 +191,8 @@ class BatchReport {
         buffer.writeln('- **Error:** ${failure.error ?? "Unknown error"}');
         if (failure.report != null) {
           buffer.writeln(
-              '- **Details:** ${failure.report!.failures.map((f) => f.message).join(", ")}');
+            '- **Details:** ${failure.report!.failures.map((f) => f.message).join(", ")}',
+          );
         }
         buffer.writeln();
       }
@@ -260,11 +262,13 @@ class BatchRunner {
         }
 
         // Emit progress
-        onProgress?.call(BatchProgress(
-          completed: i + 1,
-          total: items.length,
-          currentResult: result,
-        ));
+        onProgress?.call(
+          BatchProgress(
+            completed: i + 1,
+            total: items.length,
+            currentResult: result,
+          ),
+        );
       }
     }
 

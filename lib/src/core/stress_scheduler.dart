@@ -46,8 +46,10 @@ class StressScheduler {
   /// Validates the cron expression.
   void _validateCronExpression() {
     try {
-      final parts =
-          cronExpression.split(' ').where((s) => s.isNotEmpty).toList();
+      final parts = cronExpression
+          .split(' ')
+          .where((s) => s.isNotEmpty)
+          .toList();
       if (parts.length != 5 && parts.length != 6) {
         throw ArgumentError(
           'Invalid cron expression: "$cronExpression". '
@@ -115,9 +117,11 @@ class StressScheduler {
         if (!comparison.passed) {
           print('⚠️ Test regressed!');
           print(
-              '  - Previous: ${comparison.previousPassed}/${comparison.previousTotal}');
+            '  - Previous: ${comparison.previousPassed}/${comparison.previousTotal}',
+          );
           print(
-              '  - Current: ${comparison.currentPassed}/${comparison.currentTotal}');
+            '  - Current: ${comparison.currentPassed}/${comparison.currentTotal}',
+          );
         } else {
           print('✅ Test passed. No regression detected.');
         }
@@ -157,7 +161,9 @@ class StressScheduler {
 
   /// Compares two reports and returns a comparison result.
   ReportComparison _compareReports(
-      StressReport current, StressReport previous) {
+    StressReport current,
+    StressReport previous,
+  ) {
     return ReportComparison(
       currentPassed: current.results.where((r) => r.passed).length,
       currentTotal: current.results.length,
@@ -216,10 +222,10 @@ class ReportComparison {
 
   /// Converts comparison to JSON map.
   Map<String, dynamic> toJson() => {
-        'currentPassed': currentPassed,
-        'currentTotal': currentTotal,
-        'previousPassed': previousPassed,
-        'previousTotal': previousTotal,
-        'passed': passed,
-      };
+    'currentPassed': currentPassed,
+    'currentTotal': currentTotal,
+    'previousPassed': previousPassed,
+    'previousTotal': previousTotal,
+    'passed': passed,
+  };
 }

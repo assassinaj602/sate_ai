@@ -90,19 +90,21 @@ void main() {
       expect(fallbackInjector.mismatchDetected, isFalse);
     });
 
-    test('applyTo with incompatible version throws error even with fallback',
-        () async {
-      final incompatibleInjector = ModelVersionMismatchInjector(
-        mismatchType: VersionMismatchType.incompatible,
-        expectedVersion: '2.0.0',
-        actualVersion: '1.0.0',
-        attemptFallback: true,
-      );
-      await expectLater(
-        incompatibleInjector.applyTo(model),
-        throwsA(isA<AIInferenceError>()),
-      );
-    });
+    test(
+      'applyTo with incompatible version throws error even with fallback',
+      () async {
+        final incompatibleInjector = ModelVersionMismatchInjector(
+          mismatchType: VersionMismatchType.incompatible,
+          expectedVersion: '2.0.0',
+          actualVersion: '1.0.0',
+          attemptFallback: true,
+        );
+        await expectLater(
+          incompatibleInjector.applyTo(model),
+          throwsA(isA<AIInferenceError>()),
+        );
+      },
+    );
 
     test('applyTo simulates memory pressure', () async {
       final initialMemory = model.currentMemoryMB;

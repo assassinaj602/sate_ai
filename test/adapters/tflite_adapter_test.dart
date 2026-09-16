@@ -59,19 +59,21 @@ void main() {
       expect(await adapter.isHealthy(), isTrue);
     });
 
-    test('runInference returns correct output and respects degradation',
-        () async {
-      final input = AIInput(text: 'hello');
-      final output = await adapter.runInference(input);
-      expect(output.text, contains('TFLite output: hello'));
-      expect(output.confidence, closeTo(0.9, 0.01));
+    test(
+      'runInference returns correct output and respects degradation',
+      () async {
+        final input = AIInput(text: 'hello');
+        final output = await adapter.runInference(input);
+        expect(output.text, contains('TFLite output: hello'));
+        expect(output.confidence, closeTo(0.9, 0.01));
 
-      await adapter.simulateMemoryPressure(160);
-      expect(
-        () => adapter.runInference(input),
-        throwsA(isA<AIInferenceError>()),
-      );
-    });
+        await adapter.simulateMemoryPressure(160);
+        expect(
+          () => adapter.runInference(input),
+          throwsA(isA<AIInferenceError>()),
+        );
+      },
+    );
 
     test('dispose closes interpreter instance', () {
       adapter.dispose();

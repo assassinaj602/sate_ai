@@ -44,13 +44,13 @@ class ModelTypeDetector {
 
   /// Returns a list of supported file extensions.
   static List<String> get supportedExtensions => [
-        'onnx',
-        'tflite',
-        'gguf',
-        'mlmodel',
-        'bin',
-        'pb',
-      ];
+    'onnx',
+    'tflite',
+    'gguf',
+    'mlmodel',
+    'bin',
+    'pb',
+  ];
 }
 
 /// Detected model type from file extension.

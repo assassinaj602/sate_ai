@@ -15,26 +15,19 @@ void main() {
           modelId: 'model-1',
           modelType: 'mock',
           model: model1,
-          injectors: [
-            MemoryPressureInjector(model: model1, limitMb: 100),
-          ],
+          injectors: [MemoryPressureInjector(model: model1, limitMb: 100)],
         ),
         BatchItem(
           modelId: 'model-2',
           modelType: 'mock',
           model: model2,
-          injectors: [
-            MemoryPressureInjector(model: model2, limitMb: 100),
-          ],
+          injectors: [MemoryPressureInjector(model: model2, limitMb: 100)],
         ),
       ];
     });
 
     test('runs batch sequentially', () async {
-      final runner = BatchRunner(
-        items: items,
-        parallel: false,
-      );
+      final runner = BatchRunner(items: items, parallel: false);
       final report = await runner.run();
       expect(report.totalCount, equals(2));
       expect(report.passedCount, equals(2));
@@ -43,20 +36,14 @@ void main() {
     });
 
     test('runs batch in parallel', () async {
-      final runner = BatchRunner(
-        items: items,
-        parallel: true,
-      );
+      final runner = BatchRunner(items: items, parallel: true);
       final report = await runner.run();
       expect(report.totalCount, equals(2));
       expect(report.allPassed, isTrue);
     });
 
     test('parallel flag is correctly set in report', () async {
-      final runner = BatchRunner(
-        items: items,
-        parallel: true,
-      );
+      final runner = BatchRunner(items: items, parallel: true);
       final report = await runner.run();
       expect(report.parallel, isTrue);
     });
@@ -68,15 +55,10 @@ void main() {
           modelId: 'failing-model',
           modelType: 'mock',
           model: model1,
-          injectors: [
-            MemoryPressureInjector(model: model1, limitMb: 200),
-          ],
+          injectors: [MemoryPressureInjector(model: model1, limitMb: 200)],
         ),
       ];
-      final runner = BatchRunner(
-        items: failingItems,
-        parallel: false,
-      );
+      final runner = BatchRunner(items: failingItems, parallel: false);
       final report = await runner.run();
       expect(report.failedCount, greaterThan(0));
     });

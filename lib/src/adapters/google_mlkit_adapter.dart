@@ -91,7 +91,8 @@ class GoogleMLKitAdapter implements AIModelAdapter {
 
     if (_isDegraded) {
       throw const AIInferenceError(
-          'GoogleMLKitAdapter is degraded. Call reset() before retrying.');
+        'GoogleMLKitAdapter is degraded. Call reset() before retrying.',
+      );
     }
 
     final stopwatch = Stopwatch()..start();
@@ -127,8 +128,9 @@ class GoogleMLKitAdapter implements AIModelAdapter {
     await Future.delayed(_getProcessingTime());
 
     final inputText = input.text ?? 'input';
-    final trimmed =
-        inputText.length > 30 ? inputText.substring(0, 30) : inputText;
+    final trimmed = inputText.length > 30
+        ? inputText.substring(0, 30)
+        : inputText;
 
     switch (taskType) {
       case MLKitTaskType.textRecognition:

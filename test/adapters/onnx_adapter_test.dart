@@ -85,11 +85,13 @@ void main() {
       expect(adapter.currentMemoryMB, equals(120.0));
     });
 
-    test('simulateMemoryPressure over 150 MB marks adapter as degraded',
-        () async {
-      await adapter.simulateMemoryPressure(160);
-      expect(adapter.isDegraded, isTrue);
-    });
+    test(
+      'simulateMemoryPressure over 150 MB marks adapter as degraded',
+      () async {
+        await adapter.simulateMemoryPressure(160);
+        expect(adapter.isDegraded, isTrue);
+      },
+    );
 
     test('isHealthy() returns false when degraded', () async {
       await adapter.simulateMemoryPressure(160);
@@ -123,13 +125,15 @@ void main() {
 
     // --- degraded inference guard -------------------------------------------
 
-    test('runInference throws AIInferenceError when adapter is degraded',
-        () async {
-      await adapter.simulateMemoryPressure(160);
-      await expectLater(
-        adapter.runInference(AIInput(text: 'hello')),
-        throwsA(isA<AIInferenceError>()),
-      );
-    });
+    test(
+      'runInference throws AIInferenceError when adapter is degraded',
+      () async {
+        await adapter.simulateMemoryPressure(160);
+        await expectLater(
+          adapter.runInference(AIInput(text: 'hello')),
+          throwsA(isA<AIInferenceError>()),
+        );
+      },
+    );
   });
 }

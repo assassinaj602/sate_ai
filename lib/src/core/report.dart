@@ -41,14 +41,14 @@ class FaultResult {
 
   /// Serialises to a JSON-compatible map.
   Map<String, dynamic> toJson() => {
-        'injectorType': injectorType.name,
-        'passed': passed,
-        'inferenceTimeMs': inferenceTime?.inMilliseconds,
-        'output': output?.toJson(),
-        'errorMessage': errorMessage,
-        'memoryUsageMB': memoryUsageMB,
-        'flaky': flaky,
-      };
+    'injectorType': injectorType.name,
+    'passed': passed,
+    'inferenceTimeMs': inferenceTime?.inMilliseconds,
+    'output': output?.toJson(),
+    'errorMessage': errorMessage,
+    'memoryUsageMB': memoryUsageMB,
+    'flaky': flaky,
+  };
 
   /// Deserialises from a JSON map.
   factory FaultResult.fromJson(Map<String, dynamic> json) {
@@ -75,7 +75,8 @@ class FaultResult {
       ..writeln('### ${injectorType.icon} ${injectorType.displayName}');
     if (flaky) {
       buf.writeln(
-          '- **Status**: ⚠️ FLAKY (${errorMessage ?? "intermittent failure"})');
+        '- **Status**: ⚠️ FLAKY (${errorMessage ?? "intermittent failure"})',
+      );
     } else {
       buf.writeln('- **Status**: ${passed ? "✅ PASS" : "❌ FAIL"}');
     }
@@ -84,7 +85,8 @@ class FaultResult {
     }
     if (memoryUsageMB != null) {
       buf.writeln(
-          '- **Memory usage**: ${memoryUsageMB!.toStringAsFixed(1)} MB');
+        '- **Memory usage**: ${memoryUsageMB!.toStringAsFixed(1)} MB',
+      );
     }
     if (errorMessage != null && !flaky) {
       buf.writeln('- **Error**: `$errorMessage`');
@@ -113,10 +115,10 @@ class Failure {
 
   /// Serialises to a JSON-compatible map.
   Map<String, dynamic> toJson() => {
-        'injectorType': injectorType.name,
-        'message': message,
-        'stackTrace': stackTrace?.toString(),
-      };
+    'injectorType': injectorType.name,
+    'message': message,
+    'stackTrace': stackTrace?.toString(),
+  };
 
   /// Deserialises from a JSON map.
   factory Failure.fromJson(Map<String, dynamic> json) {
@@ -191,21 +193,21 @@ class StressReport {
 
   /// Serialises to a JSON-compatible map.
   Map<String, dynamic> toJson() => {
-        'modelId': modelId,
-        'passed': passed,
-        'results': results.map((r) => r.toJson()).toList(),
-        'failures': failures.map((f) => f.toJson()).toList(),
-        'startTime': startTime.toIso8601String(),
-        'endTime': endTime.toIso8601String(),
-        'totalDurationMs': totalDuration.inMilliseconds,
-        'summary': {
-          'totalTests': totalTests,
-          'passed': passCount,
-          'failed': failureCount,
-          'unexpectedErrors': failures.length,
-        },
-        'benchmarkReport': benchmarkReport?.toJson(),
-      };
+    'modelId': modelId,
+    'passed': passed,
+    'results': results.map((r) => r.toJson()).toList(),
+    'failures': failures.map((f) => f.toJson()).toList(),
+    'startTime': startTime.toIso8601String(),
+    'endTime': endTime.toIso8601String(),
+    'totalDurationMs': totalDuration.inMilliseconds,
+    'summary': {
+      'totalTests': totalTests,
+      'passed': passCount,
+      'failed': failureCount,
+      'unexpectedErrors': failures.length,
+    },
+    'benchmarkReport': benchmarkReport?.toJson(),
+  };
 
   /// Deserialises from a JSON map.
   factory StressReport.fromJson(Map<String, dynamic> json) {
@@ -223,7 +225,8 @@ class StressReport {
       totalDuration: Duration(milliseconds: json['totalDurationMs'] as int),
       benchmarkReport: json['benchmarkReport'] != null
           ? BenchmarkReport.fromJson(
-              json['benchmarkReport'] as Map<String, dynamic>)
+              json['benchmarkReport'] as Map<String, dynamic>,
+            )
           : null,
     );
   }
@@ -298,10 +301,12 @@ class StressReport {
     buffer.writeln('<head>');
     buffer.writeln('  <meta charset="UTF-8">');
     buffer.writeln(
-        '  <meta name="viewport" content="width=device-width, initial-scale=1.0">');
+      '  <meta name="viewport" content="width=device-width, initial-scale=1.0">',
+    );
     buffer.writeln('  <title>SATE AI Stress Report - $modelId</title>');
     buffer.writeln(
-        '  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>');
+      '  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>',
+    );
     buffer.writeln('  <style>');
     buffer.writeln(_htmlStyles());
     buffer.writeln('  </style>');
@@ -311,7 +316,8 @@ class StressReport {
     buffer.writeln('    <header>');
     buffer.writeln('      <h1>SATE AI Stress Report</h1>');
     buffer.writeln(
-        '      <p class="subtitle">Model: <strong>$modelId</strong></p>');
+      '      <p class="subtitle">Model: <strong>$modelId</strong></p>',
+    );
     buffer.writeln('    </header>');
 
     final statusClass = passed ? 'pass' : 'fail';
@@ -372,7 +378,8 @@ class StressReport {
       buffer.writeln('          <tr>');
       buffer.writeln('            <td>${r.injectorType.displayName}</td>');
       buffer.writeln(
-          '            <td><span class="status $statusClass">$status</span></td>');
+        '            <td><span class="status $statusClass">$status</span></td>',
+      );
       buffer.writeln('            <td>$inferenceTime</td>');
       buffer.writeln('            <td>$memory</td>');
       buffer.writeln('            <td>$error</td>');
@@ -389,9 +396,11 @@ class StressReport {
       for (final f in failures) {
         buffer.writeln('      <div class="failure-item">');
         buffer.writeln(
-            '        <span class="failure-type">${f.injectorType.displayName}</span>');
+          '        <span class="failure-type">${f.injectorType.displayName}</span>',
+        );
         buffer.writeln(
-            '        <span class="failure-message">${f.message}</span>');
+          '        <span class="failure-message">${f.message}</span>',
+        );
         buffer.writeln('      </div>');
       }
       buffer.writeln('    </div>');
@@ -507,12 +516,14 @@ new Chart(ctx2, {
   /// Helper to serialize results for chart.js.
   String _resultsAsJson() {
     final list = results
-        .map((r) => {
-              'injectorType': r.injectorType.displayName,
-              'passed': r.passed,
-              'inferenceTimeMs': r.inferenceTime?.inMilliseconds,
-              'memoryUsageMB': r.memoryUsageMB,
-            })
+        .map(
+          (r) => {
+            'injectorType': r.injectorType.displayName,
+            'passed': r.passed,
+            'inferenceTimeMs': r.inferenceTime?.inMilliseconds,
+            'memoryUsageMB': r.memoryUsageMB,
+          },
+        )
         .toList();
     return jsonEncode(list);
   }

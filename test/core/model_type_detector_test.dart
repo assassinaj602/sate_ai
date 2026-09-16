@@ -4,48 +4,66 @@ import 'package:sate_ai/sate_ai.dart';
 void main() {
   group('ModelTypeDetector', () {
     test('detects ONNX from .onnx extension', () {
-      expect(ModelTypeDetector.detect('model.onnx'),
-          equals(DetectedModelType.onnx));
+      expect(
+        ModelTypeDetector.detect('model.onnx'),
+        equals(DetectedModelType.onnx),
+      );
     });
 
     test('detects TFLite from .tflite extension', () {
-      expect(ModelTypeDetector.detect('model.tflite'),
-          equals(DetectedModelType.tflite));
+      expect(
+        ModelTypeDetector.detect('model.tflite'),
+        equals(DetectedModelType.tflite),
+      );
     });
 
     test('detects GGUF from .gguf extension', () {
-      expect(ModelTypeDetector.detect('model.gguf'),
-          equals(DetectedModelType.gguf));
+      expect(
+        ModelTypeDetector.detect('model.gguf'),
+        equals(DetectedModelType.gguf),
+      );
     });
 
     test('detects CoreML from .mlmodel extension', () {
-      expect(ModelTypeDetector.detect('model.mlmodel'),
-          equals(DetectedModelType.coreml));
+      expect(
+        ModelTypeDetector.detect('model.mlmodel'),
+        equals(DetectedModelType.coreml),
+      );
     });
 
     test('detects TensorFlow from .pb extension', () {
-      expect(ModelTypeDetector.detect('model.pb'),
-          equals(DetectedModelType.tensorflow));
+      expect(
+        ModelTypeDetector.detect('model.pb'),
+        equals(DetectedModelType.tensorflow),
+      );
     });
 
     test('returns unknown for unrecognized extensions', () {
-      expect(ModelTypeDetector.detect('model.xyz'),
-          equals(DetectedModelType.unknown));
+      expect(
+        ModelTypeDetector.detect('model.xyz'),
+        equals(DetectedModelType.unknown),
+      );
     });
 
     test('handles uppercase extensions', () {
-      expect(ModelTypeDetector.detect('model.ONNX'),
-          equals(DetectedModelType.onnx));
+      expect(
+        ModelTypeDetector.detect('model.ONNX'),
+        equals(DetectedModelType.onnx),
+      );
     });
 
     test('handles paths with directories', () {
-      expect(ModelTypeDetector.detect('/path/to/model.tflite'),
-          equals(DetectedModelType.tflite));
+      expect(
+        ModelTypeDetector.detect('/path/to/model.tflite'),
+        equals(DetectedModelType.tflite),
+      );
     });
 
     test('handles files without extensions', () {
       expect(
-          ModelTypeDetector.detect('model'), equals(DetectedModelType.unknown));
+        ModelTypeDetector.detect('model'),
+        equals(DetectedModelType.unknown),
+      );
     });
 
     test('isSupported returns true for supported types', () {
@@ -70,8 +88,10 @@ void main() {
       expect(DetectedModelType.onnx.displayName, equals('ONNX Runtime'));
       expect(DetectedModelType.tflite.displayName, equals('TensorFlow Lite'));
       expect(DetectedModelType.gguf.displayName, equals('Fllama (llama.cpp)'));
-      expect(DetectedModelType.unknown.displayName,
-          equals('Unknown (MockAdapter)'));
+      expect(
+        DetectedModelType.unknown.displayName,
+        equals('Unknown (MockAdapter)'),
+      );
     });
   });
 

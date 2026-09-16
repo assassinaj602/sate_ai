@@ -49,9 +49,7 @@ void main() {
       final failingReport = _createReport(
         modelId: 'model-fail',
         passed: false,
-        results: [
-          _createResult(FaultType.memoryPressure, false, 120, 100.0),
-        ],
+        results: [_createResult(FaultType.memoryPressure, false, 120, 100.0)],
       );
       final comparator = ReportComparator();
       final diff = comparator.compare(report1, failingReport);
@@ -117,9 +115,7 @@ void main() {
       final reportWithLess = _createReport(
         modelId: 'model-less',
         passed: true,
-        results: [
-          _createResult(FaultType.memoryPressure, true, 120, 100.0),
-        ],
+        results: [_createResult(FaultType.memoryPressure, true, 120, 100.0)],
       );
       final comparator = ReportComparator();
       final diff = comparator.compare(report1, reportWithLess);
@@ -132,10 +128,7 @@ void main() {
         modelId: 'simple-v1',
         passed: true,
         results: const [
-          FaultResult(
-            injectorType: FaultType.memoryPressure,
-            passed: true,
-          ),
+          FaultResult(injectorType: FaultType.memoryPressure, passed: true),
         ],
         failures: const [],
         startTime: DateTime.now(),
@@ -167,7 +160,11 @@ void main() {
 }
 
 FaultResult _createResult(
-    FaultType type, bool passed, int timeMs, double memoryMB) {
+  FaultType type,
+  bool passed,
+  int timeMs,
+  double memoryMB,
+) {
   return FaultResult(
     injectorType: type,
     passed: passed,

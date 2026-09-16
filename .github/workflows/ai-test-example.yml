@@ -1,5 +1,7 @@
 name: AI Model Testing
 
+# Verified: Using sate-ai-test composite action fixes the velocity_tracker.dart
+# dependency issue by activating the CLI tool via 'flutter pub global activate'.
 on:
   push:
     branches:

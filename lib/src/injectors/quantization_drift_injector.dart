@@ -33,10 +33,14 @@ class QuantizationDriftInjector implements FaultInjector {
     required this.model,
     this.driftFactor = 0.1,
     this.degradationThreshold = 0.3,
-  })  : assert(driftFactor > 0 && driftFactor <= 1.0,
-            'driftFactor must be between 0 and 1.0'),
-        assert(degradationThreshold >= 0 && degradationThreshold <= 1.0,
-            'degradationThreshold must be between 0 and 1.0');
+  }) : assert(
+         driftFactor > 0 && driftFactor <= 1.0,
+         'driftFactor must be between 0 and 1.0',
+       ),
+       assert(
+         degradationThreshold >= 0 && degradationThreshold <= 1.0,
+         'degradationThreshold must be between 0 and 1.0',
+       );
 
   @override
   FaultType get type => FaultType.quantizationDrift;

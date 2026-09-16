@@ -37,8 +37,9 @@ class StressRunner {
     this.flakyThreshold = 0,
     this.benchmark = false,
     this.onEvent,
-  }) : _eventController =
-            onEvent != null ? null : StreamController<StressEvent>.broadcast();
+  }) : _eventController = onEvent != null
+           ? null
+           : StreamController<StressEvent>.broadcast();
 
   /// The model under test.
   final AIModelAdapter model;
@@ -95,13 +96,15 @@ class StressRunner {
       inferenceTimes.add(inferenceTime.inMilliseconds.toDouble());
       memoryUsages.add(model.currentMemoryMB);
 
-      results.add(FaultResult(
-        injectorType: FaultType.benchmark,
-        passed: true,
-        inferenceTime: inferenceTime,
-        output: output,
-        memoryUsageMB: model.currentMemoryMB,
-      ));
+      results.add(
+        FaultResult(
+          injectorType: FaultType.benchmark,
+          passed: true,
+          inferenceTime: inferenceTime,
+          output: output,
+          memoryUsageMB: model.currentMemoryMB,
+        ),
+      );
     }
 
     final endTime = DateTime.now();

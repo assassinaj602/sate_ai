@@ -98,7 +98,8 @@ class FllamaAdapter implements AIModelAdapter {
   Future<AIOutput> runInference(AIInput input) async {
     if (_isDegraded) {
       throw const AIInferenceError(
-          'FllamaAdapter is degraded. Call reset() before retrying.');
+        'FllamaAdapter is degraded. Call reset() before retrying.',
+      );
     }
 
     final stopwatch = Stopwatch()..start();

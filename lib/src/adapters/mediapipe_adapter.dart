@@ -64,7 +64,8 @@ class MediaPipeAdapter implements AIModelAdapter {
   Future<AIOutput> runInference(AIInput input) async {
     if (_isDegraded) {
       throw const AIInferenceError(
-          'MediaPipeAdapter is degraded. Call reset() before retrying.');
+        'MediaPipeAdapter is degraded. Call reset() before retrying.',
+      );
     }
 
     final stopwatch = Stopwatch()..start();
@@ -100,8 +101,9 @@ class MediaPipeAdapter implements AIModelAdapter {
 
     // Use the input to generate a realistic response
     final inputText = input.text ?? 'input';
-    final trimmed =
-        inputText.length > 20 ? inputText.substring(0, 20) : inputText;
+    final trimmed = inputText.length > 20
+        ? inputText.substring(0, 20)
+        : inputText;
 
     switch (taskType) {
       case MediaPipeTaskType.faceDetection:

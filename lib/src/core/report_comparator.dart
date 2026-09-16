@@ -44,12 +44,12 @@ class MetricDiff {
 
   /// Serialises to a JSON-compatible map.
   Map<String, dynamic> toJson() => {
-        'metric': metric,
-        'before': before,
-        'after': after,
-        'status': status.name,
-        'message': message,
-      };
+    'metric': metric,
+    'before': before,
+    'after': after,
+    'status': status.name,
+    'message': message,
+  };
 }
 
 /// Result of comparing two stress reports.
@@ -89,12 +89,15 @@ class ReportDiff {
     buffer.writeln();
     buffer.writeln('## Summary');
     buffer.writeln(
-        '- **Report 1:** ${report1.modelId} (${report1.startTime.toIso8601String()})');
+      '- **Report 1:** ${report1.modelId} (${report1.startTime.toIso8601String()})',
+    );
     buffer.writeln(
-        '- **Report 2:** ${report2.modelId} (${report2.startTime.toIso8601String()})');
+      '- **Report 2:** ${report2.modelId} (${report2.startTime.toIso8601String()})',
+    );
     buffer.writeln('- **Total Changes:** $totalDiffs');
     buffer.writeln(
-        '- **Status:** ${hasChanges ? "⚠️ Changes Detected" : "✅ No Changes"}');
+      '- **Status:** ${hasChanges ? "⚠️ Changes Detected" : "✅ No Changes"}',
+    );
     buffer.writeln('- **Tolerance:** $tolerancePercent%');
     buffer.writeln();
 
@@ -107,10 +110,10 @@ class ReportDiff {
         final icon = diff.status == DiffStatus.same
             ? '✅'
             : diff.status == DiffStatus.changed
-                ? '⚠️'
-                : diff.status == DiffStatus.added
-                    ? '➕'
-                    : '➖';
+            ? '⚠️'
+            : diff.status == DiffStatus.added
+            ? '➕'
+            : '➖';
         buffer.writeln('### $icon ${diff.metric}');
         buffer.writeln('- **Before:** ${diff.before}');
         buffer.writeln('- **After:** ${diff.after}');
@@ -130,7 +133,8 @@ class ReportDiff {
     buffer.writeln('<head>');
     buffer.writeln('  <meta charset="UTF-8">');
     buffer.writeln(
-        '  <meta name="viewport" content="width=device-width, initial-scale=1.0">');
+      '  <meta name="viewport" content="width=device-width, initial-scale=1.0">',
+    );
     buffer.writeln('  <title>SATE AI Report Comparison</title>');
     buffer.writeln('  <style>');
     buffer.writeln(_htmlStyles());
@@ -141,34 +145,41 @@ class ReportDiff {
     buffer.writeln('    <h1>SATE AI Report Comparison</h1>');
     buffer.writeln('    <div class="summary">');
     buffer.writeln(
-        '      <p><strong>Report 1:</strong> ${report1.modelId} (${report1.startTime.toIso8601String()})</p>');
+      '      <p><strong>Report 1:</strong> ${report1.modelId} (${report1.startTime.toIso8601String()})</p>',
+    );
     buffer.writeln(
-        '      <p><strong>Report 2:</strong> ${report2.modelId} (${report2.startTime.toIso8601String()})</p>');
+      '      <p><strong>Report 2:</strong> ${report2.modelId} (${report2.startTime.toIso8601String()})</p>',
+    );
     buffer.writeln('      <p><strong>Total Changes:</strong> $totalDiffs</p>');
     buffer.writeln(
-        '      <p><strong>Status:</strong> ${hasChanges ? "⚠️ Changes Detected" : "✅ No Changes"}</p>');
+      '      <p><strong>Status:</strong> ${hasChanges ? "⚠️ Changes Detected" : "✅ No Changes"}</p>',
+    );
     buffer.writeln('    </div>');
     buffer.writeln('    <div class="diffs">');
     if (diffs.isEmpty) {
       buffer.writeln(
-          '      <p>✅ No differences detected. Reports are identical.</p>');
+        '      <p>✅ No differences detected. Reports are identical.</p>',
+      );
     } else {
       for (final diff in diffs) {
         final color = diff.status == DiffStatus.same
             ? '#34d399'
             : diff.status == DiffStatus.changed
-                ? '#fbbf24'
-                : diff.status == DiffStatus.added
-                    ? '#60a5fa'
-                    : '#f87171';
+            ? '#fbbf24'
+            : diff.status == DiffStatus.added
+            ? '#60a5fa'
+            : '#f87171';
         buffer.writeln(
-            '      <div class="diff-item" style="border-left: 4px solid $color;">');
+          '      <div class="diff-item" style="border-left: 4px solid $color;">',
+        );
         buffer.writeln('        <h3>${diff.metric}</h3>');
-        buffer
-            .writeln('        <p><strong>Before:</strong> ${diff.before}</p>');
+        buffer.writeln(
+          '        <p><strong>Before:</strong> ${diff.before}</p>',
+        );
         buffer.writeln('        <p><strong>After:</strong> ${diff.after}</p>');
         buffer.writeln(
-            '        <p><strong>Message:</strong> ${diff.message}</p>');
+          '        <p><strong>Message:</strong> ${diff.message}</p>',
+        );
         buffer.writeln('      </div>');
       }
     }
@@ -211,27 +222,31 @@ class ReportComparator {
     // Compare pass/fail status
     if (report1.passed != report2.passed) {
       totalDiffs++;
-      diffs.add(MetricDiff(
-        metric: 'Overall Status',
-        before: report1.passed ? 'PASS' : 'FAIL',
-        after: report2.passed ? 'PASS' : 'FAIL',
-        status: DiffStatus.changed,
-        message:
-            'Status changed from ${report1.passed ? "PASS" : "FAIL"} to ${report2.passed ? "PASS" : "FAIL"}',
-      ));
+      diffs.add(
+        MetricDiff(
+          metric: 'Overall Status',
+          before: report1.passed ? 'PASS' : 'FAIL',
+          after: report2.passed ? 'PASS' : 'FAIL',
+          status: DiffStatus.changed,
+          message:
+              'Status changed from ${report1.passed ? "PASS" : "FAIL"} to ${report2.passed ? "PASS" : "FAIL"}',
+        ),
+      );
     }
 
     // Compare number of results
     if (report1.results.length != report2.results.length) {
       totalDiffs++;
-      diffs.add(MetricDiff(
-        metric: 'Test Count',
-        before: '${report1.results.length}',
-        after: '${report2.results.length}',
-        status: DiffStatus.changed,
-        message:
-            'Test count changed from ${report1.results.length} to ${report2.results.length}',
-      ));
+      diffs.add(
+        MetricDiff(
+          metric: 'Test Count',
+          before: '${report1.results.length}',
+          after: '${report2.results.length}',
+          status: DiffStatus.changed,
+          message:
+              'Test count changed from ${report1.results.length} to ${report2.results.length}',
+        ),
+      );
     }
 
     // Compare individual injector results
@@ -246,28 +261,32 @@ class ReportComparator {
       // Compare injector type (should match)
       if (r1.injectorType != r2.injectorType) {
         totalDiffs++;
-        diffs.add(MetricDiff(
-          metric: 'Injector Type',
-          before: r1.injectorType.displayName,
-          after: r2.injectorType.displayName,
-          status: DiffStatus.changed,
-          message:
-              'Injector type changed from ${r1.injectorType.displayName} to ${r2.injectorType.displayName}',
-        ));
+        diffs.add(
+          MetricDiff(
+            metric: 'Injector Type',
+            before: r1.injectorType.displayName,
+            after: r2.injectorType.displayName,
+            status: DiffStatus.changed,
+            message:
+                'Injector type changed from ${r1.injectorType.displayName} to ${r2.injectorType.displayName}',
+          ),
+        );
         continue;
       }
 
       // Compare pass/fail
       if (r1.passed != r2.passed) {
         totalDiffs++;
-        diffs.add(MetricDiff(
-          metric: '${r1.injectorType.displayName} Status',
-          before: r1.passed ? 'PASS' : 'FAIL',
-          after: r2.passed ? 'PASS' : 'FAIL',
-          status: DiffStatus.changed,
-          message:
-              '${r1.injectorType.displayName} status changed from ${r1.passed ? "PASS" : "FAIL"} to ${r2.passed ? "PASS" : "FAIL"}',
-        ));
+        diffs.add(
+          MetricDiff(
+            metric: '${r1.injectorType.displayName} Status',
+            before: r1.passed ? 'PASS' : 'FAIL',
+            after: r2.passed ? 'PASS' : 'FAIL',
+            status: DiffStatus.changed,
+            message:
+                '${r1.injectorType.displayName} status changed from ${r1.passed ? "PASS" : "FAIL"} to ${r2.passed ? "PASS" : "FAIL"}',
+          ),
+        );
       }
 
       // Compare inference time
@@ -284,36 +303,41 @@ class ReportComparator {
 
         if (status == DiffStatus.changed) {
           totalDiffs++;
-          diffs.add(MetricDiff(
-            metric: '${r1.injectorType.displayName} Inference Time',
-            before: '${r1.inferenceTime!.inMilliseconds}ms',
-            after: '${r2.inferenceTime!.inMilliseconds}ms',
-            status: status,
-            message:
-                'Inference time changed by ${diffPercent.round()}% (${diffMs > 0 ? "+" : ""}${diffMs}ms)',
-          ));
+          diffs.add(
+            MetricDiff(
+              metric: '${r1.injectorType.displayName} Inference Time',
+              before: '${r1.inferenceTime!.inMilliseconds}ms',
+              after: '${r2.inferenceTime!.inMilliseconds}ms',
+              status: status,
+              message:
+                  'Inference time changed by ${diffPercent.round()}% (${diffMs > 0 ? "+" : ""}${diffMs}ms)',
+            ),
+          );
         }
       } else if (r1.inferenceTime != null || r2.inferenceTime != null) {
         totalDiffs++;
-        diffs.add(MetricDiff(
-          metric: '${r1.injectorType.displayName} Inference Time',
-          before: r1.inferenceTime != null
-              ? '${r1.inferenceTime!.inMilliseconds}ms'
-              : 'N/A',
-          after: r2.inferenceTime != null
-              ? '${r2.inferenceTime!.inMilliseconds}ms'
-              : 'N/A',
-          status: DiffStatus.changed,
-          message:
-              'Inference time changed from ${r1.inferenceTime != null ? "${r1.inferenceTime!.inMilliseconds}ms" : "N/A"} to ${r2.inferenceTime != null ? "${r2.inferenceTime!.inMilliseconds}ms" : "N/A"}',
-        ));
+        diffs.add(
+          MetricDiff(
+            metric: '${r1.injectorType.displayName} Inference Time',
+            before: r1.inferenceTime != null
+                ? '${r1.inferenceTime!.inMilliseconds}ms'
+                : 'N/A',
+            after: r2.inferenceTime != null
+                ? '${r2.inferenceTime!.inMilliseconds}ms'
+                : 'N/A',
+            status: DiffStatus.changed,
+            message:
+                'Inference time changed from ${r1.inferenceTime != null ? "${r1.inferenceTime!.inMilliseconds}ms" : "N/A"} to ${r2.inferenceTime != null ? "${r2.inferenceTime!.inMilliseconds}ms" : "N/A"}',
+          ),
+        );
       }
 
       // Compare memory usage
       if (r1.memoryUsageMB != null && r2.memoryUsageMB != null) {
         final diffMB = r2.memoryUsageMB! - r1.memoryUsageMB!;
-        final diffPercent =
-            r1.memoryUsageMB! > 0 ? (diffMB / r1.memoryUsageMB!) * 100 : 0.0;
+        final diffPercent = r1.memoryUsageMB! > 0
+            ? (diffMB / r1.memoryUsageMB!) * 100
+            : 0.0;
 
         final status = diffPercent.abs() > tolerancePercent
             ? DiffStatus.changed
@@ -321,29 +345,33 @@ class ReportComparator {
 
         if (status == DiffStatus.changed) {
           totalDiffs++;
-          diffs.add(MetricDiff(
-            metric: '${r1.injectorType.displayName} Memory',
-            before: '${r1.memoryUsageMB!.toStringAsFixed(1)}MB',
-            after: '${r2.memoryUsageMB!.toStringAsFixed(1)}MB',
-            status: status,
-            message:
-                'Memory usage changed by ${diffPercent.round()}% (${diffMB > 0 ? "+" : ""}${diffMB.toStringAsFixed(1)}MB)',
-          ));
+          diffs.add(
+            MetricDiff(
+              metric: '${r1.injectorType.displayName} Memory',
+              before: '${r1.memoryUsageMB!.toStringAsFixed(1)}MB',
+              after: '${r2.memoryUsageMB!.toStringAsFixed(1)}MB',
+              status: status,
+              message:
+                  'Memory usage changed by ${diffPercent.round()}% (${diffMB > 0 ? "+" : ""}${diffMB.toStringAsFixed(1)}MB)',
+            ),
+          );
         }
       } else if (r1.memoryUsageMB != null || r2.memoryUsageMB != null) {
         totalDiffs++;
-        diffs.add(MetricDiff(
-          metric: '${r1.injectorType.displayName} Memory',
-          before: r1.memoryUsageMB != null
-              ? '${r1.memoryUsageMB!.toStringAsFixed(1)}MB'
-              : 'N/A',
-          after: r2.memoryUsageMB != null
-              ? '${r2.memoryUsageMB!.toStringAsFixed(1)}MB'
-              : 'N/A',
-          status: DiffStatus.changed,
-          message:
-              'Memory usage changed from ${r1.memoryUsageMB != null ? "${r1.memoryUsageMB!.toStringAsFixed(1)}MB" : "N/A"} to ${r2.memoryUsageMB != null ? "${r2.memoryUsageMB!.toStringAsFixed(1)}MB" : "N/A"}',
-        ));
+        diffs.add(
+          MetricDiff(
+            metric: '${r1.injectorType.displayName} Memory',
+            before: r1.memoryUsageMB != null
+                ? '${r1.memoryUsageMB!.toStringAsFixed(1)}MB'
+                : 'N/A',
+            after: r2.memoryUsageMB != null
+                ? '${r2.memoryUsageMB!.toStringAsFixed(1)}MB'
+                : 'N/A',
+            status: DiffStatus.changed,
+            message:
+                'Memory usage changed from ${r1.memoryUsageMB != null ? "${r1.memoryUsageMB!.toStringAsFixed(1)}MB" : "N/A"} to ${r2.memoryUsageMB != null ? "${r2.memoryUsageMB!.toStringAsFixed(1)}MB" : "N/A"}',
+          ),
+        );
       }
     }
 
@@ -352,25 +380,29 @@ class ReportComparator {
       for (var i = report1.results.length; i < report2.results.length; i++) {
         final added = report2.results[i];
         totalDiffs++;
-        diffs.add(MetricDiff(
-          metric: 'Added Injector',
-          before: '—',
-          after: added.injectorType.displayName,
-          status: DiffStatus.added,
-          message: 'New injector added: ${added.injectorType.displayName}',
-        ));
+        diffs.add(
+          MetricDiff(
+            metric: 'Added Injector',
+            before: '—',
+            after: added.injectorType.displayName,
+            status: DiffStatus.added,
+            message: 'New injector added: ${added.injectorType.displayName}',
+          ),
+        );
       }
     } else if (report1.results.length > report2.results.length) {
       for (var i = report2.results.length; i < report1.results.length; i++) {
         final removed = report1.results[i];
         totalDiffs++;
-        diffs.add(MetricDiff(
-          metric: 'Removed Injector',
-          before: removed.injectorType.displayName,
-          after: '—',
-          status: DiffStatus.removed,
-          message: 'Injector removed: ${removed.injectorType.displayName}',
-        ));
+        diffs.add(
+          MetricDiff(
+            metric: 'Removed Injector',
+            before: removed.injectorType.displayName,
+            after: '—',
+            status: DiffStatus.removed,
+            message: 'Injector removed: ${removed.injectorType.displayName}',
+          ),
+        );
       }
     }
 

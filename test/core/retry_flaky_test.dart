@@ -10,9 +10,7 @@ void main() {
     });
 
     test('retryCount retries failed tests', () async {
-      final injectors = [
-        MemoryPressureInjector(model: model, limitMb: 200),
-      ];
+      final injectors = [MemoryPressureInjector(model: model, limitMb: 200)];
       final runner = StressRunner(
         model: model,
         injectors: injectors,
@@ -24,9 +22,7 @@ void main() {
     });
 
     test('flakyThreshold marks tests as flaky', () async {
-      final injectors = [
-        MemoryPressureInjector(model: model, limitMb: 200),
-      ];
+      final injectors = [MemoryPressureInjector(model: model, limitMb: 200)];
       final runner = StressRunner(
         model: model,
         injectors: injectors,
@@ -42,9 +38,7 @@ void main() {
     });
 
     test('retryCount with flakyThreshold < failures marks as flaky', () async {
-      final injectors = [
-        MemoryPressureInjector(model: model, limitMb: 200),
-      ];
+      final injectors = [MemoryPressureInjector(model: model, limitMb: 200)];
       final runner = StressRunner(
         model: model,
         injectors: injectors,
@@ -55,22 +49,22 @@ void main() {
       expect(report.results, isNotEmpty);
     });
 
-    test('retryCount with flakyThreshold = 0 disables flaky detection',
-        () async {
-      final injectors = [
-        MemoryPressureInjector(model: model, limitMb: 150),
-      ];
-      final runner = StressRunner(
-        model: model,
-        injectors: injectors,
-        retryCount: 2,
-        flakyThreshold: 0,
-      );
-      final report = await runner.run();
-      for (final result in report.results) {
-        expect(result.flaky, isFalse);
-      }
-    });
+    test(
+      'retryCount with flakyThreshold = 0 disables flaky detection',
+      () async {
+        final injectors = [MemoryPressureInjector(model: model, limitMb: 150)];
+        final runner = StressRunner(
+          model: model,
+          injectors: injectors,
+          retryCount: 2,
+          flakyThreshold: 0,
+        );
+        final report = await runner.run();
+        for (final result in report.results) {
+          expect(result.flaky, isFalse);
+        }
+      },
+    );
 
     test('FaultResult toJson includes flaky flag', () {
       const result = FaultResult(
@@ -98,9 +92,7 @@ void main() {
     test('SateAI.stress() accepts retryCount and flakyThreshold', () async {
       final report = await SateAI.stress(
         model: model,
-        injectors: [
-          MemoryPressureInjector(model: model, limitMb: 150),
-        ],
+        injectors: [MemoryPressureInjector(model: model, limitMb: 150)],
         retryCount: 2,
         flakyThreshold: 1,
       );

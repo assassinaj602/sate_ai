@@ -28,12 +28,12 @@ class MetricDeviation {
 
   /// Converts metric deviation to JSON map.
   Map<String, dynamic> toJson() => {
-        'metric': metric,
-        'expected': expected,
-        'actual': actual,
-        'deviationPercent': deviationPercent,
-        'message': message,
-      };
+    'metric': metric,
+    'expected': expected,
+    'actual': actual,
+    'deviationPercent': deviationPercent,
+    'message': message,
+  };
 }
 
 /// Result of comparing a report against a baseline.
@@ -70,15 +70,18 @@ class BaselineComparison {
     buffer.writeln('## Summary');
     buffer.writeln('- **Model:** ${report.modelId}');
     buffer.writeln('- **Status:** ${passed ? "✅ PASSED" : "❌ FAILED"}');
-    buffer
-        .writeln('- **Comparison Time:** ${comparisonTime.toIso8601String()}');
     buffer.writeln(
-        '- **Tolerance:** ${deviations.isEmpty ? "N/A" : "Deviations detected"}');
+      '- **Comparison Time:** ${comparisonTime.toIso8601String()}',
+    );
+    buffer.writeln(
+      '- **Tolerance:** ${deviations.isEmpty ? "N/A" : "Deviations detected"}',
+    );
     buffer.writeln();
 
     if (deviations.isEmpty) {
       buffer.writeln(
-          '✅ No deviations detected. All metrics are within tolerance.');
+        '✅ No deviations detected. All metrics are within tolerance.',
+      );
     } else {
       buffer.writeln('## Deviations Detected');
       buffer.writeln();
@@ -97,8 +100,8 @@ class BaselineComparison {
 
   /// Converts comparison result to JSON map.
   Map<String, dynamic> toJson() => {
-        'passed': passed,
-        'comparisonTime': comparisonTime.toIso8601String(),
-        'deviations': deviations.map((d) => d.toJson()).toList(),
-      };
+    'passed': passed,
+    'comparisonTime': comparisonTime.toIso8601String(),
+    'deviations': deviations.map((d) => d.toJson()).toList(),
+  };
 }

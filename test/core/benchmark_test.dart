@@ -79,26 +79,22 @@ void main() {
     });
 
     test('StressRunner with benchmark flag uses benchmark mode', () async {
-      final runner = StressRunner(
-        model: model,
-        injectors: [],
-        benchmark: true,
-      );
+      final runner = StressRunner(model: model, injectors: [], benchmark: true);
       final report = await runner.run();
       expect(report.benchmarkReport, isNotNull);
     });
 
-    test('StressRunner without benchmark flag does not create benchmark report',
-        () async {
-      final runner = StressRunner(
-        model: model,
-        injectors: [
-          MemoryPressureInjector(model: model, limitMb: 100),
-        ],
-        benchmark: false,
-      );
-      final report = await runner.run();
-      expect(report.benchmarkReport, isNull);
-    });
+    test(
+      'StressRunner without benchmark flag does not create benchmark report',
+      () async {
+        final runner = StressRunner(
+          model: model,
+          injectors: [MemoryPressureInjector(model: model, limitMb: 100)],
+          benchmark: false,
+        );
+        final report = await runner.run();
+        expect(report.benchmarkReport, isNull);
+      },
+    );
   });
 }
