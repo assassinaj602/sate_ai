@@ -98,8 +98,10 @@ class OnnxAdapter implements AIModelAdapter {
         rawBytes.map((b) => b.toDouble()).toList(),
       );
       final shape = [1, inputData.length];
-      final inputTensor =
-          OrtValueTensor.createTensorWithDataList(inputData, shape);
+      final inputTensor = OrtValueTensor.createTensorWithDataList(
+        inputData,
+        shape,
+      );
 
       final runOptions = OrtRunOptions();
       final outputs = await _session.runAsync(runOptions,

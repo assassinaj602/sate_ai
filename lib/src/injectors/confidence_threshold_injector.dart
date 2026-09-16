@@ -18,11 +18,11 @@ class ConfidenceThresholdInjector implements FaultInjector {
   double _lastConfidence = 1.0;
 
   /// Creates a [ConfidenceThresholdInjector].
-  ConfidenceThresholdInjector({
-    required this.model,
-    this.threshold = 0.5,
-  }) : assert(threshold >= 0 && threshold <= 1.0,
-            'threshold must be between 0 and 1.0');
+  ConfidenceThresholdInjector({required this.model, this.threshold = 0.5})
+      : assert(
+          threshold >= 0 && threshold <= 1.0,
+          'threshold must be between 0 and 1.0',
+        );
 
   @override
   FaultType get type => FaultType.confidenceValidation;
@@ -43,7 +43,8 @@ class ConfidenceThresholdInjector implements FaultInjector {
     if (_lastConfidence < threshold) {
       _failed = true;
       throw AIInferenceError(
-          'Confidence threshold breached: $_lastConfidence < $threshold');
+        'Confidence threshold breached: $_lastConfidence < $threshold',
+      );
     }
   }
 

@@ -127,8 +127,9 @@ void main() {
         taskType: MLKitTaskType.faceDetection,
         modelId: 'face-detector',
       );
-      final output =
-          await faceAdapter.runInference(AIInput(text: 'face image'));
+      final output = await faceAdapter.runInference(
+        AIInput(text: 'face image'),
+      );
       expect(output.text, contains('Face Detection'));
     });
 
@@ -137,8 +138,9 @@ void main() {
         taskType: MLKitTaskType.imageLabeling,
         modelId: 'image-labeler',
       );
-      final output =
-          await labelAdapter.runInference(AIInput(text: 'cat photo'));
+      final output = await labelAdapter.runInference(
+        AIInput(text: 'cat photo'),
+      );
       expect(output.text, contains('Image Labeling'));
     });
 
@@ -147,8 +149,9 @@ void main() {
         taskType: MLKitTaskType.translation,
         modelId: 'translator',
       );
-      final output =
-          await translateAdapter.runInference(AIInput(text: 'Hello'));
+      final output = await translateAdapter.runInference(
+        AIInput(text: 'Hello'),
+      );
       expect(output.text, contains('Translation'));
     });
 
@@ -157,8 +160,9 @@ void main() {
         taskType: MLKitTaskType.languageIdentification,
         modelId: 'lang-identifier',
       );
-      final output =
-          await langAdapter.runInference(AIInput(text: 'Hello world'));
+      final output = await langAdapter.runInference(
+        AIInput(text: 'Hello world'),
+      );
       expect(output.text, contains('Language Identification'));
     });
 

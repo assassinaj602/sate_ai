@@ -65,8 +65,9 @@ class BenchmarkReport {
   }
 
   // ⚡ Bolt: Cache sorted array for O(1) repeated access instead of sorting O(N log N) each time
-  late final List<double> _sortedInferenceTimes =
-      List<double>.from(inferenceTimes)..sort();
+  late final List<double> _sortedInferenceTimes = List<double>.from(
+    inferenceTimes,
+  )..sort();
 
   /// Calculates the specified percentile.
   double _percentile(int p) {

@@ -70,8 +70,9 @@ class MalformedInputInjector implements FaultInjector {
   /// Generates a random [AIInput] of one of the [MalformedInputKind] variants.
   static AIInput generate([MalformedInputKind? kind]) {
     final selected = kind ??
-        MalformedInputKind
-            .values[_rng.nextInt(MalformedInputKind.values.length)];
+        MalformedInputKind.values[_rng.nextInt(
+          MalformedInputKind.values.length,
+        )];
     return generateKind(selected);
   }
 

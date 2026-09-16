@@ -46,17 +46,19 @@ void main() {
       expect(injector.latencyHistory[2], equals(45));
     });
 
-    test('inject() marks degraded when totalLatencyMs >= maxLatencyMs',
-        () async {
-      // 3 injections: total=45 (not degraded yet)
-      for (var i = 0; i < 3; i++) {
+    test(
+      'inject() marks degraded when totalLatencyMs >= maxLatencyMs',
+      () async {
+        // 3 injections: total=45 (not degraded yet)
+        for (var i = 0; i < 3; i++) {
+          await injector.inject();
+        }
+        expect(injector.isDegraded, isFalse);
+        // 4th injection: adds 10+3*5=25, total=70 >=50
         await injector.inject();
-      }
-      expect(injector.isDegraded, isFalse);
-      // 4th injection: adds 10+3*5=25, total=70 >=50
-      await injector.inject();
-      expect(injector.isDegraded, isTrue);
-    });
+        expect(injector.isDegraded, isTrue);
+      },
+    );
 
     test('reset() resets all state', () async {
       for (var i = 0; i < 4; i++) {

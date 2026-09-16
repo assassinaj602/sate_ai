@@ -51,9 +51,7 @@ void main() {
     late MockAdapter model;
 
     setUp(() {
-      model = MockAdapter(
-        inferenceDelay: const Duration(milliseconds: 10),
-      );
+      model = MockAdapter(inferenceDelay: const Duration(milliseconds: 10));
     });
 
     // ------------------------------------------------------------------
@@ -94,17 +92,19 @@ void main() {
     // Error handling
     // ------------------------------------------------------------------
 
-    test('run() captures unexpected inject() exception in failures list',
-        () async {
-      final runner = StressRunner(
-        model: model,
-        injectors: [_ThrowingInjector()],
-      );
-      final report = await runner.run();
-      expect(report.passed, isFalse);
-      expect(report.failures.length, equals(1));
-      expect(report.failures.first.message, contains('Simulated inject'));
-    });
+    test(
+      'run() captures unexpected inject() exception in failures list',
+      () async {
+        final runner = StressRunner(
+          model: model,
+          injectors: [_ThrowingInjector()],
+        );
+        final report = await runner.run();
+        expect(report.passed, isFalse);
+        expect(report.failures.length, equals(1));
+        expect(report.failures.first.message, contains('Simulated inject'));
+      },
+    );
 
     test('run() continues after one injector throws', () async {
       final runner = StressRunner(
@@ -145,27 +145,24 @@ void main() {
         injectors: [_PassInjector(), _DegradingInjector(model)],
       );
       final report = await runner.run();
-      expect(
-        report.passCount + report.failureCount,
-        equals(report.totalTests),
-      );
+      expect(report.passCount + report.failureCount, equals(report.totalTests));
     });
 
-    test('FaultResult contains inferenceTime when inference succeeds',
-        () async {
-      final runner = StressRunner(model: model, injectors: [_PassInjector()]);
-      final report = await runner.run();
-      expect(report.results.first.inferenceTime, isNotNull);
-    });
+    test(
+      'FaultResult contains inferenceTime when inference succeeds',
+      () async {
+        final runner = StressRunner(model: model, injectors: [_PassInjector()]);
+        final report = await runner.run();
+        expect(report.results.first.inferenceTime, isNotNull);
+      },
+    );
 
     // ------------------------------------------------------------------
     // Timeout
     // ------------------------------------------------------------------
 
     test('run() with very short timeout produces failed result', () async {
-      final slowModel = MockAdapter(
-        inferenceDelay: const Duration(seconds: 5),
-      );
+      final slowModel = MockAdapter(inferenceDelay: const Duration(seconds: 5));
       final runner = StressRunner(
         model: slowModel,
         injectors: [_PassInjector()],

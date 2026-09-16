@@ -23,13 +23,8 @@ import 'package:tflite_flutter/src/tensor.dart' as _i2;
 // ignore_for_file: invalid_use_of_internal_member
 
 class _FakeTensor_0 extends _i1.SmartFake implements _i2.Tensor {
-  _FakeTensor_0(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeTensor_0(Object parent, Invocation parentInvocation)
+      : super(parent, parentInvocation);
 }
 
 /// A class which mocks [Interpreter].
@@ -47,179 +42,108 @@ class MockInterpreter extends _i1.Mock implements _i3.Interpreter {
       ) as int);
 
   @override
-  int get address => (super.noSuchMethod(
-        Invocation.getter(#address),
-        returnValue: 0,
-      ) as int);
+  int get address =>
+      (super.noSuchMethod(Invocation.getter(#address), returnValue: 0) as int);
 
   @override
-  bool get isAllocated => (super.noSuchMethod(
-        Invocation.getter(#isAllocated),
-        returnValue: false,
-      ) as bool);
+  bool get isAllocated =>
+      (super.noSuchMethod(Invocation.getter(#isAllocated), returnValue: false)
+          as bool);
 
   @override
-  bool get isDeleted => (super.noSuchMethod(
-        Invocation.getter(#isDeleted),
-        returnValue: false,
-      ) as bool);
+  bool get isDeleted =>
+      (super.noSuchMethod(Invocation.getter(#isDeleted), returnValue: false)
+          as bool);
 
   @override
   void close() => super.noSuchMethod(
-        Invocation.method(
-          #close,
-          [],
-        ),
+        Invocation.method(#close, []),
         returnValueForMissingStub: null,
       );
 
   @override
   void allocateTensors() => super.noSuchMethod(
-        Invocation.method(
-          #allocateTensors,
-          [],
-        ),
+        Invocation.method(#allocateTensors, []),
         returnValueForMissingStub: null,
       );
 
   @override
   void invoke() => super.noSuchMethod(
-        Invocation.method(
-          #invoke,
-          [],
-        ),
+        Invocation.method(#invoke, []),
         returnValueForMissingStub: null,
       );
 
   @override
-  void run(
-    Object? input,
-    Object? output,
-  ) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #run,
-          [
-            input,
-            output,
-          ],
-        ),
+  void run(Object? input, Object? output) => super.noSuchMethod(
+        Invocation.method(#run, [input, output]),
         returnValueForMissingStub: null,
       );
 
   @override
-  void runForMultipleInputs(
-    List<Object>? inputs,
-    Map<int, Object>? outputs,
-  ) =>
+  void runForMultipleInputs(List<Object>? inputs, Map<int, Object>? outputs) =>
       super.noSuchMethod(
-        Invocation.method(
-          #runForMultipleInputs,
-          [
-            inputs,
-            outputs,
-          ],
-        ),
+        Invocation.method(#runForMultipleInputs, [inputs, outputs]),
         returnValueForMissingStub: null,
       );
 
   @override
   void runInference(List<Object>? inputs) => super.noSuchMethod(
-        Invocation.method(
-          #runInference,
-          [inputs],
-        ),
+        Invocation.method(#runInference, [inputs]),
         returnValueForMissingStub: null,
       );
 
   @override
   List<_i2.Tensor> getInputTensors() => (super.noSuchMethod(
-        Invocation.method(
-          #getInputTensors,
-          [],
-        ),
+        Invocation.method(#getInputTensors, []),
         returnValue: <_i2.Tensor>[],
       ) as List<_i2.Tensor>);
 
   @override
   List<_i2.Tensor> getOutputTensors() => (super.noSuchMethod(
-        Invocation.method(
-          #getOutputTensors,
-          [],
-        ),
+        Invocation.method(#getOutputTensors, []),
         returnValue: <_i2.Tensor>[],
       ) as List<_i2.Tensor>);
 
   @override
-  void resizeInputTensor(
-    int? tensorIndex,
-    List<int>? shape,
-  ) =>
+  void resizeInputTensor(int? tensorIndex, List<int>? shape) =>
       super.noSuchMethod(
-        Invocation.method(
-          #resizeInputTensor,
-          [
-            tensorIndex,
-            shape,
-          ],
-        ),
+        Invocation.method(#resizeInputTensor, [tensorIndex, shape]),
         returnValueForMissingStub: null,
       );
 
   @override
   _i2.Tensor getInputTensor(int? index) => (super.noSuchMethod(
-        Invocation.method(
-          #getInputTensor,
-          [index],
-        ),
+        Invocation.method(#getInputTensor, [index]),
         returnValue: _FakeTensor_0(
           this,
-          Invocation.method(
-            #getInputTensor,
-            [index],
-          ),
+          Invocation.method(#getInputTensor, [index]),
         ),
       ) as _i2.Tensor);
 
   @override
   _i2.Tensor getOutputTensor(int? index) => (super.noSuchMethod(
-        Invocation.method(
-          #getOutputTensor,
-          [index],
-        ),
+        Invocation.method(#getOutputTensor, [index]),
         returnValue: _FakeTensor_0(
           this,
-          Invocation.method(
-            #getOutputTensor,
-            [index],
-          ),
+          Invocation.method(#getOutputTensor, [index]),
         ),
       ) as _i2.Tensor);
 
   @override
   int getInputIndex(String? opName) => (super.noSuchMethod(
-        Invocation.method(
-          #getInputIndex,
-          [opName],
-        ),
+        Invocation.method(#getInputIndex, [opName]),
         returnValue: 0,
       ) as int);
 
   @override
   int getOutputIndex(String? opName) => (super.noSuchMethod(
-        Invocation.method(
-          #getOutputIndex,
-          [opName],
-        ),
+        Invocation.method(#getOutputIndex, [opName]),
         returnValue: 0,
       ) as int);
 
   @override
   void resetVariableTensors() => super.noSuchMethod(
-        Invocation.method(
-          #resetVariableTensors,
-          [],
-        ),
+        Invocation.method(#resetVariableTensors, []),
         returnValueForMissingStub: null,
       );
 }

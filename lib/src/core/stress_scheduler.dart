@@ -115,9 +115,11 @@ class StressScheduler {
         if (!comparison.passed) {
           print('⚠️ Test regressed!');
           print(
-              '  - Previous: ${comparison.previousPassed}/${comparison.previousTotal}');
+            '  - Previous: ${comparison.previousPassed}/${comparison.previousTotal}',
+          );
           print(
-              '  - Current: ${comparison.currentPassed}/${comparison.currentTotal}');
+            '  - Current: ${comparison.currentPassed}/${comparison.currentTotal}',
+          );
         } else {
           print('✅ Test passed. No regression detected.');
         }
@@ -157,7 +159,9 @@ class StressScheduler {
 
   /// Compares two reports and returns a comparison result.
   ReportComparison _compareReports(
-      StressReport current, StressReport previous) {
+    StressReport current,
+    StressReport previous,
+  ) {
     return ReportComparison(
       currentPassed: current.results.where((r) => r.passed).length,
       currentTotal: current.results.length,

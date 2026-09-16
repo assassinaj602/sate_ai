@@ -28,10 +28,8 @@ sealed class StressEvent {
   final DateTime timestamp;
 
   /// Constructs a [StressEvent].
-  StressEvent({
-    required this.type,
-    DateTime? timestamp,
-  }) : timestamp = timestamp ?? DateTime.now();
+  StressEvent({required this.type, DateTime? timestamp})
+      : timestamp = timestamp ?? DateTime.now();
 
   /// Converts the event to a JSON map.
   Map<String, dynamic> toJson();
@@ -140,10 +138,8 @@ class InjectorErrorEvent extends StressEvent {
   final String error;
 
   /// Constructs an [InjectorErrorEvent].
-  InjectorErrorEvent({
-    required this.injectorName,
-    required this.error,
-  }) : super(type: StressEventType.injectorError);
+  InjectorErrorEvent({required this.injectorName, required this.error})
+      : super(type: StressEventType.injectorError);
 
   @override
   Map<String, dynamic> toJson() => {
@@ -163,10 +159,8 @@ class LogEvent extends StressEvent {
   final String level;
 
   /// Constructs a [LogEvent].
-  LogEvent({
-    required this.message,
-    this.level = 'info',
-  }) : super(type: StressEventType.log);
+  LogEvent({required this.message, this.level = 'info'})
+      : super(type: StressEventType.log);
 
   @override
   Map<String, dynamic> toJson() => {

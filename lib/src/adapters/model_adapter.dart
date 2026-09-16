@@ -21,11 +21,7 @@ class AIInput {
   /// Constructs an [AIInput].
   ///
   /// Throws [ArgumentError] if both [text] and [binary] are null.
-  AIInput({
-    this.text,
-    this.binary,
-    this.metadata,
-  }) {
+  AIInput({this.text, this.binary, this.metadata}) {
     if (text == null && binary == null) {
       throw ArgumentError('AIInput: either text or binary must be provided.');
     }

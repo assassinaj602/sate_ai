@@ -95,13 +95,15 @@ class StressRunner {
       inferenceTimes.add(inferenceTime.inMilliseconds.toDouble());
       memoryUsages.add(model.currentMemoryMB);
 
-      results.add(FaultResult(
-        injectorType: FaultType.benchmark,
-        passed: true,
-        inferenceTime: inferenceTime,
-        output: output,
-        memoryUsageMB: model.currentMemoryMB,
-      ));
+      results.add(
+        FaultResult(
+          injectorType: FaultType.benchmark,
+          passed: true,
+          inferenceTime: inferenceTime,
+          output: output,
+          memoryUsageMB: model.currentMemoryMB,
+        ),
+      );
     }
 
     final endTime = DateTime.now();

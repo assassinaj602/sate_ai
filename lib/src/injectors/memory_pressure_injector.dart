@@ -26,10 +26,7 @@ class MemoryPressureInjector implements FaultInjector {
   ///
   /// [limitMb] specifies how many megabytes to allocate during [inject].
   /// Defaults to 100 MB.
-  const MemoryPressureInjector({
-    required this.model,
-    this.limitMb = 100,
-  });
+  const MemoryPressureInjector({required this.model, this.limitMb = 100});
 
   /// The model adapter to stress.
   final AIModelAdapter model;

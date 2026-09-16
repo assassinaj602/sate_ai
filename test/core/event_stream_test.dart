@@ -68,9 +68,7 @@ void main() {
       final events = <StressEvent>[];
       final runner = StressRunner(
         model: MockAdapter(),
-        injectors: [
-          MemoryPressureInjector(model: MockAdapter(), limitMb: 100),
-        ],
+        injectors: [MemoryPressureInjector(model: MockAdapter(), limitMb: 100)],
         onEvent: (event) => events.add(event),
       );
 

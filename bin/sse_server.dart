@@ -51,13 +51,16 @@ class SSEServer {
 
     // Send initial connection message
     response.write(
-        'event: connected\ndata: ${jsonEncode({'status': 'connected'})}\n\n');
+      'event: connected\ndata: ${jsonEncode({'status': 'connected'})}\n\n',
+    );
     response.flush();
 
     // When client disconnects, remove from list
-    unawaited(response.done.then((_) {
-      _clients.remove(response);
-    }));
+    unawaited(
+      response.done.then((_) {
+        _clients.remove(response);
+      }),
+    );
   }
 
   /// Serves the dashboard HTML page.

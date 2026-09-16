@@ -118,8 +118,9 @@ void main() {
     });
 
     test('runInference handles image input', () async {
-      final output =
-          await adapter.runInference(AIInput(text: 'image of a cat'));
+      final output = await adapter.runInference(
+        AIInput(text: 'image of a cat'),
+      );
       expect(output.text, contains('cat'));
     });
 

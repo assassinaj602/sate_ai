@@ -47,10 +47,12 @@ class BaselineManager {
     final dir = Directory(baselineDirectory);
     final files = await dir
         .list()
-        .where((entity) =>
-            entity is File &&
-            entity.path.contains('baseline_${modelId}_') &&
-            entity.path.endsWith('.json'))
+        .where(
+          (entity) =>
+              entity is File &&
+              entity.path.contains('baseline_${modelId}_') &&
+              entity.path.endsWith('.json'),
+        )
         .toList();
 
     if (files.isEmpty) {
@@ -60,10 +62,12 @@ class BaselineManager {
     // ⚡ Bolt: Cache file modification times to avoid O(N log N) synchronous disk I/O
     // statSync() in a sort comparator causes repeated disk access.
     // Instead, we stat asynchronously once per file and sort the cached results.
-    final filesWithStats = await Future.wait(files.map((file) async {
-      final stat = await file.stat();
-      return MapEntry(file as File, stat.modified);
-    }));
+    final filesWithStats = await Future.wait(
+      files.map((file) async {
+        final stat = await file.stat();
+        return MapEntry(file as File, stat.modified);
+      }),
+    );
 
     // Get the most recent file
     filesWithStats.sort((a, b) => a.value.compareTo(b.value));
@@ -84,14 +88,16 @@ class BaselineManager {
     // Compare pass/fail status
     if (report.passed != baseline.passed) {
       passed = false;
-      deviations.add(MetricDeviation(
-        metric: 'overall_status',
-        expected: baseline.passed,
-        actual: report.passed,
-        deviationPercent: 100.0,
-        message:
-            'Overall status changed from ${baseline.passed ? "PASS" : "FAIL"} to ${report.passed ? "PASS" : "FAIL"}',
-      ));
+      deviations.add(
+        MetricDeviation(
+          metric: 'overall_status',
+          expected: baseline.passed,
+          actual: report.passed,
+          deviationPercent: 100.0,
+          message:
+              'Overall status changed from ${baseline.passed ? "PASS" : "FAIL"} to ${report.passed ? "PASS" : "FAIL"}',
+        ),
+      );
     }
 
     // Compare total tests count
@@ -101,14 +107,16 @@ class BaselineManager {
               baseline.results.length *
               100)
           .abs();
-      deviations.add(MetricDeviation(
-        metric: 'test_count',
-        expected: baseline.results.length,
-        actual: report.results.length,
-        deviationPercent: diff,
-        message:
-            'Test count changed from ${baseline.results.length} to ${report.results.length}',
-      ));
+      deviations.add(
+        MetricDeviation(
+          metric: 'test_count',
+          expected: baseline.results.length,
+          actual: report.results.length,
+          deviationPercent: diff,
+          message:
+              'Test count changed from ${baseline.results.length} to ${report.results.length}',
+        ),
+      );
     }
 
     // Compare individual injector results
@@ -127,14 +135,16 @@ class BaselineManager {
             (diffMs / previous.inferenceTime!.inMilliseconds) * 100;
         if (diffPercent > tolerancePercent) {
           passed = false;
-          deviations.add(MetricDeviation(
-            metric: 'inference_time_${current.injectorType.name}',
-            expected: previous.inferenceTime!.inMilliseconds,
-            actual: current.inferenceTime!.inMilliseconds,
-            deviationPercent: diffPercent,
-            message:
-                'Inference time for ${current.injectorType.displayName} increased by ${diffPercent.round()}%',
-          ));
+          deviations.add(
+            MetricDeviation(
+              metric: 'inference_time_${current.injectorType.name}',
+              expected: previous.inferenceTime!.inMilliseconds,
+              actual: current.inferenceTime!.inMilliseconds,
+              deviationPercent: diffPercent,
+              message:
+                  'Inference time for ${current.injectorType.displayName} increased by ${diffPercent.round()}%',
+            ),
+          );
         }
       }
 
@@ -146,28 +156,32 @@ class BaselineManager {
             : 0.0;
         if (diffPercent > tolerancePercent) {
           passed = false;
-          deviations.add(MetricDeviation(
-            metric: 'memory_usage_${current.injectorType.name}',
-            expected: previous.memoryUsageMB!,
-            actual: current.memoryUsageMB!,
-            deviationPercent: diffPercent,
-            message:
-                'Memory usage for ${current.injectorType.displayName} increased by ${diffPercent.round()}%',
-          ));
+          deviations.add(
+            MetricDeviation(
+              metric: 'memory_usage_${current.injectorType.name}',
+              expected: previous.memoryUsageMB!,
+              actual: current.memoryUsageMB!,
+              deviationPercent: diffPercent,
+              message:
+                  'Memory usage for ${current.injectorType.displayName} increased by ${diffPercent.round()}%',
+            ),
+          );
         }
       }
 
       // Compare pass/fail status per injector
       if (current.passed != previous.passed) {
         passed = false;
-        deviations.add(MetricDeviation(
-          metric: 'status_${current.injectorType.name}',
-          expected: previous.passed,
-          actual: current.passed,
-          deviationPercent: 100.0,
-          message:
-              '${current.injectorType.displayName} status changed from ${previous.passed ? "PASS" : "FAIL"} to ${current.passed ? "PASS" : "FAIL"}',
-        ));
+        deviations.add(
+          MetricDeviation(
+            metric: 'status_${current.injectorType.name}',
+            expected: previous.passed,
+            actual: current.passed,
+            deviationPercent: 100.0,
+            message:
+                '${current.injectorType.displayName} status changed from ${previous.passed ? "PASS" : "FAIL"} to ${current.passed ? "PASS" : "FAIL"}',
+          ),
+        );
       }
     }
 
@@ -200,10 +214,12 @@ class BaselineManager {
     final dir = Directory(baselineDirectory);
     final files = await dir
         .list()
-        .where((entity) =>
-            entity is File &&
-            entity.path.contains('baseline_${modelId}_') &&
-            entity.path.endsWith('.json'))
+        .where(
+          (entity) =>
+              entity is File &&
+              entity.path.contains('baseline_${modelId}_') &&
+              entity.path.endsWith('.json'),
+        )
         .toList();
 
     for (final file in files) {

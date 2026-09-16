@@ -6,9 +6,7 @@ void main() {
     late MockAdapter adapter;
 
     setUp(() {
-      adapter = MockAdapter(
-        inferenceDelay: const Duration(milliseconds: 10),
-      );
+      adapter = MockAdapter(inferenceDelay: const Duration(milliseconds: 10));
     });
 
     // ------------------------------------------------------------------
@@ -49,14 +47,16 @@ void main() {
     // Failure mode
     // ------------------------------------------------------------------
 
-    test('forceFailure=true causes runInference to throw AIInferenceError',
-        () async {
-      final broken = MockAdapter(forceFailure: true);
-      await expectLater(
-        broken.runInference(AIInput(text: 'x')),
-        throwsA(isA<AIInferenceError>()),
-      );
-    });
+    test(
+      'forceFailure=true causes runInference to throw AIInferenceError',
+      () async {
+        final broken = MockAdapter(forceFailure: true);
+        await expectLater(
+          broken.runInference(AIInput(text: 'x')),
+          throwsA(isA<AIInferenceError>()),
+        );
+      },
+    );
 
     test('forceFailure message is included in exception', () async {
       final broken = MockAdapter(
@@ -82,11 +82,13 @@ void main() {
       expect(adapter.allocatedMemory, isNotNull);
     });
 
-    test('simulateMemoryPressure over 150 MB marks adapter as degraded',
-        () async {
-      await adapter.simulateMemoryPressure(200);
-      expect(adapter.isDegraded, isTrue);
-    });
+    test(
+      'simulateMemoryPressure over 150 MB marks adapter as degraded',
+      () async {
+        await adapter.simulateMemoryPressure(200);
+        expect(adapter.isDegraded, isTrue);
+      },
+    );
 
     test('reset() clears memory and degradation', () async {
       await adapter.simulateMemoryPressure(200);

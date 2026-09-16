@@ -7,9 +7,7 @@ void main() {
     late MemoryPressureInjector injector;
 
     setUp(() {
-      model = MockAdapter(
-        inferenceDelay: const Duration(milliseconds: 10),
-      );
+      model = MockAdapter(inferenceDelay: const Duration(milliseconds: 10));
       injector = MemoryPressureInjector(model: model, limitMb: 50);
     });
 
