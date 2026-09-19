@@ -169,6 +169,8 @@ void main(List<String> arguments) async {
         help: 'Number of benchmark runs', defaultsTo: '10')
     ..addOption('timeout',
         abbr: 't', help: 'Timeout in seconds for each test', defaultsTo: '30')
+    ..addFlag('health-check',
+        help: 'Run a quick health check on the model and exit')
     ..addFlag('help', abbr: 'h', help: 'Show this help', negatable: false);
 
   try {
@@ -305,6 +307,13 @@ void main(List<String> arguments) async {
 
     final model = MockAdapter(modelId: 'cli-model');
     final injectors = _buildInjectors(results, model);
+
+    if (results['health-check'] as bool) {
+      log('Running health check on model: ${model.modelId}');
+      final result = await SateAI.healthCheck(model: model);
+      log(result.toMarkdown());
+      exit(result.passed ? 0 : 1);
+    }
 
     final benchmark = results['benchmark'] as bool;
     final benchmarkOutput = results['benchmark-output'] as String?;
