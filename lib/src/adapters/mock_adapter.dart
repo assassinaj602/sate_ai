@@ -20,11 +20,13 @@ class MockAdapter implements AIModelAdapter {
     String modelId = 'mock-model-v1',
     Duration inferenceDelay = const Duration(milliseconds: 500),
     bool forceFailure = false,
+    bool? shouldFail,
     String? forceFailureMessage,
+    String? failureMessage,
   })  : _modelId = modelId,
         _inferenceDelay = inferenceDelay,
-        _forceFailure = forceFailure,
-        _forceFailureMessage = forceFailureMessage;
+        _forceFailure = shouldFail ?? forceFailure,
+        _forceFailureMessage = failureMessage ?? forceFailureMessage;
 
   final String _modelId;
   final Duration _inferenceDelay;
