@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12.0] - 2026-09-20
+
+### Added
+- Model health check API (Issue #89)
+  - `SateAI.healthCheck(model)` runs quick sanity inference
+  - `HealthCheckResult` class with pass/fail, duration, output, error details
+  - CLI flag `--health-check` for one-shot health checks
+  - JSON and Markdown serialization
+  - 12+ unit tests
+
+### Changed
+- Documentation updated with health check usage
+
 ## [0.11.0] - 2026-09-15
 
 ### Added
