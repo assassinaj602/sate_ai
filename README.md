@@ -225,6 +225,29 @@ sate_ai --models model1.onnx,model2.tflite,model3.gguf --auto-detect
 - `.mlmodel` → Apple Core ML
 - `.pb`, `.bin` → TensorFlow
 
+## Model Health Check
+
+Before running expensive stress tests, verify that a model is loaded and
+working with a quick health check:
+
+```dart
+final result = await SateAI.healthCheck(model: myModel);
+
+if (result.passed) {
+  print('Model is healthy (${result.duration.inMilliseconds}ms)');
+} else {
+  print('Health check failed: ${result.errorMessage}');
+}
+```
+
+Or from the CLI:
+
+```bash
+sate_ai --model path/to/model.gguf --health-check
+```
+
+The command exits with code 0 on success, 1 on failure — perfect for CI.
+
 ### 📚 Practical Cookbook & Recipes
 
 Explore our comprehensive [**SATE AI Cookbook**](docs/cookbook/README.md) featuring step-by-step recipes for real-world scenarios:

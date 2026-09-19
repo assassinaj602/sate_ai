@@ -20,6 +20,7 @@ library sate_ai;
 // (Exports alone are not visible to the file's own code in Dart.)
 import 'src/adapters/model_adapter.dart';
 import 'src/core/fault_injector.dart';
+import 'src/core/health_check_result.dart';
 import 'src/core/report.dart';
 import 'src/core/stress_runner.dart';
 
@@ -34,6 +35,7 @@ export 'src/core/report_comparator.dart';
 export 'src/core/benchmark_report.dart';
 export 'src/core/event_stream.dart';
 export 'src/core/report.dart';
+export 'src/core/health_check_result.dart';
 export 'src/core/model_type_detector.dart';
 export 'src/core/model_factory.dart';
 export 'src/adapters/model_adapter.dart';
@@ -94,5 +96,58 @@ class SateAI {
       benchmark: benchmark,
     );
     return runner.run();
+  }
+
+  /// Runs a quick health check on the given model adapter.
+  ///
+  /// Performs a single sanity inference to verify that the model is
+  /// loaded correctly and can produce valid output. This is much faster
+  /// than running a full stress test.
+  ///
+  /// Example:
+  /// ```dart
+  /// final result = await SateAI.healthCheck(model: myModel);
+  /// if (result.passed) {
+  ///   print('Model is healthy');
+  /// }
+  /// ```
+  static Future<HealthCheckResult> healthCheck({
+    required AIModelAdapter model,
+    Duration timeout = const Duration(seconds: 10),
+  }) async {
+    final stopwatch = Stopwatch()..start();
+
+    try {
+      final output = await model
+          .runInference(AIInput(text: 'health-check-probe'))
+          .timeout(timeout);
+
+      stopwatch.stop();
+
+      // Verify output is not empty
+      if (output.text.isEmpty) {
+        return HealthCheckResult.failed(
+          modelId: model.modelId,
+          duration: stopwatch.elapsed,
+          errorMessage: 'Model returned empty output',
+        );
+      }
+
+      return HealthCheckResult.passed(
+        modelId: model.modelId,
+        duration: stopwatch.elapsed,
+        outputText: output.text,
+        confidence: output.confidence,
+        metadata: output.metadata ?? {},
+      );
+    } catch (e, st) {
+      stopwatch.stop();
+      return HealthCheckResult.failed(
+        modelId: model.modelId,
+        duration: stopwatch.elapsed,
+        errorMessage: e.toString(),
+        stackTrace: st,
+      );
+    }
   }
 }

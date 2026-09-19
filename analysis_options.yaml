@@ -5,6 +5,8 @@ analyzer:
     - "**/*.g.dart"
     - "**/*.freezed.dart"
     - "scripts/**"
+    - build/**
+    - web/**
   errors:
     missing_required_param: error
     missing_return: error
