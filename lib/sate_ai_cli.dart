@@ -19,6 +19,7 @@ export 'src/core/report_comparator.dart';
 export 'src/core/benchmark_report.dart';
 export 'src/core/event_stream.dart';
 export 'src/core/report.dart';
+export 'src/core/health_check_result.dart';
 export 'src/core/model_type_detector.dart';
 export 'src/core/model_factory.dart';
 export 'src/adapters/model_adapter.dart';
