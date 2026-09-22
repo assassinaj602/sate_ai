@@ -92,15 +92,13 @@ class TemplateEngine {
   }
 
   /// Loads and renders a template from a JSON map.
-  static String renderJson(
-      Map<String, dynamic> template, StressReport report) {
+  static String renderJson(Map<String, dynamic> template, StressReport report) {
     final body = template['body'] as String? ?? '';
     return render(body, report);
   }
 
   /// Loads and renders a template from a YAML map.
-  static String renderYaml(
-      Map<String, dynamic> template, StressReport report) {
+  static String renderYaml(Map<String, dynamic> template, StressReport report) {
     final body = template['body'] as String? ?? '';
     return render(body, report);
   }

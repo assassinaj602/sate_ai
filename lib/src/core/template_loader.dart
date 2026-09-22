@@ -35,7 +35,8 @@ class TemplateLoader {
   static Map<String, dynamic> _parseYaml(String content) {
     final yaml = loadYaml(content);
     if (yaml is! Map) {
-      throw FormatException('YAML template must be an object at the top level');
+      throw const FormatException(
+          'YAML template must be an object at the top level');
     }
     return _deepConvertMap(yaml);
   }
@@ -43,7 +44,8 @@ class TemplateLoader {
   static Map<String, dynamic> _parseJson(String content) {
     final decoded = jsonDecode(content);
     if (decoded is! Map) {
-      throw FormatException('JSON template must be an object at the top level');
+      throw const FormatException(
+          'JSON template must be an object at the top level');
     }
     return Map<String, dynamic>.from(decoded);
   }
