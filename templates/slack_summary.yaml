@@ -1,0 +1,11 @@
+name: Slack Summary
+description: A short Slack-friendly stress test summary
+body: |
+  *SATE AI Stress Test* for `{{ model }}`
+  Status: {{ passed_emoji }}
+  Tests: {{ passed_count }}/{{ total_tests }} passed
+  Duration: {{ duration_ms }} ms
+  Peak Memory: {{ memory_mb }} MB
+
+  Failures:
+  {{ failures }}

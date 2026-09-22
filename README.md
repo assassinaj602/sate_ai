@@ -248,6 +248,43 @@ sate_ai --model path/to/model.gguf --health-check
 
 The command exits with code 0 on success, 1 on failure — perfect for CI.
 
+## Custom Report Templates
+
+Generate reports in your own format using JSON or YAML templates:
+
+```yaml
+# templates/slack_summary.yaml
+name: Slack Summary
+body: |
+  *SATE AI* for `{{ model }}`
+  Status: {{ passed_emoji }}
+  Tests: {{ passed_count }}/{{ total_tests }}
+  Duration: {{ duration_ms }} ms
+```
+
+Then run:
+
+```bash
+sate_ai --model model.gguf --injectors memoryPressure --template templates/slack_summary.yaml
+```
+
+### Supported Placeholders
+
+| Placeholder | Description |
+|-------------|-------------|
+| `{{ model }}` | Model ID |
+| `{{ passed }}` | true/false |
+| `{{ passed_emoji }}` | PASS/FAIL |
+| `{{ total_tests }}` | Total test count |
+| `{{ passed_count }}` | Passing tests |
+| `{{ failed_count }}` | Failing tests |
+| `{{ duration_ms }}` | Duration in ms |
+| `{{ start_time }}` | ISO8601 start time |
+| `{{ end_time }}` | ISO8601 end time |
+| `{{ results }}` | Formatted results list |
+| `{{ failures }}` | Formatted failures list |
+| `{{ memory_mb }}` | Peak memory usage |
+
 ### 📚 Practical Cookbook & Recipes
 
 Explore our comprehensive [**SATE AI Cookbook**](docs/cookbook/README.md) featuring step-by-step recipes for real-world scenarios:
