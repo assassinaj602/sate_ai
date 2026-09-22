@@ -135,6 +135,8 @@ void main(List<String> arguments) async {
         help: 'Output file for the diff report (Markdown or HTML)')
     ..addFlag('diff-html',
         help: 'Generate HTML diff report instead of Markdown')
+    ..addOption('template',
+        help: 'Path to a custom report template (.yaml, .yml, or .json)')
     ..addOption('output',
         abbr: 'o', help: 'Output file path for the report (JSON or Markdown)')
     ..addFlag('markdown', help: 'Output in Markdown format (instead of JSON)')
@@ -337,6 +339,20 @@ void main(List<String> arguments) async {
       } else {
         log(report.benchmarkReport!.toMarkdown());
       }
+    }
+
+    final templatePath = results['template'] as String?;
+
+    if (templatePath != null) {
+      final template = TemplateLoader.load(templatePath);
+      final rendered = TemplateEngine.renderJson(template, report);
+      if (outputFile != null) {
+        await File(outputFile).writeAsString(rendered);
+        log('Custom report written to $outputFile');
+      } else {
+        log(rendered);
+      }
+      exit(report.passed ? 0 : 1);
     }
 
     if (outputFile != null) {
