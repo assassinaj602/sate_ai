@@ -1,3 +1,4 @@
+import 'fault_type.dart';
 import 'report.dart';
 
 /// Engine for rendering custom report templates.
