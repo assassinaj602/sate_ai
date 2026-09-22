@@ -7,18 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.12.0] - 2026-09-20
+## [0.12.0] - 2026-09-22
 
 ### Added
-- Model health check API (Issue #89)
-  - `SateAI.healthCheck(model)` runs quick sanity inference
-  - `HealthCheckResult` class with pass/fail, duration, output, error details
-  - CLI flag `--health-check` for one-shot health checks
-  - JSON and Markdown serialization
+- Custom report templates (Issue #90)
+  - `TemplateEngine` for placeholder substitution
+  - `TemplateLoader` for JSON and YAML template files
+  - Supported placeholders: model, passed, passed_emoji, total_tests,
+    passed_count, failed_count, duration_ms, start_time, end_time,
+    results, failures, memory_mb
+  - CLI flag `--template` for custom reports
   - 12+ unit tests
 
 ### Changed
-- Documentation updated with health check usage
+- Documentation updated with custom template usage
 
 ## [0.11.0] - 2026-09-15
 
