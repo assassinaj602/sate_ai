@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import '../adapters/model_adapter.dart';
+import 'badge_generator.dart';
+import 'badge_type.dart';
 import 'benchmark_report.dart';
 import 'fault_type.dart';
 
@@ -280,6 +282,20 @@ class StressReport {
   Future<void> writeHtmlToFile(String filePath) async {
     final html = toHtml();
     await File(filePath).writeAsString(html);
+  }
+
+  /// Generates an SVG badge string for this report.
+  String toBadge({BadgeType type = BadgeType.status}) {
+    return BadgeGenerator.generateBadge(this, type: type);
+  }
+
+  /// Writes an SVG badge for this report to a file.
+  Future<void> writeBadgeToFile(
+    String filePath, {
+    BadgeType type = BadgeType.status,
+  }) async {
+    final badgeSvg = toBadge(type: type);
+    await File(filePath).writeAsString(badgeSvg);
   }
 
   /// Generates a self-contained HTML page for the report.
