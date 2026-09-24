@@ -285,6 +285,40 @@ sate_ai --model model.gguf --injectors memoryPressure --template templates/slack
 | `{{ failures }}` | Formatted failures list |
 | `{{ memory_mb }}` | Peak memory usage |
 
+## CI/CD Status Badges
+
+Generate SVG badges for your stress test results to include in your project README or CI pipeline artifacts:
+
+```bash
+# Generate default status badge (PASS/FAIL)
+sate_ai --model model.gguf --badge badge.svg
+
+# Generate specific badge types: status, latency, memory, tests
+sate_ai --model model.gguf --badge latency.svg --badge-type latency
+sate_ai --model model.gguf --badge memory.svg --badge-type memory
+sate_ai --model model.gguf --badge tests.svg --badge-type tests
+```
+
+### Programmatic Badge Generation
+
+```dart
+final report = await SateAI.stress(model: myModel, injectors: injectors);
+
+// Generate SVG string
+final svgStatus = report.toBadge(type: BadgeType.status);
+final svgLatency = report.toBadge(type: BadgeType.latency);
+
+// Write SVG badge to file
+await report.writeBadgeToFile('assets/badges/status.svg', type: BadgeType.status);
+```
+
+| Badge Type | CLI Flag | Example |
+|------------|----------|---------|
+| Status | `--badge-type status` | `SATE AI \| PASS` |
+| Latency | `--badge-type latency` | `stress duration \| 120ms` |
+| Memory | `--badge-type memory` | `peak memory \| 145.0MB` |
+| Tests | `--badge-type tests` | `stress tests \| 5/5 passed` |
+
 ### 📚 Practical Cookbook & Recipes
 
 Explore our comprehensive [**SATE AI Cookbook**](docs/cookbook/README.md) featuring step-by-step recipes for real-world scenarios:
