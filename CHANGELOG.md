@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.13.0] - 2026-09-24
+
+### Added
+- CI/CD Status Badges (Issue #91)
+  - `BadgeGenerator` for generating SVG status badges (shields.io format)
+  - `BadgeType` enum supporting `status`, `latency`, `memory`, and `tests` badges
+  - `StressReport.toBadge()` and `writeBadgeToFile()` helpers
+  - CLI flags `--badge` and `--badge-type`
+  - 12+ unit tests
+
+### Changed
+- Documentation updated with CI/CD status badges usage
+
 ## [0.12.0] - 2026-09-22
 
 ### Added

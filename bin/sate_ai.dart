@@ -137,6 +137,12 @@ void main(List<String> arguments) async {
         help: 'Generate HTML diff report instead of Markdown')
     ..addOption('template',
         help: 'Path to a custom report template (.yaml, .yml, or .json)')
+    ..addOption('badge',
+        help: 'Output file path for generating an SVG status badge')
+    ..addOption('badge-type',
+        help:
+            'Type of status badge to generate: status, latency, memory, tests (default: status)',
+        defaultsTo: 'status')
     ..addOption('output',
         abbr: 'o', help: 'Output file path for the report (JSON or Markdown)')
     ..addFlag('markdown', help: 'Output in Markdown format (instead of JSON)')
@@ -339,6 +345,15 @@ void main(List<String> arguments) async {
       } else {
         log(report.benchmarkReport!.toMarkdown());
       }
+    }
+
+    final badgePath = results['badge'] as String?;
+    final badgeTypeStr = results['badge-type'] as String;
+
+    if (badgePath != null) {
+      final type = BadgeTypeX.parse(badgeTypeStr);
+      await report.writeBadgeToFile(badgePath, type: type);
+      log('SVG status badge written to $badgePath');
     }
 
     final templatePath = results['template'] as String?;
