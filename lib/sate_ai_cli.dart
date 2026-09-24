@@ -21,6 +21,8 @@ export 'src/core/event_stream.dart';
 export 'src/core/report.dart';
 export 'src/core/template_engine.dart';
 export 'src/core/template_loader.dart';
+export 'src/core/badge_generator.dart';
+export 'src/core/badge_type.dart';
 export 'src/core/health_check_result.dart';
 export 'src/core/model_type_detector.dart';
 export 'src/core/model_factory.dart';
