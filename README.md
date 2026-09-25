@@ -2,1017 +2,167 @@
 
 Fault Injection Framework for On-Device AI Models in Flutter
 
-[![Website](https://img.shields.io/badge/Website-sate__ai-007ACC?style=for-the-badge&logo=google-chrome&logoColor=white)](https://assassinaj602.github.io/sate_ai)
-[![pub package](https://img.shields.io/pub/v/sate_ai.svg?style=for-the-badge&logo=dart&logoColor=white)](https://pub.dev/packages/sate_ai)
-[![pub points](https://img.shields.io/pub/points/sate_ai?style=for-the-badge&logo=dart&logoColor=white)](https://pub.dev/packages/sate_ai/score)
-[![popularity](https://img.shields.io/pub/popularity/sate_ai?style=for-the-badge)](https://pub.dev/packages/sate_ai/score)
-[![likes](https://img.shields.io/pub/likes/sate_ai?style=for-the-badge)](https://pub.dev/packages/sate_ai/score)
-[![GitHub stars](https://img.shields.io/github/stars/assassinaj602/sate_ai?style=for-the-badge&logo=github)](https://github.com/assassinaj602/sate_ai/stargazers)
-[![CI Workflow](https://img.shields.io/github/actions/workflow/status/assassinaj602/sate_ai/test.yml?branch=main&style=for-the-badge&logo=githubactions&logoColor=white&label=CI)](https://github.com/assassinaj602/sate_ai/actions)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
-[![Flutter](https://img.shields.io/badge/Flutter-3.10%2B-02569B?style=for-the-badge&logo=flutter&logoColor=white)](https://flutter.dev)
-[![Dart](https://img.shields.io/badge/Dart-3.0%2B-0175C2?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
-
----
+[![pub package](https://img.shields.io/pub/v/sate_ai.svg)](https://pub.dev/packages/sate_ai)
+[![pub points](https://img.shields.io/pub/points/sate_ai)](https://pub.dev/packages/sate_ai/score)
+[![pub likes](https://img.shields.io/pub/likes/sate_ai)](https://pub.dev/packages/sate_ai/score)
+[![GitHub stars](https://img.shields.io/github/stars/assassinaj602/sate_ai?style=flat)](https://github.com/assassinaj602/sate_ai/stargazers)
+[![CI](https://github.com/assassinaj602/sate_ai/actions/workflows/test.yml/badge.svg)](https://github.com/assassinaj602/sate_ai/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Flutter](https://img.shields.io/badge/Flutter-3.10%2B-blue.svg)](https://flutter.dev)
 
 ## Overview
 
-SATE AI is a fault injection framework for testing on-device AI models in Flutter applications. It simulates real-world failure scenarios — memory pressure, malformed inputs, and model degradation — so developers can validate model reliability before shipping to production.
-
-On-device AI models (Llama, Phi, Gemma, and similar) run directly on user devices where resource constraints are unpredictable. Memory pressure causes out-of-memory crashes mid-inference. Unexpected inputs cause silent failures or exceptions. Without a structured testing approach, these issues surface only in production.
-
-SATE AI provides a `pytest`-style experience for AI failure modes: wrap your model in an adapter, configure fault injectors, and receive a structured `StressReport` with pass/fail results, timing data, and serialization to Markdown or JSON for CI/CD pipelines.
-
-### Key Benefits
-
-- Identify model failures before users encounter them
-- Validate error handling and recovery mechanisms in a controlled environment
-- Integrate AI reliability checks into existing CI/CD pipelines
-- Reduce production incidents caused by resource exhaustion or unexpected inputs
-- Develop against a `MockAdapter` without requiring a real AI model
-
----
-
-## 📄 Research Paper
-
-A full research paper describing SATE AI is available:
-
-- 📄 [Read the Paper Webpage](https://assassinaj602.github.io/sate_ai/paper.html)
-- 📥 [Download PDF Version](https://assassinaj602.github.io/sate_ai/assets/pdf/paper.pdf)
-- 📚 [View on arXiv](https://arxiv.org/abs/XXXX.XXXXX) *(Preprint coming soon)*
-
-The paper covers:
-- SATE AI architecture with 7 fault injectors and 3 model adapters
-- 164 unit/integration tests with 160/160 pub.dev score
-- Real-world mobile benchmarks with ONNX and TensorFlow Lite models
-
----
-
-## Live App Demos & App Preview
-
-![SATE AI Real-World App Interface](docs/assets/demo.png)
-
-| Successful Model Stress Run (`pass.gif`) | Failure Detection & Exception Report (`fail.gif`) |
-|:---:|:---:|
-| ![SATE AI Passing Stress Test](docs/assets/pass.gif) | ![SATE AI Fault Detection](docs/assets/fail.gif) |
-| *TFLite / Mock Adapter passing all stress checks* | *ONNX Adapter catching shape mismatch failure cleanly* |
-
----
+SATE AI is a fault injection framework for testing on-device AI models in
+Flutter and Dart. It simulates real-world failure scenarios — memory pressure,
+malformed inputs, quantization drift, thermal throttling, latency, model
+corruption, network failure, GPU memory pressure, and confidence degradation —
+so developers can validate model reliability before shipping to production.
 
 ## Features
 
-- Core fault injection engine with a composable `FaultInjector` interface
-- `StressRunner` for orchestrating multiple injectors with timeout support
-- `StressReport` with JSON, Markdown, and self-contained HTML page serialization (`toHtml()`)
-- HTML report export with Chart.js charts and detailed results filtering
-- `MockAdapter` for testing without real AI models
-- `FllamaAdapter` for running Llama, Phi, Gemma models via llama.cpp (Fllama)
-- `MemoryPressureInjector` for RAM out-of-memory simulation
-- `GpuMemoryPressureInjector` for GPU VRAM pressure simulation
-- `NetworkLatencyDropInjector` for simulating network latency, timeouts, and disconnections
-- `DataCorruptionInjector` for simulating corrupted input data (noise, blur, occlusion, glitches)
-- `ModelVersionMismatchInjector` for simulating model version mismatches and fallback
-- `MalformedInputInjector` for input validation testing (empty, oversized, binary garbage)
-- `SateAI.stress()` convenience API for one-call test execution
-- Extensible adapter interface for wrapping any on-device AI runtime
-- 246 unit tests with full coverage of core modules
-- Web dashboard for visualizing stress test reports with charts and exports
-
----
+- 11 fault injectors covering memory, I/O, thermal, and network failure modes
+- 8 model adapters: MockAdapter, OnnxAdapter, TFLiteAdapter, FllamaAdapter,
+  MediaPipeAdapter, CoreMLAdapter, GoogleMLKitAdapter, and custom adapters
+- CLI tool with subcommands for stress, benchmark, batch, schedule, serve,
+  health-check, badge, and template output
+- HTML report export with Chart.js charts
+- Real-time SSE monitoring dashboard
+- Golden baseline regression detection
+- Stress test retries and flaky test detection
+- SQLite storage for historical report tracking
+- CI/CD status badges (SVG)
+- Custom report templates (JSON/YAML)
+- Retry and flaky test detection
+- Stress scheduler (cron)
+- VS Code extension
 
 ## Installation
 
-Add the dependency to your `pubspec.yaml`:
-
 ```yaml
 dependencies:
-  sate_ai: ^0.7.0
+  sate_ai: ^0.13.0
 ```
-
-Then run:
 
 ```bash
 flutter pub get
 ```
 
-Import the library:
-
-```dart
-import 'package:sate_ai/sate_ai.dart';
-```
-
----
-
 ## Quick Start
-
-### Basic Usage
 
 ```dart
 import 'package:sate_ai/sate_ai.dart';
 
 Future<void> main() async {
-  // Use MockAdapter during development
-  final model = MockAdapter(modelId: 'my-llm-v1');
+  final model = MockAdapter(modelId: 'my-model');
 
-  // Run a stress test with multiple fault injectors
   final report = await SateAI.stress(
     model: model,
     injectors: [
       MemoryPressureInjector(limitMb: 100),
       MalformedInputInjector(),
     ],
-    timeout: const Duration(seconds: 60),
+    retryCount: 3,
+    flakyThreshold: 2,
   );
 
-  // Check results
   if (report.passed) {
-    print('✅ Model passed all stress tests.');
+    print('Model passed all stress tests.');
   } else {
-    print('❌ Model failed: ${report.failureCount} failure(s) detected.');
+    print('Model failed: ${report.failureCount} failures.');
     print(report.toMarkdown());
   }
-
-  // Export to JSON for CI/CD
-  final json = report.toJsonString();
-  print(json);
 }
 ```
-
-### Report Comparison & Diff View
-
-SATE AI can compare two stress reports and show differences in metrics:
-
-```dart
-final comparator = ReportComparator(tolerancePercent: 10.0);
-final diff = comparator.compare(report1, report2);
-
-if (diff.hasChanges) {
-  print('⚠️ Changes detected: ${diff.totalDiffs} changes');
-  print(diff.toMarkdown());
-}
-```
-
-CLI usage:
-```bash
-# Compare two reports (exits with code 1 if changes detected)
-sate_ai --compare-reports report1.json,report2.json
-
-# Save diff as Markdown
-sate_ai --compare-reports report1.json,report2.json --diff-output diff.md
-
-# Generate HTML diff report
-sate_ai --compare-reports report1.json,report2.json --diff-html --diff-output diff.html
-```
-
-### Performance Benchmarking Mode
-
-SATE AI can measure baseline performance without fault injection:
-
-```dart
-final report = await SateAI.stress(
-  model: myModel,
-  injectors: [],
-  benchmark: true,
-);
-
-final benchmark = report.benchmarkReport!;
-print('p50: ${benchmark.p50}ms');
-print('p90: ${benchmark.p90}ms');
-print('p99: ${benchmark.p99}ms');
-```
-
-CLI usage:
-```bash
-# Run benchmark with 20 inference passes
-sate_ai --model model.gguf --benchmark --benchmark-runs 20
-
-# Save benchmark report
-sate_ai --model model.gguf --benchmark --benchmark-output benchmark.md
-```
-
-### CLI Code Generation
-
-SATE AI can generate boilerplate code for custom injectors:
-
-```bash
-# Generate a custom injector
-sate_ai create injector MyCustomInjector
-
-# This creates:
-# - lib/src/injectors/my_custom_injector.dart
-# - test/injectors/my_custom_injector_test.dart
-```
-
-The generated injector includes:
-- Full `FaultInjector` implementation
-- `applyTo` method for model interaction
-- 8+ test cases
-- TODOs for custom implementation
-
-### Auto-Detect Model Type
-
-SATE AI can automatically detect model types from file extensions:
-
-```bash
-# Batch mode with auto-detection
-sate_ai --models model1.onnx,model2.tflite,model3.gguf --auto-detect
-```
-
-**Supported extensions:**
-- `.onnx` → ONNX Runtime
-- `.tflite` → TensorFlow Lite
-- `.gguf` → Fllama (llama.cpp)
-- `.mlmodel` → Apple Core ML
-- `.pb`, `.bin` → TensorFlow
-
-## Model Health Check
-
-Before running expensive stress tests, verify that a model is loaded and
-working with a quick health check:
-
-```dart
-final result = await SateAI.healthCheck(model: myModel);
-
-if (result.passed) {
-  print('Model is healthy (${result.duration.inMilliseconds}ms)');
-} else {
-  print('Health check failed: ${result.errorMessage}');
-}
-```
-
-Or from the CLI:
-
-```bash
-sate_ai --model path/to/model.gguf --health-check
-```
-
-The command exits with code 0 on success, 1 on failure — perfect for CI.
-
-## Custom Report Templates
-
-Generate reports in your own format using JSON or YAML templates:
-
-```yaml
-# templates/slack_summary.yaml
-name: Slack Summary
-body: |
-  *SATE AI* for `{{ model }}`
-  Status: {{ passed_emoji }}
-  Tests: {{ passed_count }}/{{ total_tests }}
-  Duration: {{ duration_ms }} ms
-```
-
-Then run:
-
-```bash
-sate_ai --model model.gguf --injectors memoryPressure --template templates/slack_summary.yaml
-```
-
-### Supported Placeholders
-
-| Placeholder | Description |
-|-------------|-------------|
-| `{{ model }}` | Model ID |
-| `{{ passed }}` | true/false |
-| `{{ passed_emoji }}` | PASS/FAIL |
-| `{{ total_tests }}` | Total test count |
-| `{{ passed_count }}` | Passing tests |
-| `{{ failed_count }}` | Failing tests |
-| `{{ duration_ms }}` | Duration in ms |
-| `{{ start_time }}` | ISO8601 start time |
-| `{{ end_time }}` | ISO8601 end time |
-| `{{ results }}` | Formatted results list |
-| `{{ failures }}` | Formatted failures list |
-| `{{ memory_mb }}` | Peak memory usage |
-
-## CI/CD Status Badges
-
-Generate SVG badges for your stress test results to include in your project README or CI pipeline artifacts:
-
-```bash
-# Generate default status badge (PASS/FAIL)
-sate_ai --model model.gguf --badge badge.svg
-
-# Generate specific badge types: status, latency, memory, tests
-sate_ai --model model.gguf --badge latency.svg --badge-type latency
-sate_ai --model model.gguf --badge memory.svg --badge-type memory
-sate_ai --model model.gguf --badge tests.svg --badge-type tests
-```
-
-### Programmatic Badge Generation
-
-```dart
-final report = await SateAI.stress(model: myModel, injectors: injectors);
-
-// Generate SVG string
-final svgStatus = report.toBadge(type: BadgeType.status);
-final svgLatency = report.toBadge(type: BadgeType.latency);
-
-// Write SVG badge to file
-await report.writeBadgeToFile('assets/badges/status.svg', type: BadgeType.status);
-```
-
-| Badge Type | CLI Flag | Example |
-|------------|----------|---------|
-| Status | `--badge-type status` | `SATE AI \| PASS` |
-| Latency | `--badge-type latency` | `stress duration \| 120ms` |
-| Memory | `--badge-type memory` | `peak memory \| 145.0MB` |
-| Tests | `--badge-type tests` | `stress tests \| 5/5 passed` |
-
-## SQLite Historical Report Storage
-
-SATE AI includes a cross-platform SQLite database (`ReportDatabase`) powered by `sqflite_common_ffi` to store and query historical stress reports over time.
-
-### CLI Usage
-
-Save reports to SQLite database during a stress test run:
-
-```bash
-# Save report to custom SQLite database file
-sate_ai --model model.gguf --db reports.db
-```
-
-Query stored historical reports:
-
-```bash
-# View all recent historical reports stored in SQLite database
-sate_ai --db-history all --db reports.db
-
-# View reports specifically for a model ID
-sate_ai --db-history llama-7b --db reports.db
-```
-
-### Programmatic API Usage
-
-```dart
-import 'package:sate_ai/sate_ai.dart';
-
-Future<void> main() async {
-  final db = ReportDatabase('sate_ai_reports.db');
-  await db.open();
-
-  // Save report to database
-  final rowId = await db.insertReport(report);
-  print('Saved report #$rowId');
-
-  // Query recent 10 reports
-  final recentReports = await db.queryRecent(limit: 10);
-
-  // Filter reports by model ID
-  final llamaReports = await db.queryByModel('llama-7b');
-
-  // Filter reports by date window
-  final rangeReports = await db.queryByDateRange(
-    from: DateTime.now().subtract(const Duration(days: 7)),
-    to: DateTime.now(),
-  );
-
-  // Count total reports stored
-  final total = await db.count();
-  print('Total historical reports: $total');
-
-  await db.close();
-}
-```
-
-### ReportDatabase API Reference
-
-| Method | Description |
-|---|---|
-| `open()` | Opens the database file and initializes schema |
-| `close()` | Closes active SQLite connection |
-| `insertReport(report)` | Stores a `StressReport` and returns the new row ID |
-| `queryRecent({limit})` | Returns recent `StressReport` list ordered by `start_time DESC` |
-| `queryByModel(modelId)` | Returns reports matching the specified `modelId` |
-| `queryByDateRange({from, to})` | Returns reports within a start time range |
-| `count()` | Returns total count of stored reports |
-| `deleteByModel(modelId)` | Deletes all reports matching specified `modelId` |
-| `deleteAll()` | Deletes all historical reports from table |
-
-### 📚 Practical Cookbook & Recipes
-
-Explore our comprehensive [**SATE AI Cookbook**](docs/cookbook/README.md) featuring step-by-step recipes for real-world scenarios:
-
-- 💬 [Recipe 1: Testing a Chatbot Model](docs/cookbook/recipe-1-chatbot-testing.md) (Llama/Phi/Gemma, KV-cache memory pressure)
-- 🖼️ [Recipe 2: Testing an Image Classifier](docs/cookbook/recipe-2-image-classifier-testing.md) (MobileNet/ResNet, thermal throttling, latency)
-- 🎙️ [Recipe 3: Testing a Speech-to-Text Model](docs/cookbook/recipe-3-speech-to-text-testing.md) (Whisper/Vosk, malformed audio buffers, confidence thresholds)
-- ⚡ [Recipe 4: Testing with ONNX Runtime](docs/cookbook/recipe-4-onnx-runtime-testing.md) (OnnxAdapter, asset validation, tensor shapes)
-- 🤖 [Recipe 5: Testing with TensorFlow Lite](docs/cookbook/recipe-5-tflite-testing.md) (TFLiteAdapter, quantization drift, delegate fallbacks)
-
-See the [Cookbook Navigation & Integration Guide](docs/cookbook/index.md) for full details.
-
-### Advanced: Using Multiple Injectors
-
-```dart
-import 'package:sate_ai/sate_ai.dart';
-
-Future<void> testWithMultipleInjectors() async {
-  final model = MockAdapter(modelId: 'advanced-test');
-
-  final report = await SateAI.stress(
-    model: model,
-    injectors: [
-      MemoryPressureInjector(limitMb: 150),
-      MalformedInputInjector(),
-      QuantizationDriftInjector(
-        driftFactor: 0.1,
-        degradationThreshold: 0.3,
-      ),
-      ThermalThrottleInjector(
-        model: model,
-        temperatureStep: 10,
-        maxTemperature: 85,
-      ),
-    ],
-  );
-
-  // Check individual results
-  for (final result in report.results) {
-    print('${result.injectorType.displayName}: ${result.passed ? "✅" : "❌"}');
-    if (result.memoryUsageMB != null) {
-      print('  Memory: ${result.memoryUsageMB} MB');
-    }
-  }
-
-  if (!report.passed) {
-    for (final failure in report.failures) {
-      print('⚠️ ${failure.injectorType.displayName}: ${failure.message}');
-    }
-  }
-}
-```
-
-### Custom Model Adapter
-
-```dart
-import 'package:sate_ai/sate_ai.dart';
-
-class MyCustomModelAdapter implements AIModelAdapter {
-  final String _modelId;
-  double _currentMemoryMB = 0;
-  bool _isDegraded = false;
-
-  MyCustomModelAdapter(this._modelId);
-
-  @override
-  String get modelId => _modelId;
-
-  @override
-  double get currentMemoryMB => _currentMemoryMB;
-
-  @override
-  bool get isDegraded => _isDegraded;
-
-  @override
-  Future<AIOutput> runInference(AIInput input) async {
-    // Call your model runtime here
-    final startTime = DateTime.now();
-    // Simulate runtime inference...
-    return AIOutput(
-      text: 'Mock response',
-      inferenceTime: DateTime.now().difference(startTime),
-      confidence: 0.95,
-      metadata: const {'custom': true},
-    );
-  }
-
-  @override
-  Future<void> simulateMemoryPressure(int mb) async {
-    _currentMemoryMB += mb.toDouble();
-    if (_currentMemoryMB > 150) {
-      _isDegraded = true;
-    }
-  }
-
-  @override
-  Future<void> reset() async {
-    _currentMemoryMB = 0;
-    _isDegraded = false;
-  }
-
-  @override
-  Future<bool> isHealthy() async {
-    return !_isDegraded && _currentMemoryMB < 150;
-  }
-}
-
-void main() async {
-  final model = MyCustomModelAdapter('my-custom-model');
-  final report = await SateAI.stress(
-    model: model,
-    injectors: [MemoryPressureInjector(limitMb: 120)],
-  );
-  print(report.passed ? '✅ Passed' : '❌ Failed');
-}
-```
-
-### Custom Fault Injector
-
-```dart
-import 'package:sate_ai/sate_ai.dart';
-
-class CustomLatencyInjector implements FaultInjector {
-  int _injections = 0;
-
-  @override
-  FaultType get type => FaultType.latency;
-
-  @override
-  String get name => 'Custom Latency Injector';
-
-  @override
-  String get description => 'Adds 100ms latency per injection';
-
-  @override
-  Future<void> inject() async {
-    _injections++;
-    await Future.delayed(Duration(milliseconds: 100 * _injections));
-  }
-
-  @override
-  Future<void> reset() async {
-    _injections = 0;
-    await Future.delayed(Duration.zero);
-  }
-}
-
-void main() async {
-  final model = MockAdapter();
-  final report = await SateAI.stress(
-    model: model,
-    injectors: [CustomLatencyInjector()],
-  );
-  print(report.passed ? '✅ Passed' : '❌ Failed');
-}
-```
-
-### CI/CD Integration
-
-```yaml
-# .github/workflows/test-ai.yml
-name: AI Model Testing
-
-on: [push, pull_request]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v2
-      - run: flutter pub get
-      - run: |
-          dart run sate_ai \
-            --model models/model.gguf \
-            --injectors memoryPressure,malformedInput \
-            --output report.json
-      - name: Upload Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: ai-test-report
-          path: report.json
-```
-
-### Real-World Scenario: Testing a Chatbot Model
-
-```dart
-import 'dart:io';
-import 'package:sate_ai/sate_ai.dart';
-
-Future<void> testChatbotModel() async {
-  // Simulate a chatbot model
-  final model = MockAdapter(modelId: 'chatbot-v1');
-
-  // Test different failure scenarios
-  final report = await SateAI.stress(
-    model: model,
-    injectors: [
-      // Test memory pressure (OOM scenarios)
-      MemoryPressureInjector(limitMb: 200),
-      
-      // Test malformed user inputs
-      MalformedInputInjector(),
-      
-      // Test model quality degradation over time
-      QuantizationDriftInjector(
-        driftFactor: 0.15,
-        degradationThreshold: 0.4,
-      ),
-    ],
-    timeout: const Duration(seconds: 45),
-  );
-
-  // Generate a readable report
-  if (report.passed) {
-    print('✅ Chatbot model is reliable under stress!');
-  } else {
-    print('❌ Chatbot model needs improvement:');
-    for (final failure in report.failures) {
-      print('  - ${failure.injectorType.displayName}: ${failure.message}');
-    }
-  }
-
-  // Export for documentation
-  final markdown = report.toMarkdown();
-  await File('chatbot-test-report.md').writeAsString(markdown);
-}
-```
-
-### Real-World Scenario: Testing an Image Classifier
-
-```dart
-import 'package:sate_ai/sate_ai.dart';
-
-Future<void> testImageClassifier() async {
-  final model = MockAdapter(modelId: 'image-classifier-v1');
-
-  final report = await SateAI.stress(
-    model: model,
-    injectors: [
-      // Test thermal throttling (mobile devices)
-      ThermalThrottleInjector(
-        model: model,
-        temperatureStep: 15,
-        maxTemperature: 80,
-      ),
-      
-      // Test model corruption (model swap scenario)
-      ModelSwapInjector(
-        initialQuality: 1.0,
-        qualityDegradation: 0.2,
-        qualityThreshold: 0.4,
-      ),
-    ],
-  );
-
-  if (!report.passed) {
-    print('⚠️ Image classifier degraded under stress:');
-    for (final result in report.results) {
-      if (!result.passed) {
-        print('  - ${result.injectorType.displayName}: FAILED');
-        if (result.memoryUsageMB != null) {
-          print('    Memory: ${result.memoryUsageMB} MB');
-        }
-      }
-    }
-  }
-}
-```
-
-### Using the CLI
-
-```bash
-# Install the CLI
-flutter pub global activate sate_ai
-
-# Run a basic stress test
-sate_ai --model model.gguf --injectors memoryPressure,malformedInput
-
-# Run with all injectors and save report
-sate_ai \
-  --model model.gguf \
-  --injectors memoryPressure,malformedInput,quantizationDrift,thermalThrottle \
-  --output report.json \
-  --timeout 60
-
-# Get a Markdown report
-sate_ai --model model.gguf --injectors memoryPressure --markdown
-```
-
-### Real-Time Monitoring Dashboard
-
-SATE AI includes a real-time monitoring dashboard for long-running tests:
-
-```bash
-# Start the monitoring server
-sate_ai --serve --port 8080
-
-# Open http://localhost:8080 in your browser
-```
-
-The dashboard shows:
-- Live progress bar
-- Real-time logs
-- Pass/fail counts
-- Individual results as they complete
-
-### Stress Test Scheduling
-
-SATE AI can run stress tests automatically on a schedule using cron expressions:
-
-```bash
-# Run stress tests daily at 2 AM
-sate_ai --schedule "0 2 * * *" --report-dir ./reports
-
-# Run stress tests every hour
-sate_ai --schedule "0 * * * *" --model model.gguf --injectors memoryPressure
-```
-
-The scheduler:
-- Runs tests at specified intervals
-- Saves reports to a directory
-- Compares results with previous successful runs
-- Detects regressions automatically
-
-### Golden Baseline Comparisons
-
-SATE AI can detect regressions by comparing test results against a baseline:
-
-```bash
-# Save current report as baseline
-sate_ai --model model.gguf --injectors memoryPressure --baseline
-
-# Compare against baseline (fails if regressions detected)
-sate_ai --model model.gguf --injectors memoryPressure --compare
-
-# Set custom tolerance (default 10%)
-sate_ai --model model.gguf --injectors memoryPressure --compare --tolerance 5.0
-```
-
-The baseline comparison:
-- Detects changes in inference time, memory usage, and pass/fail status
-- Generates detailed markdown reports on deviations
-- Exits with code 1 if regressions are detected (CI-friendly)
-
-### Batch Mode for Multiple Models
-
-SATE AI can run stress tests on multiple models in a single command:
-
-```bash
-# Run tests on multiple models sequentially
-sate_ai --models model1.gguf,model2.gguf,model3.gguf --injectors memoryPressure,malformedInput
-
-# Run tests in parallel
-sate_ai --models model1.gguf,model2.gguf --injectors memoryPressure --parallel
-
-# Save batch report
-sate_ai --models model1.gguf,model2.gguf --injectors memoryPressure --batch-output batch-report.md
-```
-
-The batch runner:
-- Supports sequential or parallel execution
-- Generates aggregated reports
-- Tracks individual model results
-- Exits with code 1 if any model fails
-
-### Stress Test Retry & Flaky Detection
-
-SATE AI can automatically retry failed tests and detect flaky (intermittent) failures:
-
-```dart
-final report = await SateAI.stress(
-  model: myModel,
-  injectors: [
-    MemoryPressureInjector(limitMb: 150),
-    MalformedInputInjector(),
-  ],
-  retryCount: 3,          // Retry failed tests up to 3 times
-  flakyThreshold: 2,      // Mark as flaky if 2 failures out of 3
-);
-
-for (final result in report.results) {
-  if (result.flaky) {
-    print('⚠️ ${result.injectorType} is flaky!');
-  }
-}
-```
-
-CLI usage:
-```bash
-sate_ai --model model.gguf --injectors memoryPressure --retry 3 --flaky-threshold 2
-```
-
-### Best Practices
-
-1. **Start Simple**: Begin with 1-2 injectors and gradually add more.
-2. **Test Early**: Run stress tests early in your development cycle.
-3. **Monitor Memory**: Always check `memoryUsageMB` to catch memory leaks.
-4. **Export Reports**: Save reports to track model reliability over time.
-5. **Integrate with CI**: Add SATE AI to your CI/CD pipeline for automated testing.
-
----
-
-## Adapters
-
-An `AIModelAdapter` wraps any on-device AI runtime and exposes a uniform interface for running inference and inspecting model state.
-
-| Adapter | Status | Notes |
-|---|---|---|
-| MockAdapter | Available | Simulates memory pressure and degradation for testing |
-| OnnxAdapter | Available | Wraps `onnxruntime ^1.4.1` (Android, iOS, Linux, macOS, Windows) |
-| TensorFlow Lite | Available | Wraps tflite_flutter |
-| FllamaAdapter | Available | Wraps fllama for Llama-family models |
-| MediaPipeAdapter | Available | Wraps Google ML Kit (MediaPipe) |
-| CoreMLAdapter | Available | Wraps Apple Core ML (iOS) |
-| GoogleMLKitAdapter | Available | Wraps Google ML Kit (Simulated) |
-
-### Writing a Custom Adapter
-
-```dart
-class MyModelAdapter implements AIModelAdapter {
-  @override
-  String get modelId => 'my-model-v1';
-
-  @override
-  Future<AIOutput> runInference(AIInput input) async {
-    // Call your model runtime here.
-    final result = await myRuntime.infer(input.text);
-    return AIOutput(
-      text: result,
-      inferenceTime: Duration(milliseconds: 120),
-      confidence: 0.92,
-    );
-  }
-
-  @override
-  Future<bool> isHealthy() async => myRuntime.isAvailable;
-
-  @override
-  double get currentMemoryMB => myRuntime.memoryUsage.toDouble();
-}
-```
-
----
 
 ## Fault Injectors
 
-A `FaultInjector` simulates a specific failure mode by manipulating the model adapter's state before inference runs.
+| Injector | Fault Type |
+|----------|-----------|
+| MemoryPressureInjector | memoryPressure |
+| MalformedInputInjector | malformedInput |
+| QuantizationDriftInjector | quantizationDrift |
+| ThermalThrottleInjector | thermalThrottle |
+| LatencyInjector | latency |
+| ModelSwapInjector | modelSwap |
+| NetworkLatencyDropInjector | networkFailure |
+| ConfidenceThresholdInjector | confidenceValidation |
+| GpuMemoryPressureInjector | gpuMemoryPressure |
+| DataCorruptionInjector | dataCorruption |
+| ModelVersionMismatchInjector | modelVersionMismatch |
 
-![Fault Injectors Overview](docs/assets/figures/injectors-overview.png)
+## Model Adapters
 
-| Injector | Status | Fault Type |
-|---|---|---|
-| MemoryPressureInjector | Available | memoryPressure |
-| MalformedInputInjector | Available | malformedInput |
-| QuantizationDriftInjector | Available | Simulates gradual precision loss |
-| ThermalThrottleInjector | Available | Simulates CPU thermal throttling |
-| LatencyInjector | Available | Simulates increasing inference latency |
-| ModelSwapInjector | Available | Simulates model corruption |
-| ConfidenceThresholdInjector | Available | Validates model confidence stays above threshold |
+| Adapter | Runtime |
+|---------|---------|
+| MockAdapter | Pure Dart (testing) |
+| OnnxAdapter | ONNX Runtime |
+| TFLiteAdapter | TensorFlow Lite |
+| FllamaAdapter | llama.cpp (Llama, Phi, Gemma) |
+| MediaPipeAdapter | Google MediaPipe (vision) |
+| CoreMLAdapter | Apple Core ML (iOS) |
+| GoogleMLKitAdapter | Google ML Kit |
 
-### Writing a Custom Injector
+## CLI
 
-```dart
-class MyLatencyInjector implements FaultInjector {
-  @override
-  FaultType get type => FaultType.latency;
+```bash
+# Basic stress test
+sate_ai --model model.gguf --injectors memoryPressure,malformedInput
 
-  @override
-  String get name => 'My Latency Injector';
+# With retry and flaky detection
+sate_ai --model model.gguf --injectors memoryPressure --retry 3 --flaky-threshold 2
 
-  @override
-  String get description => 'Simulates CPU throttling under sustained thermal load.';
+# Benchmark mode
+sate_ai --model model.gguf --benchmark --benchmark-runs 20
 
-  @override
-  Future<void> inject() async {
-    // Add artificial latency to simulate a throttled CPU.
-    await Future.delayed(const Duration(seconds: 2));
-  }
+# Batch mode with auto-detection
+sate_ai --models model1.onnx,model2.tflite,model3.gguf --auto-detect
 
-  @override
-  Future<void> reset() async {
-    // No persistent state to clean up.
-  }
-}
+# Health check
+sate_ai --model model.gguf --health-check
+
+# HTML report
+sate_ai --model model.gguf --injectors memoryPressure --html --output report.html
+
+# Custom template
+sate_ai --model model.gguf --injectors memoryPressure --template templates/slack.yaml
+
+# Generate badges
+sate_ai --model model.gguf --injectors memoryPressure --badge-output docs/sate_ai
+
+# Save to SQLite
+sate_ai --model model.gguf --injectors memoryPressure --db history.db
+
+# List history
+sate_ai --db history.db --db-history
+
+# Golden baseline
+sate_ai --model model.gguf --baseline
+sate_ai --model model.gguf --compare --tolerance 5.0
+
+# Real-time monitoring dashboard
+sate_ai serve --port 8080
+
+# Scheduling
+sate_ai --model model.gguf --schedule "0 2 * * *"
+
+# Compare two reports
+sate_ai --compare-reports report1.json,report2.json --diff-html --diff-output diff.html
+
+# Generate a custom injector
+sate_ai create injector MyCustomInjector
 ```
-
----
-
-## Architecture
-
-![SATE AI Architecture](docs/assets/figures/architecture.png)
-
-```
-sate_ai/
-  lib/src/
-    core/
-      fault_type.dart          - FaultType enum
-      fault_injector.dart      - FaultInjector abstract interface
-      stress_runner.dart       - Orchestration engine
-      report.dart              - StressReport, FaultResult, Failure
-    adapters/
-      model_adapter.dart       - AIModelAdapter interface, AIInput, AIOutput
-      mock_adapter.dart        - MockAdapter for testing
-    injectors/
-      memory_pressure_injector.dart
-      malformed_input_injector.dart
-  lib/sate_ai.dart             - Public API barrel export
-  test/                        - 164 unit tests
-  example/                     - Flutter demo application
-```
-
-### Fault Injection Execution Workflow
-
-![Fault Injection Workflow](docs/assets/figures/fault-injection-workflow.png)
-
-
----
-
-## CI/CD Integration
-
-### Automated Publishing to pub.dev (OIDC)
-
-The included GitHub Action workflow (`.github/workflows/test.yml`) is configured to publish automatically to pub.dev on new version tags (`v*`). This uses OIDC, meaning **no `PUB_CREDENTIALS` secret is required**.
-
-To enable this for your fork/project:
-1. Go to your package on pub.dev (e.g., https://pub.dev/packages/sate_ai/admin).
-2. Ensure you are logged in as the package owner.
-3. Under the **Automated Publishing** section, select **GitHub Actions**.
-4. Enter your repository name (e.g., `assassinaj602/sate_ai`) and save.
-
-
-SATE AI is designed to run in CI/CD pipelines. Use the JSON output to fail a build when a model regresses under stress:
-
-```dart
-final report = await SateAI.stress(
-  model: MyModelAdapter(),
-  injectors: [
-    MemoryPressureInjector(limitMb: 200),
-    MalformedInputInjector(),
-  ],
-);
-
-if (!report.passed) {
-  // Write report artifact and exit with error code.
-  File('stress_report.json').writeAsStringSync(report.toJsonString());
-  exit(1);
-}
-```
-
-A GitHub Actions workflow for CI is included in the repository at `.github/workflows/test.yml`.
-
----
 
 ## Documentation
 
+- [Website](https://assassinaj602.github.io/sate_ai/)
 - [API Reference](https://pub.dev/documentation/sate_ai)
-- [Contributing Guide](https://github.com/assassinaj602/sate_ai/blob/main/CONTRIBUTING.md)
-- [Example Application](https://github.com/assassinaj602/sate_ai/tree/main/example)
-- [Changelog](https://github.com/assassinaj602/sate_ai/blob/main/CHANGELOG.md)
-- [Web Dashboard](web/) - Visualize stress test reports
-
----
+- [Research Paper](https://assassinaj602.github.io/sate_ai/paper.html)
+- [Contributing Guide](CONTRIBUTING.md)
 
 ## Contributing
 
-Contributions are welcome. Please read the [Contributing Guide](https://github.com/assassinaj602/sate_ai/blob/main/CONTRIBUTING.md) before submitting a pull request.
-
-Good first issues are labeled [`good first issue`](https://github.com/assassinaj602/sate_ai/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) and cover:
-
-- Additional fault injectors
-- New model adapters (Fllama, Whisper)
-- Documentation improvements
-- Additional test coverage
-
-### Development Setup
-
-```bash
-git clone https://github.com/assassinaj602/sate_ai.git
-cd sate_ai
-flutter pub get
-flutter test
-flutter analyze
-```
-
-## Command Line Interface
-
-SATE AI provides a CLI for running stress tests from the terminal.
-
-### Installation
-
-```bash
-flutter pub global activate sate_ai
-```
-
-### Usage
-
-```bash
-sate_ai --model path/to/model.gguf --injectors memoryPressure,malformedInput
-```
-
-Options:
-- `--model, -m` – Path to model file (required)
-- `--injectors, -i` – Comma-separated list of injectors
-- `--timeout, -t` – Timeout per test (seconds)
-- `--output, -o` – Save report to file
-- `--markdown, -md` – Output as Markdown instead of JSON
-- `--help, -h` – Show help
-
----
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](https://github.com/assassinaj602/sate_ai/blob/main/LICENSE) file for the full text.
-
----
-eee
-## Links
-
-- [GitHub Repository](https://github.com/assassinaj602/sate_ai)
-- [Issue Tracker](https://github.com/assassinaj602/sate_ai/issues)
-- [Discussions](https://github.com/assassinaj602/sate_ai/discussions)
-- [pub.dev Package](https://pub.dev/packages/sate_ai)
-- [Changelog](https://github.com/assassinaj602/sate_ai/blob/main/CHANGELOG.md)
-- [Contributors](https://github.com/assassinaj602/sate_ai/graphs/contributors)
-Jjjj
-Kkkkk
+MIT — see [LICENSE](LICENSE).
