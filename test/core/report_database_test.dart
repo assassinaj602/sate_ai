@@ -83,7 +83,8 @@ void main() {
     expect(await db.count(), equals(2));
   });
 
-  test('queryRecent() returns reports ordered by start_time DESC with limit', () async {
+  test('queryRecent() returns reports ordered by start_time DESC with limit',
+      () async {
     await db.open();
     final t1 = DateTime.now().subtract(const Duration(hours: 2));
     final t2 = DateTime.now().subtract(const Duration(hours: 1));
@@ -118,8 +119,10 @@ void main() {
     final base = DateTime(2026, 1, 10, 12, 0);
 
     await db.insertReport(createDummyReport(modelId: 'm1', startTime: base));
-    await db.insertReport(createDummyReport(modelId: 'm2', startTime: base.add(const Duration(hours: 5))));
-    await db.insertReport(createDummyReport(modelId: 'm3', startTime: base.add(const Duration(days: 2))));
+    await db.insertReport(createDummyReport(
+        modelId: 'm2', startTime: base.add(const Duration(hours: 5))));
+    await db.insertReport(createDummyReport(
+        modelId: 'm3', startTime: base.add(const Duration(days: 2))));
 
     final filtered = await db.queryByDateRange(
       from: base.subtract(const Duration(minutes: 1)),
@@ -165,7 +168,8 @@ void main() {
     expect(retrieved.passed, equals(original.passed));
     expect(retrieved.results.length, equals(original.results.length));
     expect(retrieved.failures.length, equals(original.failures.length));
-    expect(retrieved.totalDuration.inMilliseconds, equals(original.totalDuration.inMilliseconds));
+    expect(retrieved.totalDuration.inMilliseconds,
+        equals(original.totalDuration.inMilliseconds));
   });
 
   test('throws StateError when operations are called without open()', () async {
