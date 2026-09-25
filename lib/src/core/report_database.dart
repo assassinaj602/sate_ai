@@ -24,6 +24,7 @@ class ReportDatabase {
   Database? _db;
   bool _initialized = false;
 
+  /// Creates a new [ReportDatabase] with the given [databasePath].
   ReportDatabase(this.databasePath);
 
   /// Opens the database and creates the schema if needed.

@@ -177,6 +177,12 @@ void main(List<String> arguments) async {
         help: 'Number of benchmark runs', defaultsTo: '10')
     ..addOption('timeout',
         abbr: 't', help: 'Timeout in seconds for each test', defaultsTo: '30')
+    ..addOption('db',
+        help:
+            'Path to SQLite database file for storing or retrieving historical reports')
+    ..addOption('db-history',
+        help:
+            'Query historical reports from SQLite database for specified model ID (or "all")')
     ..addFlag('health-check',
         help: 'Run a quick health check on the model and exit')
     ..addFlag('help', abbr: 'h', help: 'Show this help', negatable: false);
@@ -187,6 +193,23 @@ void main(List<String> arguments) async {
       log('SATE AI CLI - Run stress tests on your AI model');
       log('');
       log(parser.usage);
+      exit(0);
+    }
+
+    final dbHistory = results['db-history'] as String?;
+    if (dbHistory != null) {
+      final dbPath = results['db'] as String? ?? 'sate_ai_reports.db';
+      final db = ReportDatabase(dbPath);
+      await db.open();
+      final reports = (dbHistory.isNotEmpty && dbHistory != 'all')
+          ? await db.queryByModel(dbHistory)
+          : await db.queryRecent();
+      log('Historical reports in $dbPath (${reports.length} found):');
+      for (final r in reports) {
+        final status = r.passed ? 'PASSED' : 'FAILED';
+        log('  - [${r.startTime.toIso8601String()}] Model: ${r.modelId} | $status | Tests: ${r.results.where((x) => x.passed).length}/${r.results.length} | Duration: ${r.totalDuration.inMilliseconds}ms');
+      }
+      await db.close();
       exit(0);
     }
 
@@ -354,6 +377,15 @@ void main(List<String> arguments) async {
       final type = BadgeTypeX.parse(badgeTypeStr);
       await report.writeBadgeToFile(badgePath, type: type);
       log('SVG status badge written to $badgePath');
+    }
+
+    final dbPath = results['db'] as String?;
+    if (dbPath != null) {
+      final db = ReportDatabase(dbPath);
+      await db.open();
+      final id = await db.insertReport(report);
+      log('Report saved to SQLite database ($dbPath) with ID: $id');
+      await db.close();
     }
 
     final templatePath = results['template'] as String?;
