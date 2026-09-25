@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SATE AI – Research Paper & Architecture Overview</title>
-  <meta name="description" content="SATE AI Research Paper: Fault Injection Framework for On-Device AI Models in Flutter applications. Read the full paper, software architecture, and experimental methodology.">
+  <title>SATE AI – Research Paper &amp; Specification</title>
+  <meta name="description" content="SATE AI Research Paper: Fault Injection Framework for On-Device AI Models in Flutter applications. Read the full paper abstract, architecture, and download PDF/BibTeX.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -18,7 +18,7 @@
     .paper-header {
       text-align: center;
       margin-bottom: 3rem;
-      border-bottom: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border);
       padding-bottom: 2rem;
     }
     .paper-title {
@@ -29,13 +29,19 @@
     }
     .paper-authors {
       font-size: 1rem;
-      color: var(--accent-primary);
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    .paper-status {
+      font-size: 0.9rem;
+      color: var(--text-2);
       margin-bottom: 1.5rem;
     }
     .paper-actions {
       display: flex;
       justify-content: center;
       gap: 1rem;
+      flex-wrap: wrap;
     }
     .paper-section {
       margin-bottom: 3rem;
@@ -45,19 +51,19 @@
       font-weight: 700;
       color: #ffffff;
       margin-bottom: 1rem;
-      border-bottom: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border);
       padding-bottom: 0.4rem;
     }
-    .paper-section p {
-      color: var(--text-muted);
+    .paper-section p, .paper-section li {
+      color: var(--text-2);
       font-size: 1rem;
       line-height: 1.7;
       margin-bottom: 1rem;
     }
     .figure-container {
       margin: 2rem 0;
-      background-color: var(--bg-card);
-      border: 1px solid var(--border-color);
+      background-color: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 10px;
       padding: 1.25rem;
       text-align: center;
@@ -70,8 +76,16 @@
     .figure-caption {
       margin-top: 0.75rem;
       font-size: 0.875rem;
-      color: var(--text-dim);
+      color: var(--text-3);
       font-style: italic;
+    }
+    .notice-box {
+      background-color: rgba(96, 165, 250, 0.1);
+      border: 1px solid rgba(96, 165, 250, 0.3);
+      padding: 1rem 1.25rem;
+      border-radius: 8px;
+      margin: 1.5rem 0;
+      color: var(--text);
     }
   </style>
 </head>
@@ -88,16 +102,18 @@
         <li><a href="index.html#features">Features</a></li>
         <li><a href="index.html#quickstart">Quick Start</a></li>
         <li><a href="paper.html" class="active">Research Paper</a></li>
-        <li><a href="https://github.com/assassinaj602/sate_ai" target="_blank" rel="noopener" class="nav-github-link">GitHub</a></li>
+        <li><a href="https://pub.dev/packages/sate_ai" target="_blank" rel="noopener noreferrer" class="nav-pub-link">pub.dev</a></li>
+        <li><a href="https://github.com/assassinaj602/sate_ai" target="_blank" rel="noopener noreferrer" class="nav-github-link">GitHub</a></li>
       </ul>
     </div>
   </nav>
 
   <main class="paper-container">
     <header class="paper-header">
-      <div class="hero-badge">Research Paper & Specification</div>
+      <div class="hero-badge">Research Paper &amp; Specification</div>
       <h1 class="paper-title">SATE AI: Systematic Fault Injection Framework for On-Device AI Models in Flutter</h1>
-      <p class="paper-authors">Antigravity & SATE AI Research Team</p>
+      <p class="paper-authors">Antigravity &amp; SATE AI Research Team</p>
+      <p class="paper-status">Status: Preprint (arXiv submission pending)</p>
       <div class="paper-actions">
         <a href="assets/pdf/paper.pdf" download class="btn btn-primary">
           <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
@@ -106,29 +122,33 @@
         <a href="assets/pdf/paper.tex" download class="btn btn-secondary">
           Download LaTeX Source (.tex)
         </a>
+        <a href="assets/pdf/paper.bib" download class="btn btn-secondary">
+          Download BibTeX (.bib)
+        </a>
       </div>
     </header>
 
     <article>
       <section class="paper-section">
-        <h2>Abstract</h2>
-        <p>On-device Artificial Intelligence (AI) models operating directly on mobile and edge devices face unpredictable runtime constraints including memory pressure, thermal throttling, and unvalidated user inputs. Existing mobile testing paradigms lack specialized fault injection mechanisms tailored for AI inference runtimes. In this work, we present <strong>SATE AI</strong>, a fault injection and evaluation framework for Flutter applications that systematically evaluates model robustness across seven key failure modes.</p>
+        <h2>Abstract / Summary</h2>
+        <p>On-device Artificial Intelligence (AI) models operating directly on mobile and edge devices face unpredictable runtime constraints including memory pressure, thermal throttling, quantization drift, unvalidated user inputs, network drops, and GPU resource contention. Existing mobile testing paradigms lack specialized fault injection mechanisms tailored for AI inference runtimes.</p>
+        <p>In this work, we present <strong>SATE AI</strong>, a systematic fault injection and evaluation framework for Flutter applications that evaluates model robustness across 11 key failure modes and 8 model adapters. The framework enables mobile developers and ML engineers to detect failure scenarios, memory leaks, and degradation prior to production deployment.</p>
       </section>
 
       <section class="paper-section">
         <h2>1. Software Architecture</h2>
-        <p>SATE AI enforces a decoupled architecture isolating fault injectors, model adapters, and orchestration runners. This allows model runtimes (such as ONNX Runtime and TensorFlow Lite) to be evaluated under simulated stress scenarios without modifying the core model execution engine.</p>
+        <p>SATE AI enforces a decoupled architecture isolating fault injectors, model adapters, and orchestration runners. This allows model runtimes (such as ONNX Runtime, TensorFlow Lite, Fllama, MediaPipe, Core ML, and Google ML Kit) to be evaluated under simulated stress scenarios without modifying the core model execution engine.</p>
         
         <div class="figure-container">
           <img src="assets/figures/architecture.png" alt="SATE AI Architecture">
           <div class="figure-caption">Figure 1 – SATE AI Architecture showing core components, adapters, and fault injectors.</div>
         </div>
 
-        <p>The framework features seven core fault injectors capable of targeting memory pressure, thermal degradation, quantization drift, latency spikes, input corruption, model swapping, and confidence validation.</p>
+        <p>The framework features 11 fault injectors capable of targeting memory pressure, thermal degradation, quantization drift, latency spikes, input corruption, model swapping, confidence validation, network latency drops, GPU memory pressure, data corruption, and version mismatches.</p>
 
         <div class="figure-container">
           <img src="assets/figures/injectors-overview.png" alt="Fault Injectors Overview">
-          <div class="figure-caption">Figure 3 – The seven fault injectors and their failure modes.</div>
+          <div class="figure-caption">Figure 2 – Fault injectors suite and covered failure modes.</div>
         </div>
       </section>
 
@@ -138,13 +158,13 @@
 
         <div class="figure-container">
           <img src="assets/figures/fault-injection-workflow.png" alt="Fault Injection Workflow">
-          <div class="figure-caption">Figure 2 – The fault injection workflow: from model adapter to stress report.</div>
+          <div class="figure-caption">Figure 3 – The fault injection workflow: from model adapter to stress report.</div>
         </div>
       </section>
 
       <section class="paper-section">
-        <h2>3. Implementation & Example Usage</h2>
-        <p>SATE AI provides a clean programmatic Dart API for developers to wrap custom on-device runtimes, define targeted injection thresholds, and process structured <code>StressReport</code> outputs in JSON or Markdown format.</p>
+        <h2>3. Implementation &amp; Example Usage</h2>
+        <p>SATE AI provides a clean programmatic Dart API for developers to wrap custom on-device runtimes, define targeted injection thresholds, and process structured <code>StressReport</code> outputs in JSON, Markdown, HTML, or SQLite storage formats.</p>
 
         <div class="figure-container">
           <img src="assets/figures/example-usage.png" alt="Example Usage Code Flow">
@@ -153,8 +173,15 @@
       </section>
 
       <section class="paper-section">
-        <h2>4. Availability & Downloads</h2>
-        <p>SATE AI is open-source and published on pub.dev. Full LaTeX sources, bibliography data, and research artifacts are accessible via the repository.</p>
+        <h2>4. Publication &amp; Journal Status Note</h2>
+        <div class="notice-box">
+          <p><strong>Note on JOSS (Journal of Open Source Software) Submission:</strong> JOSS requires a minimum 6-month public repository commit history. As SATE AI was published in July 2026, formal submission to JOSS will be reconsidered after the 6-month public history window.</p>
+        </div>
+      </section>
+
+      <section class="paper-section">
+        <h2>5. Availability &amp; Downloads</h2>
+        <p>SATE AI is open-source under the MIT license and published on pub.dev. Full LaTeX sources, BibTeX bibliography data, and research artifacts are accessible via the repository.</p>
         <ul>
           <li><strong>PDF Paper:</strong> <a href="assets/pdf/paper.pdf" download>docs/assets/pdf/paper.pdf</a></li>
           <li><strong>LaTeX Source:</strong> <a href="assets/pdf/paper.tex" download>docs/assets/pdf/paper.tex</a></li>
@@ -169,16 +196,16 @@
     <div class="footer-container">
       <div class="footer-brand">
         <span class="brand-logo">SATE</span> <span class="brand-sub">AI</span>
-        <p>Systematic AI Testing & Evaluation Framework for Flutter.</p>
+        <p>Systematic AI Testing &amp; Evaluation Framework for Flutter.</p>
       </div>
       <div class="footer-links">
         <a href="index.html">Home</a>
-        <a href="https://github.com/assassinaj602/sate_ai/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>
-        <a href="https://github.com/assassinaj602/sate_ai" target="_blank" rel="noopener">GitHub Repository</a>
-        <a href="https://pub.dev/packages/sate_ai" target="_blank" rel="noopener">pub.dev Package</a>
+        <a href="https://github.com/assassinaj602/sate_ai/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License</a>
+        <a href="https://github.com/assassinaj602/sate_ai" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+        <a href="https://pub.dev/packages/sate_ai" target="_blank" rel="noopener noreferrer">pub.dev Package</a>
       </div>
       <div class="footer-copy">
-        <p>Maintained by <a href="https://github.com/assassinaj602" target="_blank" rel="noopener">assassinaj602</a>.</p>
+        <p>Maintained by <a href="https://github.com/assassinaj602" target="_blank" rel="noopener noreferrer">assassinaj602</a>.</p>
       </div>
     </div>
   </footer>

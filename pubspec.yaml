@@ -5,6 +5,15 @@ homepage: https://github.com/assassinaj602/sate_ai
 repository: https://github.com/assassinaj602/sate_ai
 issue_tracker: https://github.com/assassinaj602/sate_ai/issues
 documentation: https://pub.dev/documentation/sate_ai
+topics:
+  - testing
+  - ai
+  - on-device
+  - llm
+  - fault-injection
+  - research
+  - flutter
+  - machine-learning
 
 executables:
   sate_ai:
@@ -37,10 +46,3 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
-topics:
-  - testing
-  - ai
-  - on-device
-  - fault-injection
-  - research
