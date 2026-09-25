@@ -319,6 +319,76 @@ await report.writeBadgeToFile('assets/badges/status.svg', type: BadgeType.status
 | Memory | `--badge-type memory` | `peak memory \| 145.0MB` |
 | Tests | `--badge-type tests` | `stress tests \| 5/5 passed` |
 
+## SQLite Historical Report Storage
+
+SATE AI includes a cross-platform SQLite database (`ReportDatabase`) powered by `sqflite_common_ffi` to store and query historical stress reports over time.
+
+### CLI Usage
+
+Save reports to SQLite database during a stress test run:
+
+```bash
+# Save report to custom SQLite database file
+sate_ai --model model.gguf --db reports.db
+```
+
+Query stored historical reports:
+
+```bash
+# View all recent historical reports stored in SQLite database
+sate_ai --db-history all --db reports.db
+
+# View reports specifically for a model ID
+sate_ai --db-history llama-7b --db reports.db
+```
+
+### Programmatic API Usage
+
+```dart
+import 'package:sate_ai/sate_ai.dart';
+
+Future<void> main() async {
+  final db = ReportDatabase('sate_ai_reports.db');
+  await db.open();
+
+  // Save report to database
+  final rowId = await db.insertReport(report);
+  print('Saved report #$rowId');
+
+  // Query recent 10 reports
+  final recentReports = await db.queryRecent(limit: 10);
+
+  // Filter reports by model ID
+  final llamaReports = await db.queryByModel('llama-7b');
+
+  // Filter reports by date window
+  final rangeReports = await db.queryByDateRange(
+    from: DateTime.now().subtract(const Duration(days: 7)),
+    to: DateTime.now(),
+  );
+
+  // Count total reports stored
+  final total = await db.count();
+  print('Total historical reports: $total');
+
+  await db.close();
+}
+```
+
+### ReportDatabase API Reference
+
+| Method | Description |
+|---|---|
+| `open()` | Opens the database file and initializes schema |
+| `close()` | Closes active SQLite connection |
+| `insertReport(report)` | Stores a `StressReport` and returns the new row ID |
+| `queryRecent({limit})` | Returns recent `StressReport` list ordered by `start_time DESC` |
+| `queryByModel(modelId)` | Returns reports matching the specified `modelId` |
+| `queryByDateRange({from, to})` | Returns reports within a start time range |
+| `count()` | Returns total count of stored reports |
+| `deleteByModel(modelId)` | Deletes all reports matching specified `modelId` |
+| `deleteAll()` | Deletes all historical reports from table |
+
 ### 📚 Practical Cookbook & Recipes
 
 Explore our comprehensive [**SATE AI Cookbook**](docs/cookbook/README.md) featuring step-by-step recipes for real-world scenarios:

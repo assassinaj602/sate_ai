@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.14.0] - 2026-09-25
+
+### Added
+- SQLite storage for historical reports (Issue #92)
+  - `ReportDatabase` class for local report persistence using `sqflite_common_ffi`
+  - CRUD operations (`insertReport`, `queryRecent`, `queryByModel`, `queryByDateRange`, `count`, `deleteByModel`, `deleteAll`)
+  - CLI `--db` and `--db-history` options to automatically save and query historical stress reports
+  - Unit tests covering DB initialization, query filters, data integrity, and error handling
+
+### Changed
+- Documentation and CLI usage updated with SQLite database storage options
+
 ## [0.13.0] - 2026-09-24
 
 ### Added
