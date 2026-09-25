@@ -7,41 +7,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.13.0] - 2026-09-25
+## [0.11.0] - 2026-09-26
 
 ### Added
-- SQLite storage for historical reports (Issue #92)
-  - `ReportDatabase` class backed by `sqflite_common_ffi`
-  - CRUD: insert, queryRecent, queryByModel, queryByDateRange, count, delete
-  - CLI flags `--db <path>` and `--db-history`
-- CI/CD status badges generator (Issue #91)
-  - `BadgeGenerator` for SVG badges (status, tests, inference, memory)
-  - CLI flag `--badge-output`
-- Custom report templates (Issue #90)
-  - `TemplateEngine` and `TemplateLoader` for JSON/YAML templates
-  - CLI flag `--template`
-- Model health check API (Issue #89)
-  - `SateAI.healthCheck(model)` and `HealthCheckResult`
-  - CLI flag `--health-check`
-- Auto-detect model type in batch mode (Issue #88)
-  - `ModelTypeDetector` and `ModelFactory`
-  - CLI flag `--auto-detect`
+- CLI code generation for custom injectors (`sate_ai create injector <name>`)
+- Stress test scheduling via cron expressions
+- Golden baseline comparisons with tolerance thresholds
+- Batch mode for running stress tests on multiple models
+- Auto-detect model type from file extension in batch mode
+- Report comparison and diff view with HTML output
+- Performance benchmarking mode (p50, p90, p99 percentiles)
+- Stress test retry and flaky test detection
+- HTML report export with Chart.js charts
+- Real-time SSE monitoring dashboard
+- MediaPipe adapter for on-device vision tasks
+- Core ML adapter for iOS (with simulation mode)
+- Google ML Kit adapter
+- CI/CD SVG status badges generator
+- Custom report templates in JSON and YAML
+- SQLite storage for historical report tracking
+- Model health check API (`SateAI.healthCheck`)
+- VS Code extension for editor integration
+- Comprehensive documentation rewrite (README, CONTRIBUTING)
+- Website redesign with feature guides
+- 8 in-depth feature guides in `docs/guides/`
 
-## [0.12.0] - 2026-09-15
+### Changed
+- `README.md` rewritten to reflect all new features
+- `CONTRIBUTING.md` rewritten with current tooling and workflows
+- `pubspec.yaml` description and topics updated
+- `example/README.md` refreshed
+- `docs/paper.html` updated with current status
+- `.github/ISSUE_TEMPLATE/*` verified and updated
+- Adapters table expanded to 7 adapters
+- Fault injectors table expanded to 11 injectors
 
-### Added
-- Report comparison and diff view (Issue #74)
-- Performance benchmarking mode (Issue #75)
-- Stress test retry and flaky test detection (Issue #73)
-- VS Code extension (Issue #37)
-
-## [0.11.0] - 2026-09-05
-
-### Added
-- CLI code generation for custom injectors (Issue #39)
-- Stress test scheduling via cron (Issue #34)
-- Golden baseline comparisons (Issue #35)
-- Batch mode for multiple models (Issue #36)
+### Fixed
+- Various CI fixes for Android SDK setup and NDK installation
+- Manifest merger conflicts between example app and `fllama` plugin
 
 ## [0.10.0] - 2026-09-01
 
@@ -105,17 +108,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initial release: core framework, MockAdapter, MemoryPressureInjector, MalformedInputInjector
 - 59 unit tests
 
-[Unreleased]: https://github.com/assassinaj602/sate_ai/compare/v0.13.0...HEAD
-[0.13.0]: https://github.com/assassinaj602/sate_ai/compare/v0.12.0...v0.13.0
-[0.12.0]: https://github.com/assassinaj602/sate_ai/compare/v0.11.0...v0.12.0
+[Unreleased]: https://github.com/assassinaj602/sate_ai/compare/v0.11.0...HEAD
 [0.11.0]: https://github.com/assassinaj602/sate_ai/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/assassinaj602/sate_ai/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/assassinaj602/sate_ai/compare/v0.8.0...v0.9.0
-[0.8.0]: https://github.com/assassinaj602/sate_ai/compare/v0.7.0...v0.8.0
+[0.8.0]: https://github.com/assassinaj602/sate_ai/compare/v0.7.1...v0.8.0
+[0.7.1]: https://github.com/assassinaj602/sate_ai/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/assassinaj602/sate_ai/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/assassinaj602/sate_ai/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/assassinaj602/sate_ai/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/assassinaj602/sate_ai/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/assassinaj602/sate_ai/compare/v0.2.0...v0.3.0
-[0.2.0]: https://github.com/assassinaj602/sate_ai/compare/v0.1.0...v0.2.0
+[0.2.0]: https://github.com/assassinaj602/sate_ai/compare/v0.1.2...v0.2.0
+[0.1.2]: https://github.com/assassinaj602/sate_ai/compare/v0.1.1...v0.1.2
+[0.1.1]: https://github.com/assassinaj602/sate_ai/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/assassinaj602/sate_ai/releases/tag/v0.1.0
