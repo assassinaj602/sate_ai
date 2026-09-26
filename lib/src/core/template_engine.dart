@@ -87,8 +87,9 @@ class TemplateEngine {
         .map((r) => r.memoryUsageMB!)
         .toList();
     if (mems.isEmpty) return 'N/A';
-    mems.sort();
-    return mems.last.toStringAsFixed(1);
+    // ⚡ Bolt: Replace O(N log N) sort with O(N) reduce to find max memory usage
+    final maxMem = mems.reduce((a, b) => a > b ? a : b);
+    return maxMem.toStringAsFixed(1);
   }
 
   /// Loads and renders a template from a JSON map.
