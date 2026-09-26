@@ -13,3 +13,6 @@
 ## 2026-09-02 - List Sorting Memoization in Data Classes
 **Learning:** When calculating multiple percentiles (p50, p90, p99) from lists of metrics in Dart, naively running `List<double>.from(array)..sort()` per calculation invokes the O(N log N) sorting algorithm multiple times.
 **Action:** Use `late final` variables in Dart data transfer/report objects to cache sorted arrays lazily. This ensures sorting happens only once, turning subsequent percentile extractions into fast O(1) array accesses, without needing to pre-calculate values if they are never accessed.
+## 2026-09-26 - Array Max Optimization
+**Learning:** Finding the maximum element in an array using `list.sort(); return list.last;` is an O(N log N) anti-pattern in Dart. We just need the largest item, which takes O(N) by traversing the list once.
+**Action:** Replace `sort()` with `reduce((a, b) => a > b ? a : b)` when fetching the maximum value (or min value) from lists in metrics rendering logic.

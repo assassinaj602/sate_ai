@@ -55,8 +55,9 @@ class BadgeGenerator {
     if (mems.isEmpty) {
       value = 'N/A';
     } else {
-      mems.sort();
-      value = '${mems.last.toStringAsFixed(1)}MB';
+      // ⚡ Bolt: Replace O(N log N) sort with O(N) reduce to find max memory usage
+      final maxMem = mems.reduce((a, b) => a > b ? a : b);
+      value = '${maxMem.toStringAsFixed(1)}MB';
     }
     const color = '#007ec6';
     return generate(label: label, value: value, color: color);
