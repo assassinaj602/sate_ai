@@ -34,6 +34,7 @@ class ProfileResult {
   /// Timestamp when the profile was captured.
   final DateTime timestamp;
 
+  /// Creates a new [ProfileResult].
   ProfileResult({
     required this.modelId,
     required this.preProcessingTime,
@@ -98,8 +99,7 @@ class ProfileResult {
       ),
       preProcessingMemoryMB:
           (json['preProcessingMemoryMB'] as num?)?.toDouble() ?? 0.0,
-      executionMemoryMB:
-          (json['executionMemoryMB'] as num?)?.toDouble() ?? 0.0,
+      executionMemoryMB: (json['executionMemoryMB'] as num?)?.toDouble() ?? 0.0,
       postProcessingMemoryMB:
           (json['postProcessingMemoryMB'] as num?)?.toDouble() ?? 0.0,
       peakMemoryMB: (json['peakMemoryMB'] as num?)?.toDouble() ?? 0.0,

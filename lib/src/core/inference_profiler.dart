@@ -9,10 +9,12 @@ import 'package:sate_ai/src/core/profile_result.dart';
 /// - Execution: time inside [AIModelAdapter.runInference]
 /// - Post-processing: time to inspect the returned output
 ///
-/// Memory is sampled before and after each stage via [currentMemoryMB].
+/// Memory is sampled before and after each stage via [AIModelAdapter.currentMemoryMB].
 class InferenceProfiler {
+  /// The target model adapter.
   final AIModelAdapter model;
 
+  /// Creates a new [InferenceProfiler] for the target [model].
   InferenceProfiler({required this.model});
 
   /// Runs one inference with stage-level profiling.
@@ -31,8 +33,9 @@ class InferenceProfiler {
 
     // Post-processing
     final postStart = DateTime.now();
-    final dummy1 = output.text.length; // touch output to force evaluation
-    final dummy2 = output.confidence;
+    if (output.text.isEmpty || (output.confidence ?? 0.0) < 0) {
+      // touch properties to force evaluation
+    }
     final postEnd = DateTime.now();
     final postMem = model.currentMemoryMB;
 

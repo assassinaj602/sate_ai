@@ -21,9 +21,8 @@ void main() {
 
     test('percentages sum to 100', () {
       final p = sample();
-      final total = p.preProcessingPercent +
-          p.executionPercent +
-          p.postProcessingPercent;
+      final total =
+          p.preProcessingPercent + p.executionPercent + p.postProcessingPercent;
       expect(total, closeTo(100.0, 0.01));
     });
 
