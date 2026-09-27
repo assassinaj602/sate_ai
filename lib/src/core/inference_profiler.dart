@@ -31,8 +31,8 @@ class InferenceProfiler {
 
     // Post-processing
     final postStart = DateTime.now();
-    final _ = output.text.length; // touch output to force evaluation
-    final _ = output.confidence;
+    final dummy1 = output.text.length; // touch output to force evaluation
+    final dummy2 = output.confidence;
     final postEnd = DateTime.now();
     final postMem = model.currentMemoryMB;
 
