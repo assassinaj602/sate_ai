@@ -185,6 +185,9 @@ void main(List<String> arguments) async {
             'Query historical reports from SQLite database for specified model ID (or "all")')
     ..addFlag('health-check',
         help: 'Run a quick health check on the model and exit')
+    ..addFlag('profile', help: 'Run a single-inference profiler and exit')
+    ..addOption('profile-runs',
+        help: 'Number of profiling runs (default: 1)', defaultsTo: '1')
     ..addFlag('help', abbr: 'h', help: 'Show this help', negatable: false);
 
   try {
@@ -344,6 +347,44 @@ void main(List<String> arguments) async {
       final result = await SateAI.healthCheck(model: model);
       log(result.toMarkdown());
       exit(result.passed ? 0 : 1);
+    }
+
+    if (results['profile'] as bool) {
+      final runs = int.parse(results['profile-runs'] as String);
+      final profiler = InferenceProfiler(model: model);
+
+      log('Profiling ${model.modelId} across $runs run(s)...');
+      log('');
+
+      final profiles = await profiler.profileMany(runs: runs);
+
+      for (var i = 0; i < profiles.length; i++) {
+        log('Run ${i + 1}:');
+        log(profiles[i].toMarkdown());
+        log('');
+      }
+
+      if (profiles.length > 1) {
+        final avgExec = profiles
+                .map((p) => p.executionTime.inMicroseconds)
+                .reduce((a, b) => a + b) /
+            profiles.length;
+        final avgPre = profiles
+                .map((p) => p.preProcessingTime.inMicroseconds)
+                .reduce((a, b) => a + b) /
+            profiles.length;
+        final avgPost = profiles
+                .map((p) => p.postProcessingTime.inMicroseconds)
+                .reduce((a, b) => a + b) /
+            profiles.length;
+
+        log('Averages across ${profiles.length} runs:');
+        log('  Pre-processing:  ${(avgPre / 1000).toStringAsFixed(2)} ms');
+        log('  Execution:       ${(avgExec / 1000).toStringAsFixed(2)} ms');
+        log('  Post-processing: ${(avgPost / 1000).toStringAsFixed(2)} ms');
+      }
+
+      exit(0);
     }
 
     final benchmark = results['benchmark'] as bool;

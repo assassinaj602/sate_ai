@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Detailed model performance profiling (Issue #93)
+  - `ProfileResult` with per-stage timing and memory
+  - `InferenceProfiler` for staged profiling
+  - CLI flags `--profile` and `--profile-runs`
+  - 10+ unit tests
+
 ## [0.11.0] - 2026-09-26
 
 ### Added

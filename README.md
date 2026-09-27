@@ -148,6 +148,9 @@ sate_ai --model model.gguf --schedule "0 2 * * *"
 # Compare two reports
 sate_ai --compare-reports report1.json,report2.json --diff-html --diff-output diff.html
 
+# Profiling
+sate_ai --model model.gguf --profile --profile-runs 5
+
 # Generate a custom injector
 sate_ai create injector MyCustomInjector
 ```
