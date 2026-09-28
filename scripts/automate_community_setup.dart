@@ -44,8 +44,10 @@ class SATEAICommunityAutomator {
 
       print('\n✅ Community automation complete! 🎉');
       print('📋 Next steps:');
-      print('1. Review created issues: https://github.com/$repoOwner/$repoName/issues');
-      print('2. Check project board: https://github.com/$repoOwner/$repoName/projects');
+      print(
+          '1. Review created issues: https://github.com/$repoOwner/$repoName/issues');
+      print(
+          '2. Check project board: https://github.com/$repoOwner/$repoName/projects');
       print('3. Enable Discussions manually in Settings → General → Features');
       print('4. Copy and paste social media posts from above');
     } catch (e) {
@@ -57,19 +59,19 @@ class SATEAICommunityAutomator {
   /// Create all Good First Issues
   Future<void> _createAllIssues() async {
     final issues = _getGoodFirstIssues();
-    
+
     for (final issue in issues) {
       await _createIssue(issue);
       await Future.delayed(const Duration(seconds: 1)); // Rate limiting
     }
-    
+
     print('✅ Created ${issues.length} issues');
   }
 
   /// Create a single issue
   Future<void> _createIssue(Map<String, dynamic> issueData) async {
     final url = Uri.parse('$githubApiUrl/issues');
-    
+
     final response = await http.post(
       url,
       headers: {
@@ -351,7 +353,7 @@ Create a web dashboard to visualize stress test reports.
   /// Create a label
   Future<void> _createLabel(String name, String color) async {
     final url = Uri.parse('$githubApiUrl/labels');
-    
+
     final response = await http.post(
       url,
       headers: {
@@ -377,8 +379,9 @@ Create a web dashboard to visualize stress test reports.
 
   /// Create Project Board
   Future<void> _createProjectBoard() async {
-    final url = Uri.parse('https://api.github.com/repos/$repoOwner/$repoName/projects');
-    
+    final url =
+        Uri.parse('https://api.github.com/repos/$repoOwner/$repoName/projects');
+
     final response = await http.post(
       url,
       headers: {
@@ -411,7 +414,8 @@ Create a web dashboard to visualize stress test reports.
   Future<void> _enableDiscussions() async {
     // Note: This requires GitHub API v3 with discussions
     // You may need to enable this manually
-    print('ℹ️ Discussions must be enabled manually in Settings → General → Features');
+    print(
+        'ℹ️ Discussions must be enabled manually in Settings → General → Features');
     print('   https://github.com/$repoOwner/$repoName/settings');
   }
 
@@ -573,7 +577,7 @@ https://github.com/$repoOwner/$repoName
 Future<void> main() async {
   // Load environment variables
   final env = DotEnv()..load();
-  
+
   // Get GitHub token from environment or prompt
   String? token = env['GITHUB_TOKEN'];
   if (token == null) {

@@ -55,10 +55,18 @@ class ReportViewer extends StatelessWidget {
   }
 
   Color _getLogColor(String log) {
-    if (log.contains('✅') || log.contains('PASS')) return Colors.green;
-    if (log.contains('❌') || log.contains('FAIL')) return Colors.red;
-    if (log.contains('⚠️')) return Colors.orange;
-    if (log.contains('🚀') || log.contains('⚙️')) return const Color(0xFF60a5fa);
+    if (log.contains('✅') || log.contains('PASS')) {
+      return Colors.green;
+    }
+    if (log.contains('❌') || log.contains('FAIL')) {
+      return Colors.red;
+    }
+    if (log.contains('⚠️')) {
+      return Colors.orange;
+    }
+    if (log.contains('🚀') || log.contains('⚙️')) {
+      return const Color(0xFF60a5fa);
+    }
     return const Color(0xFFa0a5b5);
   }
 }
