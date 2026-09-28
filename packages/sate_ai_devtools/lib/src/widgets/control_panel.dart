@@ -82,14 +82,17 @@ class ControlPanel extends StatelessWidget {
         icon: Icon(icon, color: Colors.white, size: 18),
         label: Text(label),
         style: ElevatedButton.styleFrom(
-          backgroundColor: color.withValues(alpha: 0.2),
+          // ignore: deprecated_member_use
+          backgroundColor: color.withOpacity(0.2),
           foregroundColor: Colors.white,
-          disabledBackgroundColor: Colors.grey.withValues(alpha: 0.1),
+          // ignore: deprecated_member_use
+          disabledBackgroundColor: Colors.grey.withOpacity(0.1),
           disabledForegroundColor: Colors.grey,
           padding: const EdgeInsets.symmetric(vertical: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(6),
-            side: BorderSide(color: color.withValues(alpha: 0.3)),
+            // ignore: deprecated_member_use
+            side: BorderSide(color: color.withOpacity(0.3)),
           ),
         ),
       ),
