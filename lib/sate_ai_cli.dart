@@ -29,6 +29,8 @@ export 'src/core/model_type_detector.dart';
 export 'src/core/model_factory.dart';
 export 'src/core/profile_result.dart';
 export 'src/core/inference_profiler.dart';
+export 'src/core/webhook_payload.dart';
+export 'src/core/webhook_notifier.dart';
 export 'src/adapters/model_adapter.dart';
 export 'src/adapters/mock_adapter.dart';
 // NOTE: OnnxAdapter and TFLiteAdapter are intentionally excluded — both
