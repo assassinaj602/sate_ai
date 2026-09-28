@@ -151,6 +151,11 @@ sate_ai --compare-reports report1.json,report2.json --diff-html --diff-output di
 # Profiling
 sate_ai --model model.gguf --profile --profile-runs 5
 
+# Webhook notifications
+sate_ai --model model.gguf --injectors memoryPressure \
+  --webhook-url https://hooks.slack.com/services/XXX/YYY/ZZZ \
+  --webhook-type slack
+
 # Generate a custom injector
 sate_ai create injector MyCustomInjector
 ```
