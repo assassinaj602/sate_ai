@@ -1,17 +1,26 @@
-# sate_ai_example
+# SATE AI Example
 
-A new Flutter project.
+A minimal Flutter app that demonstrates SATE AI's stress testing framework
+on a variety of on-device AI models.
 
-## Getting Started
+## Running the example
 
-This project is a starting point for a Flutter application.
+```bash
+cd example
+flutter pub get
+flutter run
+```
 
-A few resources to get you started if this is your first Flutter project:
+The app runs on Android, iOS, web, macOS, Linux, and Windows.
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+## What it demonstrates
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Swapping between MockAdapter, OnnxAdapter, and TFLiteAdapter
+- Selecting different fault injectors
+- Viewing the resulting StressReport
+- Copying the report to JSON or Markdown
+
+## Adding real models
+
+Place your model files in `assets/models/` and reference them in
+`pubspec.yaml` under `flutter.assets`.

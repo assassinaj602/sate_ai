@@ -14,7 +14,7 @@ A clear description of what the bug is.
 
 ```dart
 // Minimal code to reproduce the problem
-final runner = StressRunner(model: ..., injectors: [...]);
+final runner = StressTestRunner(model: ..., injectors: [...]);
 final report = await runner.run();
 ```
 
@@ -32,7 +32,7 @@ What actually happened. Include any error messages or stack traces.
 
 ## Environment
 
-- **SATE AI version**: `0.x.x`
+- **SATE AI version**: `0.14.0`
 - **Flutter version**: `flutter --version`
 - **Dart version**: `dart --version`
 - **Platform**: Android / iOS / macOS / Web

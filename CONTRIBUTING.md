@@ -1,183 +1,118 @@
 # Contributing to SATE AI
 
-Thank you for your interest in contributing! SATE AI is a community-driven project and every contribution counts — whether it's a bug fix, a new fault injector, documentation improvements, or just filing a good issue.
-
----
-
-## Table of Contents
-
-- [Code of Conduct](#code-of-conduct)
-- [Ways to Contribute](#ways-to-contribute)
-- [Good First Issues](#good-first-issues)
-- [Development Setup](#development-setup)
-- [Running Tests](#running-tests)
-- [Submitting a Pull Request](#submitting-a-pull-request)
-- [Code Style](#code-style)
-- [Adding a New Injector](#adding-a-new-injector)
-- [Adding a New Adapter](#adding-a-new-adapter)
-
----
-
-## Code of Conduct
-
-This project follows the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md). By participating, you agree to uphold this code.
-
----
-
-## Ways to Contribute
-
-| Type | How |
-|------|-----|
-| 🐛 Bug | Open a [bug report](.github/ISSUE_TEMPLATE/bug_report.md) |
-| 💡 Feature | Open a [feature request](.github/ISSUE_TEMPLATE/feature_request.md) |
-| 🔌 Injector | Open a [custom injector proposal](.github/ISSUE_TEMPLATE/custom_injector.md) |
-| 📚 Docs | Edit any `.md` file or API docs inline |
-| ✅ Tests | Add tests to `test/` for uncovered paths |
-| 🔧 Fix | Pick up any issue labelled `good first issue` |
-
----
-
-## Good First Issues
-
-Look for issues labelled [`good first issue`](https://github.com/assassinaj602/sate_ai/issues?q=label%3A%22good+first+issue%22) — they are scoped to be completable in a few hours and include detailed guidance.
-
-Examples of good first issues:
-- Add `toMarkdown()` for a new `FaultResult` field
-- Improve error messages in `StressRunner`
-- Add a test for edge cases in `MalformedInputInjector`
-- Write a guide in `docs/`
-
----
+Thanks for your interest in contributing. This guide covers how to set up the
+project, run tests, and submit changes.
 
 ## Development Setup
 
-### Prerequisites
+### Requirements
 
-- Flutter ≥ 3.10.0
-- Dart ≥ 3.0.0
+- Flutter 3.10 or newer
+- Dart 3.0 or newer
+- Linux, macOS, or Windows
 - Git
 
-### Clone and install
+### Clone and bootstrap
 
 ```bash
 git clone https://github.com/assassinaj602/sate_ai.git
 cd sate_ai
 flutter pub get
+flutter test
 ```
 
-### Verify setup
+## Running the Full Verification Suite
 
 ```bash
+dart format --set-exit-if-changed lib/ test/ bin/
+flutter analyze --fatal-infos
 flutter test
-flutter analyze
 ```
 
-Both should pass with zero errors.
+All three commands must pass before opening a pull request.
 
----
+## Project Layout
 
-## Running Tests
+```
+lib/src/
+  core/          Core abstractions (FaultInjector, StressRunner, Report, ...)
+  adapters/      Model adapters (Mock, ONNX, TFLite, Fllama, MediaPipe, ...)
+  injectors/     Fault injectors
+  cli/           CLI helpers
+test/            Unit tests mirroring lib/ structure
+example/         Flutter demo app
+bin/             CLI entry point
+web/             Static web dashboard for HTML reports
+docs/            GitHub Pages site
+```
+
+## Adding a Fault Injector
+
+1. Create `lib/src/injectors/<name>_injector.dart`.
+2. Implement `FaultInjector` (`type`, `name`, `description`, `inject`, `reset`).
+3. Add the new value to `FaultType` in `lib/src/core/fault_type.dart`.
+4. Export it from `lib/sate_ai.dart`.
+5. Write unit tests in `test/injectors/<name>_injector_test.dart`.
+6. Update `CHANGELOG.md` and README.
+
+You can also generate the scaffolding:
 
 ```bash
-# All tests
-flutter test
-
-# Specific file
-flutter test test/core/stress_runner_test.dart
-
-# With coverage
-flutter test --coverage
-genhtml coverage/lcov.info -o coverage/html
-open coverage/html/index.html
+sate_ai create injector MyCustomInjector
 ```
 
-**Tests must pass before opening a PR.** The CI will run `flutter test`, `flutter analyze`, and `dart format` automatically.
+## Adding a Model Adapter
 
----
+1. Create `lib/src/adapters/<name>_adapter.dart`.
+2. Implement `AIModelAdapter` (all getters and methods, including
+   `simulateGPUMemoryPressure` and `currentGPUMemoryMB`).
+3. Export it from `lib/sate_ai.dart`.
+4. Write unit tests in `test/adapters/<name>_adapter_test.dart`.
+5. Update `CHANGELOG.md` and README.
 
-## Submitting a Pull Request
+## Testing Guidelines
 
-1. **Fork** the repository
-2. **Branch** off `main`: `git checkout -b feat/your-feature`
-3. **Write tests first** (TDD preferred)
-4. **Implement** your change
-5. **Run** `flutter test && flutter analyze`
-6. **Format**: `dart format lib/ test/`
-7. **Commit** with a clear message: `feat: add ThermalThrottleInjector`
-8. **Push** and open a PR against `main`
-
-### Commit message format
-
-```
-<type>: <short description>
-
-[optional body]
-
-[optional footer]
-```
-
-Types: `feat`, `fix`, `docs`, `test`, `refactor`, `chore`
-
----
+- Every public class and method must have tests.
+- Prefer small, focused tests over large integration ones.
+- Use `MockAdapter` to test adapters and injectors.
+- Run `flutter test` frequently during development.
 
 ## Code Style
 
-- Follow the `analysis_options.yaml` rules (enforced by CI)
-- All public APIs must have doc comments (`///`)
-- Use `const` constructors where possible
-- Prefer `final` for local variables
-- No `print()` statements in library code
+- Follow `very_good_analysis`.
+- Run `dart format` before committing.
+- No `print` calls in library code (use stderr or a logger).
+- Public API must have dartdoc comments.
 
----
+## Commit Convention
 
-## Adding a New Injector
+Use [Conventional Commits](https://www.conventionalcommits.org/):
 
-1. Create `lib/src/injectors/your_injector.dart`
-2. Implement `FaultInjector`
-3. Export from `lib/sate_ai.dart`
-4. Add tests in `test/injectors/your_injector_test.dart` (min 6 tests)
-5. Document in README roadmap and CHANGELOG
+- `feat:` — new feature
+- `fix:` — bug fix
+- `docs:` — documentation
+- `test:` — tests
+- `chore:` — tooling, refactors
+- `style:` — formatting
 
-Template:
+## Pull Request Process
 
-```dart
-import 'package:sate_ai/src/core/fault_injector.dart';
-import 'package:sate_ai/src/core/fault_type.dart';
+1. Fork the repo and create a feature branch.
+2. Commit often with descriptive messages.
+3. Push and open a pull request against `main`.
+4. The CI will run format, analyze, and tests.
+5. Address review comments.
+6. Do not merge your own PR — the maintainer will merge.
 
-/// Your injector description.
-class YourInjector implements FaultInjector {
-  @override
-  FaultType get type => FaultType.latency; // choose appropriate type
+## Reporting Issues
 
-  @override
-  String get name => 'Your Injector Name';
+Please use the issue templates. Include:
 
-  @override
-  String get description => 'What this injector does';
+- What you expected to happen
+- What actually happened
+- Steps to reproduce
+- Flutter, Dart, and SATE AI versions
 
-  @override
-  Future<void> inject() async {
-    // Inject the fault
-  }
+## Code of Conduct
 
-  @override
-  Future<void> reset() async {
-    // Restore normal state
-  }
-}
-```
-
----
-
-## Adding a New Adapter
-
-1. Create `lib/src/adapters/your_adapter.dart`
-2. Implement `AIModelAdapter`
-3. Export from `lib/sate_ai.dart`
-4. Add tests in `test/adapters/your_adapter_test.dart` (min 6 tests)
-
----
-
-## Questions?
-
-Open a [GitHub Discussion](https://github.com/assassinaj602/sate_ai/discussions) — we respond quickly!
+By participating you agree to the [Code of Conduct](CODE_OF_CONDUCT.md).

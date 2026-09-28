@@ -1,356 +1,126 @@
 # Changelog
 
-All notable changes to SATE AI will be documented in this file.
+All notable changes to SATE AI are documented here.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-## [0.12.0] - 2026-09-20
-
 ### Added
-- Model health check API (Issue #89)
-  - `SateAI.healthCheck(model)` runs quick sanity inference
-  - `HealthCheckResult` class with pass/fail, duration, output, error details
-  - CLI flag `--health-check` for one-shot health checks
-  - JSON and Markdown serialization
-  - 12+ unit tests
-
-### Changed
-- Documentation updated with health check usage
-
-## [0.11.0] - 2026-09-15
-
-### Added
-- Auto-detect model type in batch mode (Issue #88)
-  - `ModelTypeDetector` class for file extension detection
-  - `ModelFactory` for creating adapters from detected types
-  - Supports `.onnx`, `.tflite`, `.gguf`, `.mlmodel`, `.pb`
-  - CLI flag `--auto-detect` for automatic detection
+- Detailed model performance profiling (Issue #93)
+  - `ProfileResult` with per-stage timing and memory
+  - `InferenceProfiler` for staged profiling
+  - CLI flags `--profile` and `--profile-runs`
   - 10+ unit tests
-- CLI code generation for custom injectors (Issue #39)
-  - `sate_ai create injector <name>` command
-  - Generates injector class with all required methods
-  - Generates test file with 8+ test cases
-  - Adds custom FaultType for generated injectors
+
+## [0.11.0] - 2026-09-26
+
+### Added
+- CLI code generation for custom injectors (`sate_ai create injector <name>`)
+- Stress test scheduling via cron expressions
+- Golden baseline comparisons with tolerance thresholds
+- Batch mode for running stress tests on multiple models
+- Auto-detect model type from file extension in batch mode
+- Report comparison and diff view with HTML output
+- Performance benchmarking mode (p50, p90, p99 percentiles)
+- Stress test retry and flaky test detection
+- HTML report export with Chart.js charts
+- Real-time SSE monitoring dashboard
+- MediaPipe adapter for on-device vision tasks
+- Core ML adapter for iOS (with simulation mode)
+- Google ML Kit adapter
+- CI/CD SVG status badges generator
+- Custom report templates in JSON and YAML
+- SQLite storage for historical report tracking
+- Model health check API (`SateAI.healthCheck`)
+- VS Code extension for editor integration
+- Comprehensive documentation rewrite (README, CONTRIBUTING)
+- Website redesign with feature guides
+- 8 in-depth feature guides in `docs/guides/`
 
 ### Changed
-- Batch mode now auto-detects model types by default
-- Documentation updated with auto-detection usage
-- Documentation updated with CLI code generation usage
+- `README.md` rewritten to reflect all new features
+- `CONTRIBUTING.md` rewritten with current tooling and workflows
+- `pubspec.yaml` description and topics updated
+- `example/README.md` refreshed
+- `docs/paper.html` updated with current status
+- `.github/ISSUE_TEMPLATE/*` verified and updated
+- Adapters table expanded to 7 adapters
+- Fault injectors table expanded to 11 injectors
+
+### Fixed
+- Various CI fixes for Android SDK setup and NDK installation
+- Manifest merger conflicts between example app and `fllama` plugin
 
 ## [0.10.0] - 2026-09-01
 
 ### Added
-- **VS Code Extension** (Issue #37)
-  - Run stress tests directly from editor
-  - Save baselines and view reports
-  - Status bar integration
-  - Context menu for model files
+- Real-time monitoring dashboard (Issue #33)
+- HTML report export with Chart.js (Issue #32)
+- MediaPipe adapter (Issue #29)
+- Core ML adapter (Issue #30)
+- Google ML Kit adapter (Issue #31)
 
-- **Report Comparison & Diff View** (Issue #74)
-  - `ReportComparator` class for comparing two stress reports
-  - Detect changes in: inference time, memory usage, pass/fail status
-  - Markdown and HTML diff report output
-  - CLI flag `--compare-reports`
-
-- **Performance Benchmarking Mode** (Issue #75)
-  - `benchmark` parameter in `SateAI.stress()`
-  - `BenchmarkReport` class with percentiles (p50, p90, p99)
-  - CLI flags: `--benchmark`, `--benchmark-output`, `--benchmark-runs`
-
-- **Stress Test Retry & Flaky Detection** (Issue #73)
-  - `retryCount` parameter for automatic retries
-  - `flakyThreshold` parameter to mark tests as flaky
-  - `flaky` flag in `FaultResult`
-
-- **HTML Report Export** (Issue #32)
-  - `toHtml()` method in `StressReport`
-  - Chart.js integration for inference time and memory usage
-  - CLI `--html` flag
-
-- **Real-time Monitoring Dashboard** (Issue #33)
-  - Server-Sent Events (SSE) streaming
-  - Live progress, logs, and results
-  - CLI `serve` command
-
-- **Golden Baseline Comparisons** (Issue #35)
-  - `BaselineManager` class
-  - CLI flags: `--baseline`, `--compare`, `--tolerance`
-
-- **Batch Mode** (Issue #36)
-  - `BatchRunner` class
-  - CLI `--models` and `--parallel` flags
-
-- **MediaPipeAdapter** (Issue #29)
-  - Face detection, pose estimation, object detection, image labeling, text recognition
-
-- **Core ML Adapter** (Issue #30)
-  - iOS Core ML support with simulation mode
-
-- **Google ML Kit Adapter** (Issue #31)
-  - 7 task types: OCR, face detection, image labeling, object detection, language identification, translation, pose detection
-
-### Changed
-- Documentation updated with all new features
-- All adapters now support GPU memory pressure simulation
-- Improved error handling in StressRunner
-
-### Fixed
-- Build issues with fllama plugin resolved
-- CI workflow now properly installs CMake 3.31.0 and Android NDK
-- Example app builds successfully on CI
-
-## [0.9.0] - 2026-08-25
+## [0.9.0] - 2026-08-21
 
 ### Added
-- Batch mode for multiple models (Issue #36)
-  - `BatchRunner` class for sequential/parallel execution
-  - CLI `--models` flag for specifying multiple models
-  - `--parallel` flag for parallel execution
-  - Aggregated batch reports with Markdown output
-  - Progress tracking during batch execution
-  - 9+ unit tests
-- Golden baseline comparisons for regression detection (Issue #35)
-  - `BaselineManager` class for baseline management
-  - Compare current reports against baselines
-  - Detect deviations in inference time, memory usage, and status
-  - CLI flags: `--baseline`, `--compare`, `--tolerance`
-  - Markdown report generation for comparisons
-  - 9+ unit tests
-- Stress test scheduling with cron expressions (Issue #34)
-  - `StressScheduler` class with cron support
-  - `--schedule` CLI flag for automated testing
-  - Report history and comparison with baseline
-  - Configurable report directory
-  - 8+ unit tests
-- Real-time monitoring dashboard with Server-Sent Events (Issue #33)
-  - Live progress streaming to web dashboard
-  - Event stream with test started, injector progress, and finished events
-  - HTTP server with SSE endpoint
-  - CLI `serve` command for launching dashboard
-  - Live logs and results display
-  - Auto-reconnect on connection loss
-- MediaPipeAdapter for on-device vision tasks (Issue #29)
-  - Supports face detection, pose estimation, object detection, image labeling, text recognition
-  - Configurable task type via `MediaPipeTaskType`
-  - 8+ unit tests
+- TensorFlow Lite adapter (Issue #4)
+- Confidence threshold injector (Issue #6)
+- Data corruption injector (Issue #26)
+- Model version mismatch injector (Issue #27)
+- Network latency/drop injector (Issue #25)
 
-- Core ML Adapter for iOS (Issue #30)
-  - `CoreMLAdapter` implementing `AIModelAdapter`
-  - Simulation mode for testing on all platforms
-  - Support for image classification, text classification, numeric prediction
-  - 8+ unit tests
-
-- Google ML Kit Adapter (Issue #31)
-  - `GoogleMLKitAdapter` implementing `AIModelAdapter`
-  - Simulation-based (no external dependencies)
-  - Supports: text recognition, face detection, image labeling, object detection, language identification, translation, pose detection
-  - 10+ unit tests
-
-- HTML Report Export with charts and filtering (Issue #32)
-  - New `toHtml()` method in `StressReport`
-  - `writeHtmlToFile()` for saving HTML reports
-  - Chart.js integration for inference time and memory usage charts
-  - Self-contained HTML page with dark theme
-  - CLI `--html` flag for HTML output
-
-### Changed
-- Adapters table in README updated with all new adapters
-- Documentation updated with HTML report usage
-- All adapters now support GPU memory pressure simulation
-
-### Fixed
-- Build issues with fllama plugin resolved (NDK, CMake, SDK versions)
-- CI workflow now properly installs CMake 3.31.0 and Android NDK
-- Example app builds successfully on CI
-
-## [0.8.0] - 2026-08-07
+## [0.8.0] - 2026-08-12
 
 ### Added
-- GPU Memory Pressure Injector (`GpuMemoryPressureInjector`) (Issue #23)
-  - Simulates GPU memory pressure with configurable limit (`limitMb`)
-  - Extended `AIModelAdapter` interface with `simulateGPUMemoryPressure(int mb)` and `currentGPUMemoryMB`
-  - Added `FaultType.gpuMemoryPressure` enum value, display name, and icon
-  - Added 8 unit tests (now 172 total)
-- Enhanced `ThermalThrottleInjector` with battery drain simulation (Issue #24)
-  - Simulates battery percentage drop on each injection
-  - Triggers throttling when battery drops below configurable threshold
-  - Adds extra memory pressure when battery is low
-  - Configurable `batteryThreshold` and `batteryDropStep`
-  - 8 new unit tests (now 180 total)
-- Network Latency / Drop Injector (`NetworkLatencyDropInjector`) (Issue #25)
-  - Simulates network latency, timeouts, and disconnections
-  - Configurable failure type, latency, and timeout
-  - 13 new unit tests (now 193 total)
-  - Works with any adapter (adapter can check network state)
-- Data Corruption Injector (`DataCorruptionInjector`) (Issue #26)
-  - Simulates corrupted input data (image noise, blur, occlusion, salt & pepper, audio glitch)
-  - Configurable corruption type and intensity
-  - 16 new unit tests (now 209 total)
-  - Utility method `corruptData()` for testing data corruption effects
-- Model Version Mismatch Injector (`ModelVersionMismatchInjector`) (Issue #27)
-  - Simulates loading older/newer/incompatible model versions
-  - Configurable expected and actual versions
-  - Optional fallback simulation
-  - 18 new unit tests (now 227 total)
-- FllamaAdapter for running Llama, Phi, Gemma models via llama.cpp (Issue #28)
-  - Supports GGUF models via `fllama` package
-  - Configurable context size, threads, tokens, temperature, top-p
-  - Full `AIModelAdapter` implementation
-  - 19 new unit tests (now 246 total)
+- Fllama (llama.cpp) adapter (Issue #28)
 
-### Changed
-- Breaking: `AIModelAdapter` now requires implementing `simulateGPUMemoryPressure` and `currentGPUMemoryMB`
-
-## [0.7.1] - 2026-08-02
-
-### Fixed
-- Updated `tflite_flutter` constraint to `^0.12.0` (recovers 10 pub points → 160/160 score)
-- Fixed CI workflow status badge URL in `README.md`
-- Fixed `OnnxAdapter` null-safety call for `runAsync` timeout
-- All dependencies now up-to-date with latest stable releases
+## [0.7.0] - 2026-08-05
 
 ### Added
-- Prominent Research Paper section and links in `README.md`
-- Live demo animations (`pass.gif`, `fail.gif`) and physical app preview (`demo.png`)
-- New package topics (`research`, `flutter`, `machine-learning`)
-
-## [0.7.0] - 2026-07-30
-
-### Added
-- Confidence Threshold Validator injector (Issue #6)
-  - Validates that model confidence stays above a threshold
-  - Configurable threshold (default 0.5)
-  - Marks test as failed when confidence drops below
-  - 10 new unit/integration tests (now 164 total)
+- Latency injector
+- Model swap injector
+- Interactive demo on website
 
 ## [0.6.0] - 2026-07-30
 
 ### Added
-- TensorFlow Lite Adapter (`TFLiteAdapter`) wrapping `tflite_flutter` (Issue #4)
-  - Supports `fromAsset` and `fromFile` factory constructors
-  - Memory pressure simulation and degradation tracking
-  - 8 new unit tests (now 153 total)
+- Thermal throttle injector (Issue #5)
 
-### Changed
-- Documentation updated with TensorFlow Lite details
-- Injector/Adapter tables in README updated
-
-## [0.5.0] - 2026-07-30
+## [0.5.0] - 2026-07-29
 
 ### Added
-- CLI command `sate_ai` for running stress tests from the terminal
-- GitHub Action for CI/CD integration (`.github/actions/sate-ai-test`)
-- Example workflow showing how to use the action
-- New documentation for CLI and GitHub Action
+- CLI executable `sate_ai`
+- GitHub composite action
 
-## [0.4.0] - 2026-07-30
+## [0.4.0] - 2026-07-28
 
 ### Added
-- Latency Injector for simulating increasing inference latency (Issue #8)
-  - Configurable baseDelayMs, incrementMs, maxLatencyMs
-  - Tracks latency history for debugging
-  - Applies memory pressure proportional to latency
-- Model Swap Injector for simulating model corruption (Issue #9)
-  - Configurable initialQuality, qualityDegradation, qualityThreshold
-  - Tracks quality history for debugging
-  - Applies memory pressure based on quality loss
-- 20 new unit tests (now 140+ total)
+- Quantization drift injector (Issue #2)
 
-### Changed
-- Documentation updated with new injectors
-- Injector table in README updated
-
-## [0.3.0] - 2026-07-30
+## [0.3.0] - 2026-07-28
 
 ### Added
-- Thermal Throttle Injector for simulating CPU throttling (Issue #5)
-  - Configurable temperatureStep and maxTemperature
-  - Tracks temperature history for debugging
-  - Applies memory pressure proportional to temperature
-  - 25 new unit tests for comprehensive coverage
-  - Full integration with StressRunner
+- Web dashboard with dark mode and exports
 
-### Changed
-- Documentation updated with ThermalThrottleInjector details
-- Injector table in README updated
-
-## [0.2.0] - 2026-07-30
+## [0.2.0] - 2026-07-28
 
 ### Added
-- Quantization Drift Injector for simulating gradual precision loss (Issue #2)
-  - Configurable driftFactor and degradationThreshold
-  - Tracks confidence history for debugging
-  - Applies memory pressure proportional to drift
-  - 20 new unit tests for comprehensive coverage
-  - Full integration with StressRunner
-
-### Changed
-- Documentation updated with QuantizationDriftInjector details
-- Injector table in README updated
-
-## [0.1.2] - 2026-07-29
-
-### Added
-- Web dashboard for visualizing stress test reports (Issue #7)
-  - Drag-and-drop JSON upload
-  - Dark/light mode toggle with localStorage persistence
-  - Chart.js integration for inference time and memory usage charts
-  - Export reports to JSON, Markdown, and CSV
-  - Mobile responsive design
-- MemoryUsageMB field to FaultResult for memory tracking
-
-## [0.1.1] - 2026-07-29
-
-### Added
-
-- `OnnxAdapter` — [AIModelAdapter] implementation backed by the ONNX Runtime
-  (`onnxruntime ^1.4.1`). Supports text and binary inputs, memory pressure
-  simulation, degradation tracking, and safe reset. (Closes #1)
-- Injectable `OrtSessionFactory` parameter on `OnnxAdapter` for unit testing
-  without a real `.onnx` model file.
-- 11 new unit tests for `OnnxAdapter` (70 total across the library).
-
-### Changed
-
-- `pubspec.yaml` version bumped to `0.1.1`.
+- ONNX Runtime adapter (Issue #1)
 
 ## [0.1.0] - 2026-07-28
 
-Initial release of SATE AI.
-
 ### Added
+- Initial release: core framework, MockAdapter, MemoryPressureInjector, MalformedInputInjector
+- 59 unit tests
 
-- `FaultInjector` abstract interface for implementing fault injection strategies
-- `StressRunner` orchestration engine with configurable timeout support
-- `StressReport` with JSON (`toJsonString`) and Markdown (`toMarkdown`) serialization
-- `FaultResult` value object capturing per-injector pass/fail outcomes and timing
-- `AIModelAdapter` abstract interface for wrapping on-device AI runtimes
-- `AIInput` and `AIOutput` typed value objects for inference I/O
-- `MockAdapter` for testing without a real AI model; supports memory simulation and forced failures
-- `MemoryPressureInjector` — simulates out-of-memory conditions up to a configurable limit in MB
-- `MalformedInputInjector` — injects empty strings, oversized payloads (1 MB), and binary garbage inputs
-- `FaultType` enum with values: `memoryPressure`, `malformedInput`, `quantizationDrift`, `thermalThrottle`, `latency`, `modelSwap`
-- `SateAI.stress()` convenience API for single-call test execution
-- 59 unit tests with full coverage of all core modules and injectors
-- Flutter demo application in `example/` demonstrating all features with a dark-theme UI
-- GitHub Actions CI/CD workflow for automated testing and lint on every pull request
-- GitHub Actions workflow for automated pub.dev publishing on version tag push
-- Issue templates for bug reports, feature requests, and custom injector proposals
-- `CONTRIBUTING.md` with development setup, code style, and pull request guidelines
-- `CODE_OF_CONDUCT.md` following the Contributor Covenant standard
-
-### Technical Details
-
-- Dart SDK constraint: `>=3.0.0 <4.0.0`
-- Flutter constraint: `>=3.10.0`
-- Minimal dependencies (Flutter SDK + test tooling)
-- Zero `flutter analyze` issues
-- `dart format` compliant
-
-[Unreleased]: https://github.com/assassinaj602/sate_ai/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/assassinaj602/sate_ai/compare/v0.11.0...HEAD
+[0.11.0]: https://github.com/assassinaj602/sate_ai/compare/v0.10.0...v0.11.0
+[0.10.0]: https://github.com/assassinaj602/sate_ai/compare/v0.9.0...v0.10.0
+[0.9.0]: https://github.com/assassinaj602/sate_ai/compare/v0.8.0...v0.9.0
+[0.8.0]: https://github.com/assassinaj602/sate_ai/compare/v0.7.1...v0.8.0
+[0.7.1]: https://github.com/assassinaj602/sate_ai/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/assassinaj602/sate_ai/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/assassinaj602/sate_ai/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/assassinaj602/sate_ai/compare/v0.4.0...v0.5.0

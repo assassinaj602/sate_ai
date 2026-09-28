@@ -43,12 +43,16 @@ class _SateAIScreenState extends State<SateAIScreen> {
                   ),
                   decoration: BoxDecoration(
                     color: _isRunning
-                        ? Colors.amber.withValues(alpha: 0.2)
+                        // ignore: deprecated_member_use
+                        ? Colors.amber.withOpacity(0.2)
                         : _lastReport != null
                             ? _lastReport!.passed
-                                ? Colors.green.withValues(alpha: 0.2)
-                                : Colors.red.withValues(alpha: 0.2)
-                            : Colors.grey.withValues(alpha: 0.2),
+                                // ignore: deprecated_member_use
+                                ? Colors.green.withOpacity(0.2)
+                                // ignore: deprecated_member_use
+                                : Colors.red.withOpacity(0.2)
+                            // ignore: deprecated_member_use
+                            : Colors.grey.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: _isRunning

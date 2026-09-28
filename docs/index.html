@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SATE AI – Fault Injection Framework for On-Device AI in Flutter</title>
-  <meta name="description" content="SATE AI is a fault injection framework for testing on-device AI models in Flutter applications. Simulate memory pressure, malformed inputs, thermal throttling, and model degradation before deployment.">
+  <meta name="description" content="SATE AI is a fault injection framework for testing on-device AI models in Flutter applications. Simulate memory pressure, malformed inputs, thermal throttling, quantization drift, latency, SQLite report storage, and CI/CD status badges before deployment.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -21,9 +21,13 @@
       </a>
       <ul class="nav-links">
         <li><a href="#features">Features</a></li>
-        <li><a href="#quickstart">Quick Start</a></li>
-        <li><a href="#docs">Documentation</a></li>
-        <li><a href="https://github.com/assassinaj602/sate_ai" target="_blank" rel="noopener" class="nav-github-link">GitHub</a></li>
+        <li><a href="#injectors-adapters">Injectors &amp; Adapters</a></li>
+        <li><a href="#cli">CLI Reference</a></li>
+        <li><a href="#reporting">Reports &amp; Storage</a></li>
+        <li><a href="#vscode">VS Code Extension</a></li>
+        <li><a href="paper.html">Paper</a></li>
+        <li><a href="https://pub.dev/packages/sate_ai" target="_blank" rel="noopener noreferrer" class="nav-pub-link">pub.dev</a></li>
+        <li><a href="https://github.com/assassinaj602/sate_ai" target="_blank" rel="noopener noreferrer" class="nav-github-link">GitHub</a></li>
       </ul>
     </div>
   </nav>
@@ -31,33 +35,33 @@
   <!-- Hero Section -->
   <header class="hero">
     <div class="hero-container">
-      <div class="hero-badge">Systematic AI Testing & Evaluation</div>
+      <div class="hero-badge">Systematic AI Testing &amp; Evaluation</div>
       <h1 class="hero-title">SATE AI</h1>
       <p class="hero-subtitle">A Fault Injection Framework for On-Device AI Models in Flutter</p>
-      <p class="hero-tagline">Catch failure scenarios, out-of-memory crashes, and model degradation before your users do.</p>
+      <p class="hero-tagline">Catch failure scenarios, resource exhaustion, and model degradation before your users do.</p>
       <div class="hero-actions">
-        <a href="https://github.com/assassinaj602/sate_ai" target="_blank" rel="noopener" class="btn btn-primary">
+        <a href="https://github.com/assassinaj602/sate_ai" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
           <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
           View on GitHub
         </a>
-        <a href="https://pub.dev/packages/sate_ai" target="_blank" rel="noopener" class="btn btn-secondary">
+        <a href="https://pub.dev/packages/sate_ai" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
           <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
           View on pub.dev
         </a>
       </div>
-      <div class="hero-demo-container" style="margin-top: 2.5rem; background: #111827; padding: 20px; border-radius: 14px; border: 1px solid #1f2937; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
-        <div style="margin-bottom: 20px; text-align: center;">
-          <h4 style="color: #60a5fa; margin-bottom: 10px; font-size: 1.05rem;">Physical App Interface Preview</h4>
-          <img src="assets/demo.png" alt="SATE AI Mobile App Interface" style="max-width: 100%; border-radius: 10px; border: 1px solid #1f2937; max-height: 450px;">
+      <div class="hero-demo-container">
+        <div class="demo-main">
+          <h4>Physical App Interface Preview</h4>
+          <img src="assets/demo.png" alt="SATE AI Mobile App Interface">
         </div>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; text-align: center;">
+        <div class="demo-comparison">
           <div>
-            <h4 style="color: #06D6A0; margin-bottom: 8px; font-size: 0.95rem;">Pass Demo (TFLite / Mock)</h4>
-            <img src="assets/pass.gif" alt="SATE AI Passing Demo" style="max-width: 100%; border-radius: 8px; border: 1px solid #1f2937;">
+            <h4 class="text-pass">Pass Demo (TFLite / Mock)</h4>
+            <img src="assets/pass.gif" alt="SATE AI Passing Demo">
           </div>
           <div>
-            <h4 style="color: #EF476F; margin-bottom: 8px; font-size: 0.95rem;">Fault Detection (ONNX Failure)</h4>
-            <img src="assets/fail.gif" alt="SATE AI Fault Detection Demo" style="max-width: 100%; border-radius: 8px; border: 1px solid #1f2937;">
+            <h4 class="text-fail">Fault Detection (ONNX Failure)</h4>
+            <img src="assets/fail.gif" alt="SATE AI Fault Detection Demo">
           </div>
         </div>
       </div>
@@ -68,15 +72,15 @@
   <section class="metrics">
     <div class="metrics-container">
       <div class="metric-card">
-        <span class="metric-value">7</span>
+        <span class="metric-value">11</span>
         <span class="metric-label">Fault Injectors</span>
       </div>
       <div class="metric-card">
-        <span class="metric-value">3</span>
+        <span class="metric-value">8</span>
         <span class="metric-label">Model Adapters</span>
       </div>
       <div class="metric-card">
-        <span class="metric-value">164</span>
+        <span class="metric-value">456+</span>
         <span class="metric-label">Passing Tests</span>
       </div>
       <div class="metric-card">
@@ -86,156 +90,299 @@
     </div>
   </section>
 
-  <!-- Features Section -->
+  <!-- Core Features Section -->
   <section id="features" class="section">
     <div class="section-container">
-      <h2 class="section-title">Framework Architecture & Features</h2>
-      <p class="section-subtitle">A comprehensive suite designed specifically for on-device AI stress testing.</p>
+      <h2 class="section-title">Framework Capabilities</h2>
+      <p class="section-subtitle">End-to-end fault injection, benchmarking, scheduling, and regression tracking.</p>
 
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-header">
-            <span class="feature-tag">Injector</span>
-            <h3>Memory Pressure Simulation</h3>
+      <div class="grid-3">
+        <article class="card">
+          <span class="chip chip-accent">Core Engine</span>
+          <h3>11 Fault Injectors</h3>
+          <p>Simulate RAM/VRAM pressure, malformed inputs, quantization drift, thermal throttling, network latency drops, model swaps, and confidence validation.</p>
+        </article>
+
+        <article class="card">
+          <span class="chip chip-accent">Runtimes</span>
+          <h3>8 Model Adapters</h3>
+          <p>Out-of-the-box support for Mock, ONNX Runtime, TensorFlow Lite, Fllama (llama.cpp), MediaPipe, Core ML, Google ML Kit, and custom runtimes.</p>
+        </article>
+
+        <article class="card">
+          <span class="chip chip-accent">Analytics</span>
+          <h3>SQLite &amp; Golden Baselines</h3>
+          <p>Store historical test reports locally using pure-Dart SQLite (`sqflite_common_ffi`) and compare test runs against golden baselines.</p>
+        </article>
+
+        <article class="card">
+          <span class="chip chip-accent">CI/CD</span>
+          <h3>Status Badges &amp; Templates</h3>
+          <p>Generate SVG badges (status, latency, memory, tests) for READMEs and render custom JSON/YAML report templates for team webhooks.</p>
+        </article>
+
+        <article class="card">
+          <span class="chip chip-accent">Monitoring</span>
+          <h3>Real-Time SSE Server</h3>
+          <p>Start a real-time SSE monitoring server (`sate_ai serve --port 8080`) to stream live stress test metrics to dashboards.</p>
+        </article>
+
+        <article class="card">
+          <span class="chip chip-accent">Reliability</span>
+          <h3>Retry &amp; Flaky Detection</h3>
+          <p>Automatically retry transient failures and identify flaky test steps to maintain high CI signal quality.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Injectors & Adapters Grid -->
+  <section id="injectors-adapters" class="section section-alt">
+    <div class="section-container">
+      <h2 class="section-title">Injectors &amp; Adapters Suite</h2>
+      <p class="section-subtitle">Comprehensive coverage across on-device AI runtimes and failure modes.</p>
+
+      <div class="grid-2">
+        <div>
+          <h3 class="subsection-title">11 Fault Injectors</h3>
+          <div class="feature-grid">
+            <article class="card">
+              <span class="chip chip-pass">Memory</span>
+              <h4>MemoryPressureInjector</h4>
+              <p>Injects artificial RAM allocation pressure up to limit MB.</p>
+            </article>
+            <article class="card">
+              <span class="chip chip-fail">Validation</span>
+              <h4>MalformedInputInjector</h4>
+              <p>Feeds empty, oversized (1MB), and binary garbage inputs.</p>
+            </article>
+            <article class="card">
+              <span class="chip chip-accent">Quantization</span>
+              <h4>QuantizationDriftInjector</h4>
+              <p>Simulates cumulative precision degradation over repeated steps.</p>
+            </article>
+            <article class="card">
+              <span class="chip chip-accent">Thermal</span>
+              <h4>ThermalThrottleInjector</h4>
+              <p>Simulates mobile device CPU throttling and heat step escalation.</p>
+            </article>
+            <article class="card">
+              <span class="chip chip-accent">Performance</span>
+              <h4>LatencyInjector</h4>
+              <p>Injects artificial latency delays to test fallback paths.</p>
+            </article>
+            <article class="card">
+              <span class="chip chip-accent">Fallback</span>
+              <h4>ModelSwapInjector</h4>
+              <p>Swaps model quality dynamically to evaluate alternative runtimes.</p>
+            </article>
+            <article class="card">
+              <span class="chip chip-accent">Network</span>
+              <h4>NetworkLatencyDropInjector</h4>
+              <p>Simulates network latency drops, timeouts, and disconnections.</p>
+            </article>
+            <article class="card">
+              <span class="chip chip-accent">Confidence</span>
+              <h4>ConfidenceThresholdInjector</h4>
+              <p>Validates confidence threshold boundaries on predictions.</p>
+            </article>
+            <article class="card">
+              <span class="chip chip-accent">VRAM</span>
+              <h4>GpuMemoryPressureInjector</h4>
+              <p>Simulates GPU VRAM exhaustion scenarios.</p>
+            </article>
+            <article class="card">
+              <span class="chip chip-accent">I/O</span>
+              <h4>DataCorruptionInjector</h4>
+              <p>Injects noise, blur, and bit glitches into input payloads.</p>
+            </article>
+            <article class="card">
+              <span class="chip chip-accent">Version</span>
+              <h4>ModelVersionMismatchInjector</h4>
+              <p>Simulates model schema mismatches and fallback handlers.</p>
+            </article>
           </div>
-          <p>Injects artificial memory overhead to verify how your app handles resource exhaustion and low-memory conditions without crashing.</p>
         </div>
 
-        <div class="feature-card">
-          <div class="feature-header">
-            <span class="feature-tag">Injector</span>
-            <h3>Malformed Input Validation</h3>
+        <div>
+          <h3 class="subsection-title">8 Model Adapters</h3>
+          <div class="feature-grid">
+            <article class="card">
+              <span class="chip chip-pass">Testing</span>
+              <h4>MockAdapter</h4>
+              <p>Pure-Dart mock runtime supporting simulated memory and faults.</p>
+            </article>
+            <article class="card">
+              <span class="chip chip-accent">Runtime</span>
+              <h4>OnnxAdapter</h4>
+              <p>Backed by `onnxruntime` for cross-platform ONNX models.</p>
+            </article>
+            <article class="card">
+              <span class="chip chip-accent">Runtime</span>
+              <h4>TFLiteAdapter</h4>
+              <p>Backed by `tflite_flutter` for MobileNet, ResNet, and TFLite.</p>
+            </article>
+            <article class="card">
+              <span class="chip chip-accent">LLM</span>
+              <h4>FllamaAdapter</h4>
+              <p>Backed by `fllama` (llama.cpp) for Llama, Phi, and Gemma.</p>
+            </article>
+            <article class="card">
+              <span class="chip chip-accent">Vision</span>
+              <h4>MediaPipeAdapter</h4>
+              <p>Google MediaPipe adapter for computer vision tasks.</p>
+            </article>
+            <article class="card">
+              <span class="chip chip-accent">iOS</span>
+              <h4>CoreMLAdapter</h4>
+              <p>Apple Core ML adapter for native iOS model runtimes.</p>
+            </article>
+            <article class="card">
+              <span class="chip chip-accent">ML Kit</span>
+              <h4>GoogleMLKitAdapter</h4>
+              <p>Google ML Kit adapter for on-device Vision/NLP APIs.</p>
+            </article>
+            <article class="card">
+              <span class="chip chip-accent">Custom</span>
+              <h4>Custom Adapters</h4>
+              <p>Extend `AIModelAdapter` to wrap any custom native engine.</p>
+            </article>
           </div>
-          <p>Feeds empty payloads, 1MB oversized text strings, and binary garbage into model runtimes to ensure robust input handling.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-header">
-            <span class="feature-tag">Injector</span>
-            <h3>Quantization Drift</h3>
-          </div>
-          <p>Simulates cumulative precision loss across repeated inference runs to evaluate model stability under quantized constraints.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-header">
-            <span class="feature-tag">Injector</span>
-            <h3>Thermal Throttling</h3>
-          </div>
-          <p>Emulates mobile hardware thermal degradation and CPU clock throttling under sustained high-load workloads.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-header">
-            <span class="feature-tag">Injector</span>
-            <h3>Latency & Model Swap</h3>
-          </div>
-          <p>Injects artificial latency spikes and quality degradation to test fallback logic and error handling paths.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-header">
-            <span class="feature-tag">Injector</span>
-            <h3>Confidence Validation</h3>
-          </div>
-          <p>Enforces minimum prediction confidence thresholds to ensure output reliability before serving inference results.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-header">
-            <span class="feature-tag">Adapter</span>
-            <h3>ONNX & TFLite Support</h3>
-          </div>
-          <p>Built-in model adapters for ONNX Runtime and TensorFlow Lite (`tflite_flutter`), plus a decoupled `MockAdapter` for unit testing.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-header">
-            <span class="feature-tag">Tooling</span>
-            <h3>Web Dashboard & CLI</h3>
-          </div>
-          <p>Export stress reports as JSON/Markdown, analyze results in an interactive web dashboard, or integrate directly into CI/CD pipelines.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Quick Start Section -->
-  <section id="quickstart" class="section section-alt">
+  <!-- CLI Reference Section -->
+  <section id="cli" class="section">
     <div class="section-container">
-      <h2 class="section-title">Quick Start Guide</h2>
-      <p class="section-subtitle">Add SATE AI to your Flutter project in seconds.</p>
+      <h2 class="section-title">CLI Quick Reference</h2>
+      <p class="section-subtitle">Execute stress tests, benchmarks, batch jobs, health checks, and history queries from command line.</p>
 
-      <div class="code-box">
-        <div class="code-header">
-          <span class="code-title">pubspec.yaml</span>
-          <button class="copy-btn" id="copy-btn" onclick="copyInstallation()">Copy</button>
+      <div class="cli-group">
+        <div class="code-box">
+          <div class="code-header">
+            <span class="code-title">Basic Stress &amp; Retry</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre class="code-body"><code>sate_ai --model model.gguf --injectors memoryPressure,malformedInput --retry 3 --flaky-threshold 2</code></pre>
         </div>
-        <pre class="code-body"><code>dependencies:
-  sate_ai: ^0.7.0</code></pre>
+
+        <div class="code-box">
+          <div class="code-header">
+            <span class="code-title">Benchmark Mode &amp; Batch Auto-Detect</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre class="code-body"><code>sate_ai --model model.gguf --benchmark --benchmark-runs 20
+sate_ai --models model1.onnx,model2.tflite,model3.gguf --auto-detect</code></pre>
+        </div>
+
+        <div class="code-box">
+          <div class="code-header">
+            <span class="code-title">SQLite Storage &amp; History Query</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre class="code-body"><code>sate_ai --model model.gguf --db reports.db
+sate_ai --db reports.db --db-history all</code></pre>
+        </div>
+
+        <div class="code-box">
+          <div class="code-header">
+            <span class="code-title">SVG Status Badges &amp; Custom Templates</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre class="code-body"><code>sate_ai --model model.gguf --badge badge.svg --badge-type status
+sate_ai --model model.gguf --template templates/slack.yaml --output custom_report.json</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reporting & Storage Section -->
+  <section id="reporting" class="section section-alt">
+    <div class="section-container">
+      <h2 class="section-title">Reporting, Storage &amp; CI/CD Integration</h2>
+      <p class="section-subtitle">Export self-contained HTML pages, persist historical records in SQLite, and render status badges.</p>
+
+      <div class="grid-3">
+        <article class="card">
+          <h3>SQLite History Storage</h3>
+          <p>Pure-Dart SQLite database engine (`ReportDatabase`) for saving and querying test runs across Flutter apps and CLI pipelines.</p>
+        </article>
+
+        <article class="card">
+          <h3>SVG Status Badges</h3>
+          <p>Generate Shields.io style status, latency, memory, and test ratio SVG badges to embed in project READMEs or CI artifacts.</p>
+        </article>
+
+        <article class="card">
+          <h3>Custom Templates</h3>
+          <p>Substitute placeholders like `{{ model }}`, `{{ passed_emoji }}`, `{{ memory_mb }}` in custom JSON/YAML templates for Slack/Teams alerts.</p>
+        </article>
       </div>
 
-      <div class="code-box" style="margin-top: 1.5rem;">
-        <div class="code-header">
-          <span class="code-title">example.dart</span>
-        </div>
-        <pre class="code-body"><code>import 'package:sate_ai/sate_ai.dart';
+      <div class="badge-row" style="margin-top: 2rem; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;">
+        <span class="chip chip-pass">SATE AI | PASS</span>
+        <span class="chip chip-accent">stress duration | 120ms</span>
+        <span class="chip chip-accent">peak memory | 145.0MB</span>
+        <span class="chip chip-accent">stress tests | 5/5 passed</span>
+      </div>
+    </div>
+  </section>
 
-Future&lt;void&gt; main() async {
-  // Wrap model runtime in an adapter (or use MockAdapter)
-  final model = MockAdapter(modelId: 'llama-3-8b');
+  <!-- VS Code Extension Highlight -->
+  <section id="vscode" class="section">
+    <div class="section-container">
+      <h2 class="section-title">VS Code Extension</h2>
+      <p class="section-subtitle">Run model stress tests directly from your IDE editor window.</p>
 
-  // Execute stress testing suite
-  final report = await SateAI.stress(
-    model: model,
-    injectors: [
-      MemoryPressureInjector(limitMb: 150),
-      MalformedInputInjector(),
-      ThermalThrottleInjector(
-        model: model,
-        temperatureStep: 10,
-        maxTemperature: 85,
-      ),
-    ],
-    timeout: const Duration(seconds: 45),
-  );
-
-  if (report.passed) {
-    print('Model passed all stress scenarios!');
-  } else {
-    print('Failure detected: ${report.failureCount} issues found.');
-    print(report.toMarkdown());
-  }
-}</code></pre>
+      <div class="card" style="text-align: center; padding: 2.5rem;">
+        <h3>SATE AI for Visual Studio Code</h3>
+        <p style="max-width: 650px; margin: 1rem auto; color: var(--text-2);">
+          Run stress tests with one click from model context menus, compare reports against golden baselines, and monitor real-time test progress directly inside VS Code.
+        </p>
+        <a href="https://marketplace.visualstudio.com/items?itemName=sate-ai.sate-ai-vscode" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+          View on VS Code Marketplace
+        </a>
       </div>
     </div>
   </section>
 
   <!-- Documentation & Research Section -->
-  <section id="docs" class="section">
+  <section id="docs" class="section section-alt">
     <div class="section-container">
-      <h2 class="section-title">Documentation & Resources</h2>
-      <p class="section-subtitle">Explore guides, API references, and theoretical background.</p>
+      <h2 class="section-title">Documentation &amp; Guides</h2>
+      <p class="section-subtitle">Explore feature guides, API references, and theoretical background.</p>
 
-      <div class="docs-grid">
-        <a href="https://pub.dev/documentation/sate_ai/latest/" target="_blank" rel="noopener" class="doc-card">
+      <div class="grid-3">
+        <a href="https://pub.dev/documentation/sate_ai/latest/" target="_blank" rel="noopener noreferrer" class="card doc-card">
           <h3>API Reference</h3>
           <p>Complete Dart class and method reference hosted on pub.dev.</p>
         </a>
 
-        <a href="https://github.com/assassinaj602/sate_ai/blob/main/README.md" target="_blank" rel="noopener" class="doc-card">
+        <a href="https://github.com/assassinaj602/sate_ai/blob/main/README.md" target="_blank" rel="noopener noreferrer" class="card doc-card">
           <h3>Repository README</h3>
           <p>In-depth architectural overview, CLI options, and CI/CD workflow integration.</p>
         </a>
 
-        <a href="https://github.com/assassinaj602/sate_ai/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener" class="doc-card">
+        <a href="https://github.com/assassinaj602/sate_ai/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer" class="card doc-card">
           <h3>Contributing Guide</h3>
           <p>Guidelines for creating custom fault injectors, model adapters, and submitting PRs.</p>
         </a>
 
-        <a href="paper.html" class="doc-card">
+        <a href="paper.html" class="card doc-card">
           <h3>Research Paper</h3>
           <p>Read the research paper, architecture diagrams, and download PDF/LaTeX sources.</p>
+        </a>
+
+        <a href="https://github.com/assassinaj602/sate_ai/tree/main/docs/guides" target="_blank" rel="noopener noreferrer" class="card doc-card">
+          <h3>Feature Guides</h3>
+          <p>Guides for SQLite storage, badges, templates, benchmarks, and cron scheduling.</p>
+        </a>
+
+        <a href="https://github.com/assassinaj602/sate_ai/tree/main/example" target="_blank" rel="noopener noreferrer" class="card doc-card">
+          <h3>Example App</h3>
+          <p>Sample Flutter app demonstrating multi-adapter and injector testing UI.</p>
         </a>
       </div>
     </div>
@@ -246,15 +393,17 @@ Future&lt;void&gt; main() async {
     <div class="footer-container">
       <div class="footer-brand">
         <span class="brand-logo">SATE</span> <span class="brand-sub">AI</span>
-        <p>Systematic AI Testing & Evaluation Framework for Flutter.</p>
+        <p>Systematic AI Testing &amp; Evaluation Framework for Flutter.</p>
       </div>
       <div class="footer-links">
-        <a href="https://github.com/assassinaj602/sate_ai/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>
-        <a href="https://github.com/assassinaj602/sate_ai" target="_blank" rel="noopener">GitHub Repository</a>
-        <a href="https://pub.dev/packages/sate_ai" target="_blank" rel="noopener">pub.dev Package</a>
+        <a href="https://github.com/assassinaj602/sate_ai/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License</a>
+        <a href="https://github.com/assassinaj602/sate_ai" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+        <a href="https://pub.dev/packages/sate_ai" target="_blank" rel="noopener noreferrer">pub.dev Package</a>
+        <a href="paper.html">Research Paper</a>
+        <a href="https://github.com/assassinaj602/sate_ai/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">Contributor Guide</a>
       </div>
       <div class="footer-copy">
-        <p>Maintained by <a href="https://github.com/assassinaj602" target="_blank" rel="noopener">assassinaj602</a>.</p>
+        <p>Maintained by <a href="https://github.com/assassinaj602" target="_blank" rel="noopener noreferrer">assassinaj602</a>.</p>
       </div>
     </div>
   </footer>

@@ -1,0 +1,5 @@
+{
+  "name": "CI Summary",
+  "description": "A compact CI report",
+  "body": "Model: {{ model }}\nResult: {{ passed_emoji }}\nTests: {{ passed_count }}/{{ total_tests }}\nDuration: {{ duration_ms }}ms"
+}
