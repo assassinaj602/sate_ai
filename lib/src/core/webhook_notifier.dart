@@ -22,6 +22,7 @@ class WebhookNotifier {
   /// Optional timeout.
   final Duration timeout;
 
+  /// Creates a new [WebhookNotifier].
   WebhookNotifier({
     required this.url,
     required this.type,
