@@ -194,6 +194,10 @@ void main(List<String> arguments) async {
         help: 'Webhook provider: slack, discord, or teams', defaultsTo: 'slack')
     ..addFlag('webhook-on-pass',
         help: 'Also send webhook when tests pass (default: only on failure)')
+    ..addOption('language',
+        help:
+            'Language for report generation: en, es, fr, de, pt (default: en)',
+        defaultsTo: 'en')
     ..addFlag('help', abbr: 'h', help: 'Show this help', negatable: false);
 
   try {
@@ -480,19 +484,22 @@ void main(List<String> arguments) async {
       exit(report.passed ? 0 : 1);
     }
 
+    final langStr = results['language'] as String? ?? 'en';
+    final language = ReportLanguageX.parse(langStr);
+
     if (outputFile != null) {
       final content = useMarkdown
-          ? report.toMarkdown()
+          ? report.toMarkdownLocalized(language)
           : useHtml
-              ? report.toHtml()
+              ? report.toHtmlLocalized(language)
               : report.toJsonString();
       await File(outputFile).writeAsString(content);
       log('Report written to $outputFile');
     } else {
       if (useMarkdown) {
-        log(report.toMarkdown());
+        log(report.toMarkdownLocalized(language));
       } else if (useHtml) {
-        log(report.toHtml());
+        log(report.toHtmlLocalized(language));
       } else {
         log(report.toJsonString());
       }
