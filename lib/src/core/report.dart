@@ -2,9 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import '../adapters/model_adapter.dart';
-import '../i18n/i18n.dart';
-import '../i18n/report_language.dart';
-import '../i18n/report_localizer.dart';
 import 'badge_generator.dart';
 import 'badge_type.dart';
 import 'benchmark_report.dart';
@@ -95,12 +92,6 @@ class FaultResult {
       buf.writeln('- **Error**: `$errorMessage`');
     }
     return buf.toString();
-  }
-
-  /// Renders this result as a localized Markdown section.
-  String toMarkdownLocalized([dynamic language = ReportLanguage.en]) {
-    final lang = ReportLanguageX.parse(language);
-    return ReportLocalizer(lang).formatFaultResultMarkdown(this);
   }
 }
 
@@ -285,27 +276,6 @@ class StressReport {
       }
     }
     return buf.toString();
-  }
-
-  /// Renders a human-readable localized Markdown report.
-  String toMarkdownLocalized([dynamic language = ReportLanguage.en]) {
-    final lang = ReportLanguageX.parse(language);
-    return ReportLocalizer(lang).formatReportMarkdown(this);
-  }
-
-  /// Generates a self-contained localized HTML page for the report.
-  String toHtmlLocalized([dynamic language = ReportLanguage.en]) {
-    final lang = ReportLanguageX.parse(language);
-    return ReportLocalizer(lang).formatReportHtml(this);
-  }
-
-  /// Writes the localized HTML report to a file.
-  Future<void> writeHtmlToFileLocalized(
-    String filePath, [
-    dynamic language = ReportLanguage.en,
-  ]) async {
-    final html = toHtmlLocalized(language);
-    await File(filePath).writeAsString(html);
   }
 
   /// Writes the HTML report to a file.

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import '../core/fault_type.dart';
 import '../core/report.dart';
 import 'i18n.dart';
 import 'report_language.dart';
@@ -16,12 +19,14 @@ class ReportLocalizer {
   /// Renders a [FaultResult] as a localized Markdown section.
   String formatFaultResultMarkdown(FaultResult result) {
     final buf = StringBuffer()
-      ..writeln('### ${result.injectorType.icon} ${result.injectorType.displayName}');
+      ..writeln(
+          '### ${result.injectorType.icon} ${result.injectorType.displayName}');
     if (result.flaky) {
       final reason = result.errorMessage ?? text('intermittentFailure');
       buf.writeln('- **${text("status")}**: ⚠️ ${text("flaky")} ($reason)');
     } else {
-      final statusStr = result.passed ? text('passedStatus') : text('failedStatus');
+      final statusStr =
+          result.passed ? text('passedStatus') : text('failedStatus');
       buf.writeln('- **${text("status")}**: $statusStr');
     }
     if (result.inferenceTime != null) {
@@ -40,7 +45,8 @@ class ReportLocalizer {
 
   /// Renders a [StressReport] as a localized Markdown document.
   String formatReportMarkdown(StressReport report) {
-    final overallStatus = report.passed ? text('passedStatus') : text('failedStatus');
+    final overallStatus =
+        report.passed ? text('passedStatus') : text('failedStatus');
     final buf = StringBuffer()
       ..writeln('# ${text("reportTitle")}')
       ..writeln()
@@ -53,7 +59,8 @@ class ReportLocalizer {
       ..writeln('| ${text("passedCount")} | ${report.passCount} |')
       ..writeln('| ${text("failedCount")} | ${report.failureCount} |')
       ..writeln('| ${text("unexpectedErrors")} | ${report.failures.length} |')
-      ..writeln('| ${text("duration")} | ${report.totalDuration.inMilliseconds} ms |')
+      ..writeln(
+          '| ${text("duration")} | ${report.totalDuration.inMilliseconds} ms |')
       ..writeln()
       ..writeln('## ${text("testResults")}')
       ..writeln();
@@ -96,7 +103,8 @@ class ReportLocalizer {
     buffer.writeln('  <meta charset="UTF-8">');
     buffer.writeln(
         '  <meta name="viewport" content="width=device-width, initial-scale=1.0">');
-    buffer.writeln('  <title>${text("reportTitle")} - ${report.modelId}</title>');
+    buffer
+        .writeln('  <title>${text("reportTitle")} - ${report.modelId}</title>');
     buffer.writeln(
         '  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>');
     buffer.writeln('  <style>');
@@ -112,7 +120,8 @@ class ReportLocalizer {
     buffer.writeln('    </header>');
 
     final statusClass = report.passed ? 'pass' : 'fail';
-    final statusText = report.passed ? text('allPassedBanner') : text('failedBanner');
+    final statusText =
+        report.passed ? text('allPassedBanner') : text('failedBanner');
     buffer.writeln('    <div class="status-banner $statusClass">');
     buffer.writeln('      $statusText');
     buffer.writeln('    </div>');
@@ -153,7 +162,8 @@ class ReportLocalizer {
     buffer.writeln('        <div class="controls">');
     buffer.writeln(
         '          <input type="text" id="searchInput" placeholder="Search tests..." onkeyup="filterTable()">');
-    buffer.writeln('          <select id="statusFilter" onchange="filterTable()">');
+    buffer.writeln(
+        '          <select id="statusFilter" onchange="filterTable()">');
     buffer.writeln('            <option value="all">All Statuses</option>');
     buffer.writeln('            <option value="pass">Passed</option>');
     buffer.writeln('            <option value="fail">Failed</option>');
@@ -185,9 +195,8 @@ class ReportLocalizer {
       final memStr = result.memoryUsageMB != null
           ? result.memoryUsageMB!.toStringAsFixed(1)
           : 'N/A';
-      final errStr = result.errorMessage != null
-          ? _escapeHtml(result.errorMessage!)
-          : '-';
+      final errStr =
+          result.errorMessage != null ? _escapeHtml(result.errorMessage!) : '-';
 
       buffer.writeln(
           '          <tr data-status="${result.passed ? 'pass' : 'fail'}">');
@@ -268,5 +277,38 @@ class ReportLocalizer {
       .badge-fail { background: rgba(239, 68, 68, 0.2); color: var(--fail); }
       .error-cell { color: var(--fail); font-family: monospace; font-size: 13px; }
     ''';
+  }
+}
+
+/// Extension adding localized report generation methods to [StressReport].
+extension LocalizedStressReportX on StressReport {
+  /// Renders a human-readable localized Markdown report.
+  String toMarkdownLocalized([dynamic language = ReportLanguage.en]) {
+    final lang = ReportLanguageX.parse(language);
+    return ReportLocalizer(lang).formatReportMarkdown(this);
+  }
+
+  /// Generates a self-contained localized HTML page for the report.
+  String toHtmlLocalized([dynamic language = ReportLanguage.en]) {
+    final lang = ReportLanguageX.parse(language);
+    return ReportLocalizer(lang).formatReportHtml(this);
+  }
+
+  /// Writes the localized HTML report to a file.
+  Future<void> writeHtmlToFileLocalized(
+    String filePath, [
+    dynamic language = ReportLanguage.en,
+  ]) async {
+    final html = toHtmlLocalized(language);
+    await File(filePath).writeAsString(html);
+  }
+}
+
+/// Extension adding localized rendering methods to [FaultResult].
+extension LocalizedFaultResultX on FaultResult {
+  /// Renders this result as a localized Markdown section.
+  String toMarkdownLocalized([dynamic language = ReportLanguage.en]) {
+    final lang = ReportLanguageX.parse(language);
+    return ReportLocalizer(lang).formatFaultResultMarkdown(this);
   }
 }

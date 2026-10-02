@@ -143,8 +143,9 @@ void main() {
       }
     });
 
-    test('FaultResult.toMarkdownLocalized formats localized result section', () {
-      final result = const FaultResult(
+    test('FaultResult.toMarkdownLocalized formats localized result section',
+        () {
+      const result = FaultResult(
         injectorType: FaultType.memoryPressure,
         passed: true,
         inferenceTime: Duration(milliseconds: 100),

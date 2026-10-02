@@ -133,8 +133,10 @@ class I18n {
   };
 
   /// Retrieves the translation string for the given key and language.
-  static String text(String key, {ReportLanguage language = ReportLanguage.en}) {
-    final langMap = _translations[language] ?? _translations[ReportLanguage.en]!;
+  static String text(String key,
+      {ReportLanguage language = ReportLanguage.en}) {
+    final langMap =
+        _translations[language] ?? _translations[ReportLanguage.en]!;
     return langMap[key] ?? _translations[ReportLanguage.en]![key] ?? key;
   }
 
