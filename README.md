@@ -151,6 +151,10 @@ sate_ai --compare-reports report1.json,report2.json --diff-html --diff-output di
 # Profiling
 sate_ai --model model.gguf --profile --profile-runs 5
 
+# Multi-language localized reports (en, es, fr, de, pt)
+sate_ai --model model.gguf --markdown --language es --output report_es.md
+sate_ai --model model.gguf --html --language fr --output report_fr.html
+
 # Webhook notifications
 sate_ai --model model.gguf --injectors memoryPressure \
   --webhook-url https://hooks.slack.com/services/XXX/YYY/ZZZ \
