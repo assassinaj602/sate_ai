@@ -35,6 +35,7 @@ jobs:
       - name: Install Android NDK
         run: |
           sdkmanager "ndk;28.0.12433566"
+          sdkmanager "cmake;3.31.0"
           echo "ANDROID_NDK_HOME=${ANDROID_HOME}/ndk/28.0.12433566" >> $GITHUB_ENV
         shell: bash
 
