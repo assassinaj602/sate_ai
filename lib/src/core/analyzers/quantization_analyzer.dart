@@ -12,7 +12,8 @@ class QuantizationAnalyzer {
     String modelId = 'model',
     String? format,
   }) {
-    final detectedFormat = (format ?? _detectFormat(bytes, modelId)).toLowerCase();
+    final detectedFormat =
+        (format ?? _detectFormat(bytes, modelId)).toLowerCase();
 
     if (detectedFormat == 'onnx' || modelId.toLowerCase().endsWith('.onnx')) {
       return OnnxQuantizationAnalyzer.analyze(bytes, modelId: modelId);
@@ -27,7 +28,8 @@ class QuantizationAnalyzer {
   }
 
   /// Analyzes a local model [file].
-  static Future<QuantizationReport> analyzeFile(File file, {String? format}) async {
+  static Future<QuantizationReport> analyzeFile(File file,
+      {String? format}) async {
     if (!await file.exists()) {
       throw FileSystemException('Model file does not exist', file.path);
     }

@@ -28,9 +28,9 @@ class TfliteQuantizationAnalyzer {
       );
     }
 
-    bool validMagic = hasTfliteMagic(bytes);
+    final validMagic = hasTfliteMagic(bytes);
 
-    // FlatBuffer TensorType enum scanning in binary offset stream:
+    // FlatBuffer TensorType enum scanning in binary stream (after header):
     // 0 = FLOAT32
     // 1 = FLOAT16
     // 3 = UINT8
@@ -38,58 +38,52 @@ class TfliteQuantizationAnalyzer {
     // 9 = INT8
 
     int layerIndex = 0;
-    int pos = 0;
+    int pos = 8; // start scanning past 8-byte FlatBuffer header
 
-    // Scan for FlatBuffer field table patterns
-    while (pos < bytes.length - 2) {
-      // Look for tensor type enum byte indicators in FlatBuffer metadata
+    while (pos < bytes.length) {
       final val = bytes[pos];
-      if (val == 0 || val == 1 || val == 3 || val == 7 || val == 9) {
-        // Simple byte alignment check to reduce false positives
-        if (pos % 2 == 0) {
-          QuantizationPrecision precision = QuantizationPrecision.unknown;
-          bool warning = false;
-          String? warningReason;
+      // Only match quantization precision enums (1, 3, 7, 9, or 0)
+      if (val == 1 || val == 3 || val == 7 || val == 9 || val == 0) {
+        QuantizationPrecision precision = QuantizationPrecision.unknown;
+        bool warning = false;
+        String? warningReason;
 
-          switch (val) {
-            case 0:
-              precision = QuantizationPrecision.float32;
-              break;
-            case 1:
-              precision = QuantizationPrecision.float16;
-              break;
-            case 3:
-              precision = QuantizationPrecision.uint8;
-              warning = true;
-              warningReason =
-                  '8-bit unsigned integer quantization may cause accuracy loss';
-              break;
-            case 7:
-              precision = QuantizationPrecision.int16;
-              warning = true;
-              warningReason = '16-bit integer quantization detected';
-              break;
-            case 9:
-              precision = QuantizationPrecision.int8;
-              warning = true;
-              warningReason =
-                  '8-bit signed integer quantization may cause accuracy loss';
-              break;
-          }
+        switch (val) {
+          case 0:
+            precision = QuantizationPrecision.float32;
+            break;
+          case 1:
+            precision = QuantizationPrecision.float16;
+            break;
+          case 3:
+            precision = QuantizationPrecision.uint8;
+            warning = true;
+            warningReason =
+                '8-bit unsigned integer quantization may cause accuracy loss';
+            break;
+          case 7:
+            precision = QuantizationPrecision.int16;
+            warning = true;
+            warningReason = '16-bit integer quantization detected';
+            break;
+          case 9:
+            precision = QuantizationPrecision.int8;
+            warning = true;
+            warningReason =
+                '8-bit signed integer quantization may cause accuracy loss';
+            break;
+        }
 
-          if (precision != QuantizationPrecision.unknown) {
-            layerIndex++;
-            final sizeEst = (bytes.length / (layerIndex + 4)).round();
-            layers.add(QuantizedLayer(
-              name: 'tflite_tensor_$layerIndex',
-              precision: precision,
-              sizeBytes: sizeEst,
-              hasPrecisionWarning: warning,
-              warningReason: warningReason,
-            ));
-            pos += 4; // Skip ahead after finding a match
-            continue;
-          }
+        if (precision != QuantizationPrecision.unknown) {
+          layerIndex++;
+          final sizeEst = (bytes.length / (layerIndex + 4)).round();
+          layers.add(QuantizedLayer(
+            name: 'tflite_tensor_$layerIndex',
+            precision: precision,
+            sizeBytes: sizeEst,
+            hasPrecisionWarning: warning,
+            warningReason: warningReason,
+          ));
         }
       }
       pos++;

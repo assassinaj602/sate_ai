@@ -19,6 +19,7 @@ enum QuantizationPrecision {
   unknown,
 }
 
+/// Extension methods for [QuantizationPrecision].
 extension QuantizationPrecisionX on QuantizationPrecision {
   /// Whether this precision is quantized (below float32).
   bool get isQuantized => this != QuantizationPrecision.float32;
@@ -48,6 +49,7 @@ class QuantizedLayer {
   /// Reason for the warning (if any).
   final String? warningReason;
 
+  /// Creates a [QuantizedLayer].
   QuantizedLayer({
     required this.name,
     required this.precision,
@@ -56,6 +58,7 @@ class QuantizedLayer {
     this.warningReason,
   });
 
+  /// Converts this [QuantizedLayer] to a JSON-encodable Map.
   Map<String, dynamic> toJson() => {
         'name': name,
         'precision': precision.name,
@@ -64,6 +67,7 @@ class QuantizedLayer {
         'warningReason': warningReason,
       };
 
+  /// Restores a [QuantizedLayer] from JSON.
   factory QuantizedLayer.fromJson(Map<String, dynamic> json) {
     return QuantizedLayer(
       name: json['name'] as String? ?? 'unknown',
@@ -95,6 +99,7 @@ class QuantizationReport {
   /// When the report was generated.
   final DateTime timestamp;
 
+  /// Creates a [QuantizationReport].
   QuantizationReport({
     required this.modelId,
     required this.format,
@@ -123,6 +128,7 @@ class QuantizationReport {
     return counts.entries.reduce((a, b) => a.value >= b.value ? a : b).key;
   }
 
+  /// Converts this [QuantizationReport] to a JSON-encodable Map.
   Map<String, dynamic> toJson() => {
         'modelId': modelId,
         'format': format,
@@ -135,6 +141,7 @@ class QuantizationReport {
         'layers': layers.map((l) => l.toJson()).toList(),
       };
 
+  /// Restores a [QuantizationReport] from JSON.
   factory QuantizationReport.fromJson(Map<String, dynamic> json) {
     return QuantizationReport(
       modelId: json['modelId'] as String? ?? '',

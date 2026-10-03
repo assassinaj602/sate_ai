@@ -6,7 +6,8 @@ import '../quantization_report.dart';
 /// Inspects raw ONNX Protobuf bytes without requiring native dependencies.
 class OnnxQuantizationAnalyzer {
   /// Analyzes an ONNX model binary and returns a [QuantizationReport].
-  static QuantizationReport analyze(Uint8List bytes, {String modelId = 'onnx_model'}) {
+  static QuantizationReport analyze(Uint8List bytes,
+      {String modelId = 'onnx_model'}) {
     final layers = <QuantizedLayer>[];
 
     // ONNX models are Protobuf binary files.
@@ -35,7 +36,8 @@ class OnnxQuantizationAnalyzer {
 
     while (pos < bytes.length - 4) {
       // Look for protobuf field tag 0x10 (field #2, varint type) or field tag 0x0a (string field for name)
-      if (bytes[pos] == 0x10) { // TensorProto.data_type varint
+      if (bytes[pos] == 0x10) {
+        // TensorProto.data_type varint
         final dtValue = bytes[pos + 1];
         QuantizationPrecision precision = QuantizationPrecision.unknown;
         bool warning = false;
@@ -48,12 +50,14 @@ class OnnxQuantizationAnalyzer {
           case 2:
             precision = QuantizationPrecision.uint8;
             warning = true;
-            warningReason = '8-bit unsigned integer quantization may reduce model accuracy';
+            warningReason =
+                '8-bit unsigned integer quantization may reduce model accuracy';
             break;
           case 3:
             precision = QuantizationPrecision.int8;
             warning = true;
-            warningReason = '8-bit signed integer quantization may reduce model accuracy';
+            warningReason =
+                '8-bit signed integer quantization may reduce model accuracy';
             break;
           case 5:
             precision = QuantizationPrecision.int16;
@@ -86,16 +90,19 @@ class OnnxQuantizationAnalyzer {
     // Fallback if no specific layers extracted from raw bytes heuristic
     if (layers.isEmpty) {
       // Perform fallback string/byte heuristics for ONNX format marker
-      bool hasFloat32 = _containsMarker(bytes, [0x08, 0x01]);
-      bool hasInt8 = _containsMarker(bytes, [0x08, 0x03]);
+      final hasFloat32 = _containsMarker(bytes, [0x08, 0x01]);
+      final hasInt8 = _containsMarker(bytes, [0x08, 0x03]);
 
       if (hasInt8 || hasFloat32) {
         layers.add(QuantizedLayer(
           name: 'tensor_0',
-          precision: hasInt8 ? QuantizationPrecision.int8 : QuantizationPrecision.float32,
+          precision: hasInt8
+              ? QuantizationPrecision.int8
+              : QuantizationPrecision.float32,
           sizeBytes: bytes.length,
           hasPrecisionWarning: hasInt8,
-          warningReason: hasInt8 ? 'Post-training int8 quantization detected' : null,
+          warningReason:
+              hasInt8 ? 'Post-training int8 quantization detected' : null,
         ));
       }
     }

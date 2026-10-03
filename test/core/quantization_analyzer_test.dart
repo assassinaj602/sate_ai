@@ -49,11 +49,17 @@ void main() {
         format: 'onnx',
         layers: [
           QuantizedLayer(
-              name: 'l1', precision: QuantizationPrecision.int8, sizeBytes: 100),
+              name: 'l1',
+              precision: QuantizationPrecision.int8,
+              sizeBytes: 100),
           QuantizedLayer(
-              name: 'l2', precision: QuantizationPrecision.int8, sizeBytes: 100),
+              name: 'l2',
+              precision: QuantizationPrecision.int8,
+              sizeBytes: 100),
           QuantizedLayer(
-              name: 'l3', precision: QuantizationPrecision.float32, sizeBytes: 100),
+              name: 'l3',
+              precision: QuantizationPrecision.float32,
+              sizeBytes: 100),
         ],
         totalSizeBytes: 300,
       );
@@ -92,7 +98,9 @@ void main() {
         format: 'tflite',
         layers: [
           QuantizedLayer(
-              name: 'layer_0', precision: QuantizationPrecision.float16, sizeBytes: 500),
+              name: 'layer_0',
+              precision: QuantizationPrecision.float16,
+              sizeBytes: 500),
         ],
         totalSizeBytes: 500,
       );
@@ -103,18 +111,19 @@ void main() {
       expect(restored.modelId, equals('model.tflite'));
       expect(restored.format, equals('tflite'));
       expect(restored.layers.length, equals(1));
-      expect(restored.layers.first.precision, equals(QuantizationPrecision.float16));
+      expect(restored.layers.first.precision,
+          equals(QuantizationPrecision.float16));
     });
   });
 
   group('OnnxQuantizationAnalyzer', () {
     test('analyzes raw ONNX Protobuf bytes correctly', () {
       // Mock ONNX bytes containing field 0x10 and data_type enum 3 (int8)
-      final bytes = Uint8List.fromList([
-        0x08, 0x01, 0x10, 0x03, 0x00, 0x00, 0x10, 0x01, 0x00, 0x00
-      ]);
+      final bytes = Uint8List.fromList(
+          [0x08, 0x01, 0x10, 0x03, 0x00, 0x00, 0x10, 0x01, 0x00, 0x00]);
 
-      final report = OnnxQuantizationAnalyzer.analyze(bytes, modelId: 'test.onnx');
+      final report =
+          OnnxQuantizationAnalyzer.analyze(bytes, modelId: 'test.onnx');
       expect(report.format, equals('onnx'));
       expect(report.layers.length, greaterThanOrEqualTo(1));
     });
@@ -134,7 +143,8 @@ void main() {
         0x00, 0x00
       ]);
 
-      final invalidBytes = Uint8List.fromList([0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07]);
+      final invalidBytes =
+          Uint8List.fromList([0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07]);
 
       expect(TfliteQuantizationAnalyzer.hasTfliteMagic(validBytes), isTrue);
       expect(TfliteQuantizationAnalyzer.hasTfliteMagic(invalidBytes), isFalse);
@@ -147,7 +157,8 @@ void main() {
         0x09 // int8 tensor type enum
       ]);
 
-      final report = TfliteQuantizationAnalyzer.analyze(tfliteBytes, modelId: 'model.tflite');
+      final report = TfliteQuantizationAnalyzer.analyze(tfliteBytes,
+          modelId: 'model.tflite');
       expect(report.format, equals('tflite'));
       expect(report.hasQuantization, isTrue);
     });
@@ -155,8 +166,10 @@ void main() {
 
   group('QuantizationAnalyzer Facade', () {
     test('auto-detects ONNX format by file extension', () {
-      final bytes = Uint8List.fromList([0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08]);
-      final report = QuantizationAnalyzer.analyzeBytes(bytes, modelId: 'my_model.onnx');
+      final bytes =
+          Uint8List.fromList([0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08]);
+      final report =
+          QuantizationAnalyzer.analyzeBytes(bytes, modelId: 'my_model.onnx');
       expect(report.format, equals('onnx'));
     });
 
