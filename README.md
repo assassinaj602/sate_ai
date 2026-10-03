@@ -40,7 +40,7 @@ so developers can validate model reliability before shipping to production.
 
 ```yaml
 dependencies:
-  sate_ai: ^0.13.0
+  sate_ai: ^0.11.0
 ```
 
 ```bash
