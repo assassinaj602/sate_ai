@@ -21,10 +21,11 @@ so developers can validate model reliability before shipping to production.
 ## Features
 
 - 11 fault injectors covering memory, I/O, thermal, and network failure modes
+- Model Quantization Analyzer for ONNX and TFLite models
 - 8 model adapters: MockAdapter, OnnxAdapter, TFLiteAdapter, FllamaAdapter,
   MediaPipeAdapter, CoreMLAdapter, GoogleMLKitAdapter, and custom adapters
 - CLI tool with subcommands for stress, benchmark, batch, schedule, serve,
-  health-check, badge, and template output
+  health-check, badge, template output, and quantization analysis
 - HTML report export with Chart.js charts
 - Real-time SSE monitoring dashboard
 - Golden baseline regression detection
