@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Model Quantization Analyzer (Issue #96)
+  - Pure-Dart structural binary analyzer for ONNX Protobuf and TFLite FlatBuffer models
+  - `QuantizationAnalyzer`, `OnnxQuantizationAnalyzer`, and `TfliteQuantizationAnalyzer`
+  - Precision level detection (`float32`, `float16`, `int8`, `uint8`, `int16`) and warning flags
+  - CLI flags `--analyze-quantization` and `--quant-output`
+
 ## [0.11.0] - 2026-10-03
 
 ### Added
