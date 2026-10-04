@@ -2,6 +2,11 @@
 
 Fault Injection Framework for On-Device AI Models in Flutter
 
+> 🔍 **Looking for runtime observability?** Pair SATE AI with
+> [EdgePulse](https://github.com/assassinaj602/edgepulse) — the observability
+> companion that traces memory, thermal state, battery draw, and latency during
+> inference, and works directly alongside SATE AI's fault injection.
+
 [![pub package](https://img.shields.io/pub/v/sate_ai.svg)](https://pub.dev/packages/sate_ai)
 [![pub points](https://img.shields.io/pub/points/sate_ai)](https://pub.dev/packages/sate_ai/score)
 [![pub likes](https://img.shields.io/pub/likes/sate_ai)](https://pub.dev/packages/sate_ai/score)
