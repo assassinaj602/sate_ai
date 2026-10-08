@@ -15,6 +15,8 @@ Fault Injection Framework for On-Device AI Models in Flutter
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Flutter](https://img.shields.io/badge/Flutter-3.10%2B-blue.svg)](https://flutter.dev)
 
+> 📄 **Published research:** The EdgePulse observability paper — a real-device study that identified a thermal-API blind spot on budget Android hardware — is available at [DOI: 10.5281/zenodo.23248718](https://doi.org/10.5281/zenodo.23248718). A joint SATE AI + EdgePulse fault-injection study is planned.
+
 ## Overview
 
 SATE AI is a fault injection framework for testing on-device AI models in
