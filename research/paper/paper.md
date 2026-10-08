@@ -15,7 +15,7 @@ On-device artificial intelligence deployment in mobile applications exposes mach
 
 We present **SATE AI**, an open-source fault injection and reliability engineering framework designed specifically for on-device machine learning models in mobile and desktop cross-platform applications. SATE AI introduces a unified architecture comprising 11 domain-specific fault injectors (covering process memory pressure, thermal throttling simulation, malformed inputs, quantization drift, data corruption, network latency drops, model swaps, version mismatches, GPU memory pressure, and confidence threshold degradation) across 8 model runtime adapters (TensorFlow Lite, ONNX Runtime, llama.cpp/fllama, Apple CoreML, MediaPipe, Google ML Kit, MockAdapter, and custom interfaces).
 
-We evaluate SATE AI across 246 automated test suites and model execution scenarios. SATE AI demonstrates automated baseline deviation detection, identifying memory allocation boundaries, throughput bottlenecks, and output confidence degradation prior to production deployment.
+We validate SATE AI through a 246-case automated test suite covering unit, integration, and stress scenarios across all 11 fault injectors and 8 model adapters. This paper describes the framework design and implementation. An empirical fault-injection study applying these injectors to physical Android hardware, combined with EdgePulse runtime telemetry, is planned as a follow-up study.
 
 SATE AI is open-source software available at https://pub.dev/packages/sate_ai under the MIT license.
 
@@ -44,7 +44,7 @@ This paper makes the following contributions:
 1. **SATE AI Architecture**: An open-source, extensible fault injection and reliability engine (`sate_ai`) establishing unified `ModelAdapter` and `FaultInjector` contracts for mobile cross-platform applications.
 2. **Comprehensive Fault & Adapter Suite**: Implementations of 11 domain-specific fault injectors and 8 model runtime adapters enabling systematic stress testing across TensorFlow Lite, ONNX Runtime, llama.cpp (fllama), CoreML, MediaPipe, and ML Kit.
 3. **Automated Baseline & Regression Engine**: A baseline management framework (`BaselineManager`, `QuantizationAnalyzer`, and `ReportComparator`) that records golden execution baselines, calculates metric deviations ($\Delta \text{Latency}$, $\Delta \text{Memory}$, $\Delta \text{Confidence}$), and exports structured HTML/JSON benchmark reports.
-4. **Open Artifacts & Test Suite**: A fully tested open-source implementation backed by 246 unit, integration, and stress test suites released under the MIT license on pub.dev.
+4. **Open Artifacts & Test Suite**: A fully tested open-source implementation with 246 passing test cases, released under the MIT license on pub.dev. Empirical device experiments are left to a companion study.
 
 ---
 
@@ -232,3 +232,4 @@ This paper introduced **SATE AI**, an open-source fault injection and reliabilit
 6. David, R., et al. (2021). TensorFlow Lite Micro: Embedded machine learning on TinyML systems. *Proceedings of Machine Learning and Systems (MLSys)*, 3, 800–811.
 7. Han, S., Mao, H., & Dally, W. J. (2016). Deep Compression: Compressing deep neural networks with pruning, trained quantization and huffman coding. *International Conference on Learning Representations (ICLR)*.
 8. Wang, X., et al. (2024). Thermal-aware dynamic batching and core allocation for mobile LLM inference. *ACM Transactions on Embedded Computing Systems*, 23(4), 1–22.
+
