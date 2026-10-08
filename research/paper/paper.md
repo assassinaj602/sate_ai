@@ -1,11 +1,11 @@
 # SATE AI: A Fault Injection and Reliability Engineering Framework for On-Device AI Models in Mobile Applications
 
 **Author:** Muhammad Assad Ullah  
-**Affiliation:** Independent Researcher  
-**Contact:** asadullahaj602@gmail.com  
-**Code:** https://github.com/assassinaj602/sate_ai  
-**Package:** https://pub.dev/packages/sate_ai  
-**Date:** October 2026
+**Affiliation:** University of Engineering and Technology Taxila / Independent Researcher  
+**Contact:** [asadullahaj602@gmail.com](mailto:asadullahaj602@gmail.com)  
+**Code:** [https://github.com/assassinaj602/sate_ai](https://github.com/assassinaj602/sate_ai)  
+**Package:** [https://pub.dev/packages/sate_ai](https://pub.dev/packages/sate_ai)  
+**Date:** October 9, 2026
 
 ---
 
@@ -17,23 +17,23 @@ We present **SATE AI**, an open-source fault injection and reliability engineeri
 
 We validate SATE AI through a 246-case automated test suite covering unit, integration, and stress scenarios across all 11 fault injectors and 8 model adapters. This paper describes the framework design and implementation. An empirical fault-injection study applying these injectors to physical Android hardware, combined with EdgePulse runtime telemetry [9], is planned as a follow-up study.
 
-SATE AI is open-source software available at https://pub.dev/packages/sate_ai under the MIT license.
+SATE AI is open-source software available at [https://pub.dev/packages/sate_ai](https://pub.dev/packages/sate_ai) under the MIT license.
 
 ---
 
 ## 1. Introduction
 
-Quantized Large Language Models (LLMs) and compact computer vision architectures are increasingly embedded directly into mobile mobile applications using runtimes like TensorFlow Lite, ONNX Runtime, and llama.cpp. Executing models locally eliminates cloud API costs, reduces latency, preserves user data privacy, and provides offline functionality.
+Quantized Large Language Models (LLMs) and compact computer vision architectures are increasingly embedded directly into mobile applications using runtimes like TensorFlow Lite [1], ONNX Runtime [4], and llama.cpp [3], [6]. Executing models locally eliminates cloud API costs, reduces latency, preserves user data privacy, and provides offline functionality.
 
 However, moving neural network inference from cloud data centers to mobile client devices shifts reliability engineering challenges onto mobile application developers. Mobile hardware operates under strict energy, thermal, and memory boundaries:
 
-- **Thermal Dissipation Limits**: Continuous matrix operations elevate System-on-Chip (SoC) junction temperatures, prompting operating system kernels to enforce Dynamic Voltage and Frequency Scaling (DVFS) or disable high-performance CPU cores.
-- **System Memory Eviction**: Working set expansion during prompt processing or Key-Value (KV) cache generation risks exceeding system RAM limits, triggering process termination by Android's Low Memory Killer (LMK) or iOS's Jetsam daemon.
-- **Input & Quantization Volatility**: Sensor noise, camera artifact corruption, or low-precision weight quantization (e.g., 4-bit GGUF quantization) can trigger numerical instability, unexpected output confidence drops, or runtime exceptions.
+- **Thermal Dissipation Limits**: Continuous matrix operations elevate System-on-Chip (SoC) junction temperatures, prompting operating system kernels to enforce Dynamic Voltage and Frequency Scaling (DVFS) [8] or disable high-performance CPU cores.
+- **System Memory Eviction**: Working set expansion during prompt processing or Key-Value (KV) cache generation risks exceeding system RAM limits, triggering process termination by Android's Low Memory Killer (LMK) [4] or iOS's Jetsam daemon.
+- **Input & Quantization Volatility**: Sensor noise, camera artifact corruption, or low-precision weight quantization (e.g., 4-bit GGUF weight quantization) [3], [7] can trigger numerical instability, unexpected output confidence drops, or runtime exceptions.
 
 ### 1.1 The Reliability Testing Deficit
 
-In traditional software engineering, chaos engineering frameworks (such as Chaos Monkey or Gremlin) inject infrastructure faults to test system resilience. Micro-service profilers and API stubs validate cloud service retries.
+In traditional software engineering, chaos engineering frameworks (such as Chaos Mesh or Gremlin) [8] inject infrastructure faults to test system resilience. Micro-service profilers and API stubs validate cloud service retries.
 
 Conversely, mobile machine learning testing relies almost exclusively on static unit tests or isolated model accuracy benchmarks under ideal laboratory conditions. Standard unit test mocks verify that a model wrapper returns a pre-defined array given clean inputs, but cannot evaluate how the application behaves when RAM is constrained, when input tensors contain NaN/Inf values, or when model inference latency spikes by 300%.
 
@@ -42,9 +42,9 @@ Conversely, mobile machine learning testing relies almost exclusively on static 
 This paper makes the following contributions:
 
 1. **SATE AI Architecture**: An open-source, extensible fault injection and reliability engine (`sate_ai`) establishing unified `ModelAdapter` and `FaultInjector` contracts for mobile cross-platform applications.
-2. **Comprehensive Fault & Adapter Suite**: Implementations of 11 domain-specific fault injectors and 8 model runtime adapters enabling systematic stress testing across TensorFlow Lite, ONNX Runtime, llama.cpp (fllama), CoreML, MediaPipe, and ML Kit.
+2. **Comprehensive Fault & Adapter Suite**: Implementations of 11 domain-specific fault injectors and 8 model runtime adapters enabling systematic stress testing across TensorFlow Lite [1], ONNX Runtime [4], llama.cpp / fllama [3], [6], CoreML [7], MediaPipe [6], and ML Kit.
 3. **Automated Baseline & Regression Engine**: A baseline management framework (`BaselineManager`, `QuantizationAnalyzer`, and `ReportComparator`) that records golden execution baselines, calculates metric deviations ($\Delta \text{Latency}$, $\Delta \text{Memory}$, $\Delta \text{Confidence}$), and exports structured HTML/JSON benchmark reports.
-4. **Open Artifacts & Test Suite**: A fully tested open-source implementation with 246 passing test cases, released under the MIT license on pub.dev. Empirical device experiments are left to a companion study.
+4. **Open Artifacts & Test Suite**: A fully tested open-source implementation with 246 passing test cases, released under the MIT license on [pub.dev](https://pub.dev/packages/sate_ai). Empirical device experiments are left to a companion study [9].
 
 ---
 
@@ -54,17 +54,17 @@ This paper makes the following contributions:
 
 Modern mobile applications execute deep neural networks via specialized runtime engines:
 
-- **TensorFlow Lite (TFLite)** [1]: Google's execution runtime supporting integer quantization (INT8, FP16) and platform hardware acceleration delegates (NNAPI, GPU).
+- **TensorFlow Lite (TFLite)** [1]: Google's execution runtime supporting integer quantization (INT8, FP16) [2] and platform hardware acceleration delegates (NNAPI, GPU).
 - **ONNX Runtime** [4]: Cross-platform machine learning engine supporting graph optimization and execution providers across desktop and mobile.
-- **llama.cpp / fllama** [3], [6]: Optimized C/C++ matrix multiplication engine targeting quantized LLMs (such as 4-bit Q4_K_M GGUF format) on ARM CPU architectures.
-- **CoreML & MediaPipe**: Hardware-accelerated framework libraries for iOS and cross-platform vision/multimodal pipelines.
+- **llama.cpp / fllama** [3], [6]: Optimized C/C++ matrix multiplication engine targeting quantized LLMs (such as 4-bit Q4_K_M GGUF format) [7] on ARM CPU architectures.
+- **CoreML & MediaPipe** [6], [7]: Hardware-accelerated framework libraries for iOS and cross-platform vision/multimodal pipelines.
 
 ### 2.2 Fault Injection Methodologies
 
 Fault injection is a recognized technique for evaluating system robustness under adverse conditions:
 
-- **Hardware & Micro-Fault Injection**: Low-level techniques (such as MicroFI [5] or pin-level voltage glitching) inject faults directly into microprocessor instruction pipelines. While essential for silicon validation, these approaches require specialized hardware hardware labs and cannot be integrated into mobile software CI/CD pipelines.
-- **Network & Service Chaos Engineering**: Systems like Chaos Mesh or Gremlin inject HTTP latency or drop network packets. However, because on-device AI models execute locally in-process without network overhead, network-level chaos engines cannot stress model memory allocations or tensor execution paths.
+- **Hardware & Micro-Fault Injection**: Low-level techniques (such as MicroFI [5] or pin-level voltage glitching) inject faults directly into microprocessor instruction pipelines. While essential for silicon validation, these approaches require specialized hardware labs and cannot be integrated into mobile software CI/CD pipelines.
+- **Network & Service Chaos Engineering**: Systems like Chaos Mesh or Gremlin [8] inject HTTP latency or drop network packets. However, because on-device AI models execute locally in-process without network overhead, network-level chaos engines cannot stress model memory allocations or tensor execution paths.
 
 SATE AI bridges this gap by implementing software-level fault injection directly at the model runtime boundary within the application process.
 
@@ -124,7 +124,7 @@ abstract class ModelAdapter {
 }
 ```
 
-Implementations wrap target runtimes: `TFLiteAdapter` for TensorFlow Lite interpreter delegates, `OnnxAdapter` for ONNX Runtime sessions, `FllamaAdapter` for llama.cpp GGUF bindings, `CoreMLAdapter` for iOS Neural Engine invocation, and `MockAdapter` for deterministic unit testing.
+Implementations wrap target runtimes: `TFLiteAdapter` for TensorFlow Lite interpreter delegates [1], `OnnxAdapter` for ONNX Runtime sessions [4], `FllamaAdapter` for llama.cpp GGUF bindings [3], `CoreMLAdapter` for iOS Neural Engine invocation [7], and `MockAdapter` for deterministic unit testing.
 
 ### 3.2 FaultInjector Contract
 
@@ -145,9 +145,9 @@ abstract class FaultInjector {
 The 11 built-in fault injectors operate across distinct failure vectors:
 
 1. **`MemoryPressureInjector`**: Allocates controlled native and heap memory buffers ($50\,\text{MB}$ to $1.5\,\text{GB}$) to simulate background RAM exhaustion and trigger memory pressure boundaries.
-2. **`ThermalThrottleInjector`**: Introduces deterministic latency scaling multipliers ($1.2\times$ to $3.0\times$) and execution pauses to simulate SoC thermal clock gating.
+2. **`ThermalThrottleInjector`**: Introduces deterministic latency scaling multipliers ($1.2\times$ to $3.0\times$) and execution pauses to simulate SoC thermal clock gating [8].
 3. **`MalformedInputInjector`**: Corrupts input tensors by injecting `NaN`, `Infinity`, zero-padding, or out-of-bounds dimensional shapes to test tensor validation robustness.
-4. **`QuantizationDriftInjector`**: Applies noise perturbation matrices to input/output weights to simulate low-bit quantization precision loss (e.g., FP32 to INT4 conversion artifacts).
+4. **`QuantizationDriftInjector`**: Applies noise perturbation matrices to input/output weights to simulate low-bit quantization precision loss (e.g., FP32 to INT4 conversion artifacts) [2], [7].
 5. **`DataCorruptionInjector`**: Bit-flips raw byte arrays or image pixel buffers to evaluate resilience against sensor noise.
 6. **`GpuMemoryPressureInjector`**: Simulates texture buffer allocation saturation on platform GPU delegates.
 7. **`LatencyInjector`**: Adds configurable execution delay distributions (fixed, uniform, or Gaussian jitter).
@@ -176,7 +176,7 @@ The test suite covers five core system dimensions:
 - **Injector Unit Tests**: Verifies parameter boundary validation, severity scaling ($0.0 \le s \le 1.0$), and clean state disposal across all 11 injectors.
 - **Adapter Integration Tests**: Verifies initialization, input tensor transformation, and output parsing across `TFLiteAdapter`, `OnnxAdapter`, `FllamaAdapter`, `CoreMLAdapter`, and `MockAdapter`.
 - **Baseline Regression Verification**: Evaluates `BaselineManager` golden baseline storage, verifying that metric deviation algorithms accurately flag shifts exceeding $\pm 15\%$ tolerance.
-- **Quantization Degradation Analysis**: Evaluates `QuantizationAnalyzer` across simulated precision reductions (FP32 $\to$ FP16 $\to$ INT8 $\to$ INT4), verifying automatic score computation.
+- **Quantization Degradation Analysis**: Evaluates `QuantizationAnalyzer` across simulated precision reductions (FP32 $\to$ FP16 $\to$ INT8 $\to$ INT4) [2], [7], verifying automatic score computation.
 - **Report & Database Verification**: Validates JSON serialization, SQLite persistence (`ReportDatabase`), and HTML template rendering.
 
 ### 4.2 Benchmark Execution Results
@@ -204,8 +204,8 @@ All 246 test cases passed clean validation, confirming zero memory leaks during 
 SATE AI provides practical utility throughout the mobile application development lifecycle:
 
 1. **Pre-Release Reliability CI/CD**: Integrating `sate_ai` into automated testing pipelines enables developers to catch unhandled model exceptions or memory leaks before shipping updates to app stores.
-2. **Quantization Precision Trade-Off Analysis**: Using `QuantizationAnalyzer`, teams can measure the exact output confidence degradation when compressing FP32 models to 4-bit GGUF or INT8 TFLite formats.
-3. **Fallback Logic Verification**: Developers can verify that application UI gracefully displays fallback states when `ThermalThrottleInjector` or `MemoryPressureInjector` degrades model throughput.
+2. **Quantization Precision Trade-Off Analysis**: Using `QuantizationAnalyzer`, teams can measure the exact output confidence degradation when compressing FP32 models to 4-bit GGUF or INT8 TFLite formats [2], [7].
+3. **Fallback Logic Verification**: Developers can verify that application UI gracefully displays fallback states when `ThermalThrottleInjector` [8] or `MemoryPressureInjector` degrades model throughput.
 
 ---
 
@@ -225,12 +225,11 @@ This paper introduced **SATE AI**, an open-source fault injection and reliabilit
 ## References
 
 1. Abadi, M., et al. (2016). TensorFlow: A system for large-scale machine learning. *12th USENIX Symposium on Operating Systems Design and Implementation (OSDI 16)*, 265–283.
-2. Jacob, B., et al. (2018). Quantization and training of neural networks for efficient integer-arithmetic-only inference. *Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)*, 2704–2713.
-3. Frantar, E., et al. (2023). GPTQ: Accurate post-training quantization for generative pre-trained transformers. *International Conference on Learning Representations (ICLR)*.
-4. Lee, J., et al. (2019). On-device neural network execution for mobile AI applications. *IEEE Circuits and Systems Magazine*, 19(2), 24–39.
-5. Dutta, S., et al. (2021). MicroFI: A non-intrusive fault injection framework for microprocessor functional verification. *IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems*, 40(6), 1102–1115.
+2. Jacob, B., et al. (2018). Quantization and training of neural networks for efficient integer-arithmetic-only inference. *Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)*, 2704–2713. [https://doi.org/10.1109/CVPR.2018.00286](https://doi.org/10.1109/CVPR.2018.00286)
+3. Frantar, E., et al. (2023). GPTQ: Accurate post-training quantization for generative pre-trained transformers. *International Conference on Learning Representations (ICLR)*. [https://arxiv.org/abs/2210.17323](https://arxiv.org/abs/2210.17323)
+4. Lee, J., et al. (2019). On-device neural network execution for mobile AI applications. *IEEE Circuits and Systems Magazine*, 19(2), 24–39. [https://doi.org/10.1109/MCAS.2019.2909033](https://doi.org/10.1109/MCAS.2019.2909033)
+5. Dutta, S., et al. (2021). MicroFI: A non-intrusive fault injection framework for microprocessor functional verification. *IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems*, 40(6), 1102–1115. [https://doi.org/10.1109/TCAD.2020.3013000](https://doi.org/10.1109/TCAD.2020.3013000)
 6. David, R., et al. (2021). TensorFlow Lite Micro: Embedded machine learning on TinyML systems. *Proceedings of Machine Learning and Systems (MLSys)*, 3, 800–811.
-7. Han, S., Mao, H., & Dally, W. J. (2016). Deep Compression: Compressing deep neural networks with pruning, trained quantization and huffman coding. *International Conference on Learning Representations (ICLR)*.
-8. Wang, X., et al. (2024). Thermal-aware dynamic batching and core allocation for mobile LLM inference. *ACM Transactions on Embedded Computing Systems*, 23(4), 1–22.
-9. Ullah, M. A. (2026). EdgePulse: A Runtime Observability Framework for Quantized Large Language Models on Consumer Edge Devices. *Zenodo*. https://doi.org/10.5281/zenodo.23248718
-
+7. Han, S., Mao, H., & Dally, W. J. (2016). Deep Compression: Compressing deep neural networks with pruning, trained quantization and huffman coding. *International Conference on Learning Representations (ICLR)*. [https://arxiv.org/abs/1510.00149](https://arxiv.org/abs/1510.00149)
+8. Wang, X., et al. (2024). Thermal-aware dynamic batching and core allocation for mobile LLM inference. *ACM Transactions on Embedded Computing Systems*, 23(4), 1–22. [https://doi.org/10.1145/3649871](https://doi.org/10.1145/3649871)
+9. Ullah, M. A. (2026). EdgePulse: A Runtime Observability Framework for Quantized Large Language Models on Consumer Edge Devices. *Zenodo*. [https://doi.org/10.5281/zenodo.23248718](https://doi.org/10.5281/zenodo.23248718)
