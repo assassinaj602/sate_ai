@@ -10,12 +10,13 @@ Fault Injection Framework for On-Device AI Models in Flutter
 [![pub package](https://img.shields.io/pub/v/sate_ai.svg)](https://pub.dev/packages/sate_ai)
 [![pub points](https://img.shields.io/pub/points/sate_ai)](https://pub.dev/packages/sate_ai/score)
 [![pub likes](https://img.shields.io/pub/likes/sate_ai)](https://pub.dev/packages/sate_ai/score)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23250418.svg)](https://doi.org/10.5281/zenodo.23250418)
 [![GitHub stars](https://img.shields.io/github/stars/assassinaj602/sate_ai?style=flat)](https://github.com/assassinaj602/sate_ai/stargazers)
 [![CI](https://github.com/assassinaj602/sate_ai/actions/workflows/test.yml/badge.svg)](https://github.com/assassinaj602/sate_ai/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Flutter](https://img.shields.io/badge/Flutter-3.10%2B-blue.svg)](https://flutter.dev)
 
-> 📄 **Published research:** The EdgePulse observability paper — a real-device study that identified a thermal-API blind spot on budget Android hardware — is available at [DOI: 10.5281/zenodo.23248718](https://doi.org/10.5281/zenodo.23248718). A joint SATE AI + EdgePulse fault-injection study is planned.
+> 📄 **Published research:** The SATE AI paper is published on Zenodo at [DOI: 10.5281/zenodo.23250418](https://doi.org/10.5281/zenodo.23250418). Its runtime observability companion EdgePulse is available at [DOI: 10.5281/zenodo.23248718](https://doi.org/10.5281/zenodo.23248718).
 
 ## Overview
 
@@ -178,6 +179,23 @@ sate_ai create injector MyCustomInjector
 - [API Reference](https://pub.dev/documentation/sate_ai)
 - [Research Paper](https://assassinaj602.github.io/sate_ai/paper.html)
 - [Contributing Guide](CONTRIBUTING.md)
+
+## Citation
+
+If you use SATE AI in your research or project, please cite:
+
+```bibtex
+@software{ullah2026sateai,
+  author       = {Muhammad Assad Ullah},
+  title        = {SATE AI: A Fault Injection and Reliability Engineering Framework for On-Device AI Models in Mobile Applications},
+  month        = oct,
+  year         = 2026,
+  publisher    = {Zenodo},
+  version      = {0.1.0},
+  doi          = {10.5281/zenodo.23250418},
+  url          = {https://doi.org/10.5281/zenodo.23250418}
+}
+```
 
 ## Contributing
 
