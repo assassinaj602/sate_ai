@@ -382,9 +382,9 @@ class StressReport {
     for (final r in results) {
       final status = r.passed ? 'PASS' : 'FAIL';
       final statusClass = r.passed ? 'pass' : 'fail';
-      final inferenceTime = r.inferenceTime?.inMilliseconds ?? '—';
-      final memory = r.memoryUsageMB?.toStringAsFixed(1) ?? '—';
-      final error = r.errorMessage ?? '—';
+      final inferenceTime = r.inferenceTime?.inMilliseconds ?? 'N/A';
+      final memory = r.memoryUsageMB?.toStringAsFixed(1) ?? 'N/A';
+      final error = r.errorMessage ?? 'N/A';
       buffer.writeln('          <tr>');
       buffer.writeln('            <td>${r.injectorType.displayName}</td>');
       buffer.writeln(

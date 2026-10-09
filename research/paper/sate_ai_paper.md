@@ -19,7 +19,7 @@ abstract: |
   We present SATE AI, an open-source fault injection and reliability engineering
   framework designed for on-device machine learning models in mobile and desktop
   cross-platform applications built with Dart and Flutter. SATE AI provides a
-  unified architecture comprising 11 domain-specific fault injectors---covering
+  unified architecture comprising 11 domain-specific fault injectors, covering
   process memory pressure, thermal throttling simulation, malformed tensor inputs,
   quantization drift, data corruption, network latency drops, model swaps, version
   mismatches, GPU memory pressure, and confidence threshold degradation---paired
@@ -92,7 +92,7 @@ skin temperature rather than with input characteristics---making it difficult to
 reproduce in a standard unit test.
 
 **System memory eviction.** Working set expansion during LLM prompt processing
-or key--value (KV) cache generation can exhaust available RAM. Android's
+or key-value (KV) cache generation can exhaust available RAM. Android's
 Low Memory Killer (LMK) terminates background---and occasionally
 foreground---processes to reclaim pages; iOS's Jetsam daemon does the same under
 memory pressure. A model that passes all functional tests may be silently killed

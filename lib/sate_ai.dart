@@ -1,4 +1,4 @@
-/// SATE AI — Fault Injection Framework for On-Device AI.
+/// SATE AI: Fault Injection Framework for On-Device AI.
 ///
 /// Import this library to access all public APIs:
 ///

@@ -1,4 +1,4 @@
-/// CLI-safe library for SATE AI — no Flutter SDK dependency.
+/// CLI-safe library for SATE AI: no Flutter SDK dependency.
 ///
 /// Use this import in Dart CLI executables (`bin/`) or pure-Dart tools
 /// that must run with `dart run` (i.e., without the Flutter toolchain).
@@ -40,7 +40,7 @@ export 'src/i18n/report_language.dart';
 export 'src/i18n/report_localizer.dart';
 export 'src/adapters/model_adapter.dart';
 export 'src/adapters/mock_adapter.dart';
-// NOTE: OnnxAdapter and TFLiteAdapter are intentionally excluded — both
+// NOTE: OnnxAdapter and TFLiteAdapter are intentionally excluded: both
 // transitively import Flutter (dart:ui) and cannot be used in dart run CLIs.
 // Use `package:sate_ai/sate_ai.dart` in Flutter apps to access those adapters.
 export 'src/injectors/memory_pressure_injector.dart';

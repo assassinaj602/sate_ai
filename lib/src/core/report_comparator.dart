@@ -354,7 +354,7 @@ class ReportComparator {
         totalDiffs++;
         diffs.add(MetricDiff(
           metric: 'Added Injector',
-          before: '—',
+          before: 'N/A',
           after: added.injectorType.displayName,
           status: DiffStatus.added,
           message: 'New injector added: ${added.injectorType.displayName}',
@@ -367,7 +367,7 @@ class ReportComparator {
         diffs.add(MetricDiff(
           metric: 'Removed Injector',
           before: removed.injectorType.displayName,
-          after: '—',
+          after: 'N/A',
           status: DiffStatus.removed,
           message: 'Injector removed: ${removed.injectorType.displayName}',
         ));

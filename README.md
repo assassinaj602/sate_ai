@@ -3,7 +3,7 @@
 Fault Injection Framework for On-Device AI Models in Flutter
 
 > 🔍 **Looking for runtime observability?** Pair SATE AI with
-> [EdgePulse](https://github.com/assassinaj602/edgepulse) — the observability
+> [EdgePulse](https://github.com/assassinaj602/edgepulse): the observability
 > companion that traces memory, thermal state, battery draw, and latency during
 > inference, and works directly alongside SATE AI's fault injection.
 
@@ -21,9 +21,9 @@ Fault Injection Framework for On-Device AI Models in Flutter
 ## Overview
 
 SATE AI is a fault injection framework for testing on-device AI models in
-Flutter and Dart. It simulates real-world failure scenarios — memory pressure,
+Flutter and Dart. It simulates real-world failure scenarios: memory pressure,
 malformed inputs, quantization drift, thermal throttling, latency, model
-corruption, network failure, GPU memory pressure, and confidence degradation —
+corruption, network failure, GPU memory pressure, and confidence degradation:
 so developers can validate model reliability before shipping to production.
 
 ## Features
@@ -203,4 +203,4 @@ Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT: see [LICENSE](LICENSE).

@@ -24,10 +24,10 @@ sate_ai schedule \
 
 ### Common Cron Expressions
 
-- `*/15 * * * *` — Every 15 minutes
-- `0 * * * *` — Top of every hour
-- `0 0 * * *` — Every day at midnight
-- `0 8 * * 1` — Every Monday at 8:00 AM
+- `*/15 * * * *`: Every 15 minutes
+- `0 * * * *`: Top of every hour
+- `0 0 * * *`: Every day at midnight
+- `0 8 * * 1`: Every Monday at 8:00 AM
 
 ## Configuration File Scheduling
 
