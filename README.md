@@ -10,13 +10,18 @@ Fault Injection Framework for On-Device AI Models in Flutter
 [![pub package](https://img.shields.io/pub/v/sate_ai.svg)](https://pub.dev/packages/sate_ai)
 [![pub points](https://img.shields.io/pub/points/sate_ai)](https://pub.dev/packages/sate_ai/score)
 [![pub likes](https://img.shields.io/pub/likes/sate_ai)](https://pub.dev/packages/sate_ai/score)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23250418.svg)](https://doi.org/10.5281/zenodo.23250418)
+[![DOI - SATE AI](https://zenodo.org/badge/DOI/10.5281/zenodo.23250418.svg)](https://doi.org/10.5281/zenodo.23250418)
+[![DOI - EdgePulse](https://zenodo.org/badge/DOI/10.5281/zenodo.23248718.svg)](https://doi.org/10.5281/zenodo.23248718)
+[![DOI - Joint Study](https://zenodo.org/badge/DOI/10.5281/zenodo.23262270.svg)](https://doi.org/10.5281/zenodo.23262270)
 [![GitHub stars](https://img.shields.io/github/stars/assassinaj602/sate_ai?style=flat)](https://github.com/assassinaj602/sate_ai/stargazers)
 [![CI](https://github.com/assassinaj602/sate_ai/actions/workflows/test.yml/badge.svg)](https://github.com/assassinaj602/sate_ai/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Flutter](https://img.shields.io/badge/Flutter-3.10%2B-blue.svg)](https://flutter.dev)
 
-> 📄 **Published research:** The SATE AI paper is published on Zenodo at [DOI: 10.5281/zenodo.23250418](https://doi.org/10.5281/zenodo.23250418). Its runtime observability companion EdgePulse is available at [DOI: 10.5281/zenodo.23248718](https://doi.org/10.5281/zenodo.23248718).
+> 📄 **Published research:** Three papers published on Zenodo cover SATE AI and on-device AI reliability:
+> 1. **SATE AI Framework Paper:** [DOI: 10.5281/zenodo.23250418](https://doi.org/10.5281/zenodo.23250418)
+> 2. **EdgePulse Telemetry Paper:** [DOI: 10.5281/zenodo.23248718](https://doi.org/10.5281/zenodo.23248718)
+> 3. **Joint Fault Injection & Tracing Study:** [DOI: 10.5281/zenodo.23262270](https://doi.org/10.5281/zenodo.23262270) (280 real-device traces across TFLite, ONNX, and GGUF)
 
 ## Overview
 
@@ -182,18 +187,37 @@ sate_ai create injector MyCustomInjector
 
 ## Citation
 
-If you use SATE AI in your research or project, please cite:
+If you use SATE AI or EdgePulse in your research, please cite the corresponding works:
 
 ```bibtex
 @software{ullah2026sateai,
   author       = {Muhammad Assad Ullah},
   title        = {SATE AI: A Fault Injection and Reliability Engineering Framework for On-Device AI Models in Mobile Applications},
-  month        = oct,
-  year         = 2026,
+  year         = {2026},
   publisher    = {Zenodo},
   version      = {0.1.0},
   doi          = {10.5281/zenodo.23250418},
   url          = {https://doi.org/10.5281/zenodo.23250418}
+}
+
+@software{ullah2026edgepulse,
+  author       = {Muhammad Assad Ullah},
+  title        = {EdgePulse: A Runtime Observability Framework for Quantized Large Language Models on Consumer Edge Devices},
+  year         = {2026},
+  publisher    = {Zenodo},
+  version      = {1.0.0},
+  doi          = {10.5281/zenodo.23248718},
+  url          = {https://doi.org/10.5281/zenodo.23248718}
+}
+
+@software{ullah2026joint,
+  author       = {Muhammad Assad Ullah},
+  title        = {Characterising On-Device AI Failure Modes Under Joint Fault Injection and Runtime Observability},
+  year         = {2026},
+  publisher    = {Zenodo},
+  version      = {1.0.0},
+  doi          = {10.5281/zenodo.23262270},
+  url          = {https://doi.org/10.5281/zenodo.23262270}
 }
 ```
 
