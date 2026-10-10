@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:sate_ai/src/adapters/model_adapter.dart';
+import 'package:sate_core/src/adapters/model_adapter.dart';
 
 /// Adapter for Apple Core ML models on iOS.
 ///

@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'dart:io';
 import 'package:tflite_flutter/tflite_flutter.dart';
-import 'package:sate_ai/src/adapters/model_adapter.dart';
+import 'package:sate_core/src/adapters/model_adapter.dart';
 
 /// Adapter for TensorFlow Lite models using tflite_flutter.
 class TFLiteAdapter implements AIModelAdapter {

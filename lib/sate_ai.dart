@@ -16,154 +16,15 @@
 /// ```
 library sate_ai;
 
-// Explicit imports so the SateAI class body can reference these types.
-// (Exports alone are not visible to the file's own code in Dart.)
-import 'src/adapters/model_adapter.dart';
-import 'src/core/fault_injector.dart';
-import 'src/core/health_check_result.dart';
-import 'src/core/report.dart';
-import 'src/core/stress_runner.dart';
+// Re-export the entire pure Dart core
+export 'package:sate_core/sate_core.dart';
 
-export 'src/core/fault_type.dart';
-export 'src/core/fault_injector.dart';
-export 'src/core/stress_runner.dart';
-export 'src/core/stress_scheduler.dart';
-export 'src/core/batch_runner.dart';
-export 'src/core/baseline_manager.dart';
-export 'src/core/metric_deviation.dart';
-export 'src/core/report_comparator.dart';
-export 'src/core/benchmark_report.dart';
-export 'src/core/event_stream.dart';
-export 'src/core/report.dart';
-export 'src/core/template_engine.dart';
-export 'src/core/template_loader.dart';
-export 'src/core/badge_generator.dart';
-export 'src/core/badge_type.dart';
-export 'src/core/report_database.dart';
-export 'src/core/health_check_result.dart';
-export 'src/core/model_type_detector.dart';
-export 'src/core/model_factory.dart';
-export 'src/core/profile_result.dart';
-export 'src/core/inference_profiler.dart';
-export 'src/core/webhook_payload.dart';
-export 'src/core/webhook_notifier.dart';
-export 'src/core/quantization_report.dart';
-export 'src/core/analyzers/quantization_analyzer.dart';
-export 'src/core/analyzers/onnx_analyzer.dart';
-export 'src/core/analyzers/tflite_analyzer.dart';
-export 'src/i18n/i18n.dart';
-export 'src/i18n/report_language.dart';
-export 'src/i18n/report_localizer.dart';
-export 'src/adapters/model_adapter.dart';
-export 'src/adapters/mock_adapter.dart';
+// Flutter-only adapters (require native plugins)
 export 'src/adapters/onnx_adapter.dart';
 export 'src/adapters/tflite_adapter.dart';
 export 'src/adapters/fllama_adapter.dart';
+
+// Simulation adapters
 export 'src/adapters/mediapipe_adapter.dart';
 export 'src/adapters/coreml_adapter.dart';
 export 'src/adapters/google_mlkit_adapter.dart';
-export 'src/injectors/memory_pressure_injector.dart';
-export 'src/injectors/malformed_input_injector.dart';
-export 'src/injectors/quantization_drift_injector.dart';
-export 'src/injectors/thermal_throttle_injector.dart';
-export 'src/injectors/latency_injector.dart';
-export 'src/injectors/model_swap_injector.dart';
-export 'src/injectors/confidence_threshold_injector.dart';
-export 'src/injectors/gpu_memory_pressure_injector.dart';
-export 'src/injectors/network_latency_drop_injector.dart';
-export 'src/injectors/data_corruption_injector.dart';
-export 'src/injectors/model_version_mismatch_injector.dart';
-
-/// Top-level convenience API for running SATE AI stress tests.
-///
-/// This is a thin wrapper around [StressRunner] and is the recommended
-/// entry point for most users.
-class SateAI {
-  SateAI._(); // prevent instantiation
-
-  /// Runs a stress test against [model] using each of the [injectors].
-  ///
-  /// Returns a [StressReport] with per-injector results, timing data,
-  /// and Markdown/JSON serialisation helpers.
-  ///
-  /// ```dart
-  /// final report = await SateAI.stress(
-  ///   model: MockAdapter(),
-  ///   injectors: [
-  ///     MemoryPressureInjector(model: MockAdapter(), limitMb: 100),
-  ///   ],
-  /// );
-  /// assert(report.passed);
-  /// ```
-  static Future<StressReport> stress({
-    required AIModelAdapter model,
-    required List<FaultInjector> injectors,
-    Duration timeout = const Duration(seconds: 30),
-    int retryCount = 1,
-    int flakyThreshold = 0,
-    bool benchmark = false,
-  }) async {
-    final runner = StressRunner(
-      model: model,
-      injectors: injectors,
-      timeout: timeout,
-      retryCount: retryCount,
-      flakyThreshold: flakyThreshold,
-      benchmark: benchmark,
-    );
-    return runner.run();
-  }
-
-  /// Runs a quick health check on the given model adapter.
-  ///
-  /// Performs a single sanity inference to verify that the model is
-  /// loaded correctly and can produce valid output. This is much faster
-  /// than running a full stress test.
-  ///
-  /// Example:
-  /// ```dart
-  /// final result = await SateAI.healthCheck(model: myModel);
-  /// if (result.passed) {
-  ///   print('Model is healthy');
-  /// }
-  /// ```
-  static Future<HealthCheckResult> healthCheck({
-    required AIModelAdapter model,
-    Duration timeout = const Duration(seconds: 10),
-  }) async {
-    final stopwatch = Stopwatch()..start();
-
-    try {
-      final output = await model
-          .runInference(AIInput(text: 'health-check-probe'))
-          .timeout(timeout);
-
-      stopwatch.stop();
-
-      // Verify output is not empty
-      if (output.text.isEmpty) {
-        return HealthCheckResult.failed(
-          modelId: model.modelId,
-          duration: stopwatch.elapsed,
-          errorMessage: 'Model returned empty output',
-        );
-      }
-
-      return HealthCheckResult.passed(
-        modelId: model.modelId,
-        duration: stopwatch.elapsed,
-        outputText: output.text,
-        confidence: output.confidence,
-        metadata: output.metadata ?? {},
-      );
-    } catch (e, st) {
-      stopwatch.stop();
-      return HealthCheckResult.failed(
-        modelId: model.modelId,
-        duration: stopwatch.elapsed,
-        errorMessage: e.toString(),
-        stackTrace: st,
-      );
-    }
-  }
-}

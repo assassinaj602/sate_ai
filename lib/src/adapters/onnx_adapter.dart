@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:onnxruntime/onnxruntime.dart';
-import 'package:sate_ai/src/adapters/model_adapter.dart';
+import 'package:sate_core/src/adapters/model_adapter.dart';
 
 /// Signature for a factory that produces an [OrtSession] from raw model bytes.
 ///
