@@ -12,9 +12,6 @@ topics:
   - fault-injection
   - flutter
 
-executables:
-  sate_ai:
-
 environment:
   sdk: ">=3.0.0 <4.0.0"
   flutter: ">=3.10.0"
@@ -27,7 +24,6 @@ dependencies:
   onnxruntime: ^1.4.1
   tflite_flutter: ^0.12.0
   fllama: ^0.0.1
-  args: ^2.4.0
   yaml: ^3.1.2
   path: ^1.9.0
   http: ^1.2.0
