@@ -1,0 +1,57 @@
+name: CLI
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'packages/sate_cli/**'
+      - 'packages/sate_core/**'
+      - '.github/workflows/cli.yml'
+  pull_request:
+    paths:
+      - 'packages/sate_cli/**'
+      - 'packages/sate_core/**'
+      - '.github/workflows/cli.yml'
+
+jobs:
+  cli-only:
+    name: CLI-only (no Flutter)
+    runs-on: ubuntu-latest
+    container:
+      image: dart:stable
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install core
+        working-directory: packages/sate_core
+        run: dart pub get
+
+      - name: Install CLI
+        working-directory: packages/sate_cli
+        run: dart pub get
+
+      - name: Analyze core
+        working-directory: packages/sate_core
+        run: dart analyze
+
+      - name: Analyze CLI
+        working-directory: packages/sate_cli
+        run: dart analyze
+
+      - name: Test core
+        working-directory: packages/sate_core
+        run: dart test
+
+      - name: Test CLI
+        working-directory: packages/sate_cli
+        run: dart test
+
+      - name: Activate CLI globally
+        working-directory: packages/sate_cli
+        run: dart pub global activate --source=path .
+
+      - name: Verify CLI binary is on PATH
+        run: |
+          export PATH="$PATH:$HOME/.pub-cache/bin"
+          which sate_ai || (echo "sate_ai not found" && exit 1)
+          sate_ai --help | head -5
