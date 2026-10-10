@@ -71,11 +71,8 @@ void main() {
   group('FaultType', () {
     test('displayName returns non-empty string for each value', () {
       for (final type in FaultType.values) {
-        expect(
-          type.displayName,
-          isNotEmpty,
-          reason: 'displayName missing for $type',
-        );
+        expect(type.displayName, isNotEmpty,
+            reason: 'displayName missing for $type');
       }
     });
 
@@ -90,7 +87,10 @@ void main() {
     });
 
     test('malformedInput has correct display name', () {
-      expect(FaultType.malformedInput.displayName, equals('Malformed Input'));
+      expect(
+        FaultType.malformedInput.displayName,
+        equals('Malformed Input'),
+      );
     });
   });
 }

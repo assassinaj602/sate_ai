@@ -39,23 +39,20 @@ void main() {
     });
 
     test('generate(empty) returns empty text input', () {
-      final input = MalformedInputInjector.generateKind(
-        MalformedInputKind.empty,
-      );
+      final input =
+          MalformedInputInjector.generateKind(MalformedInputKind.empty);
       expect(input.text, equals(''));
     });
 
     test('generate(oversized) returns a 1 MB text input', () {
-      final input = MalformedInputInjector.generateKind(
-        MalformedInputKind.oversized,
-      );
+      final input =
+          MalformedInputInjector.generateKind(MalformedInputKind.oversized);
       expect(input.text!.length, equals(1024 * 1024));
     });
 
     test('generate(binaryGarbage) returns binary input with 1024 bytes', () {
-      final input = MalformedInputInjector.generateKind(
-        MalformedInputKind.binaryGarbage,
-      );
+      final input =
+          MalformedInputInjector.generateKind(MalformedInputKind.binaryGarbage);
       expect(input.binary, isNotNull);
       expect(input.binary!.length, equals(1024));
     });
@@ -81,16 +78,14 @@ void main() {
       expect(MalformedInputInjector.isHandledGracefully(output), isFalse);
     });
 
-    test(
-      'isHandledGracefully returns false when output contains "exception"',
-      () {
-        const output = AIOutput(
-          text: 'Unhandled exception in model',
-          inferenceTime: Duration(milliseconds: 10),
-        );
-        expect(MalformedInputInjector.isHandledGracefully(output), isFalse);
-      },
-    );
+    test('isHandledGracefully returns false when output contains "exception"',
+        () {
+      const output = AIOutput(
+        text: 'Unhandled exception in model',
+        inferenceTime: Duration(milliseconds: 10),
+      );
+      expect(MalformedInputInjector.isHandledGracefully(output), isFalse);
+    });
 
     // ------------------------------------------------------------------
     // Integration: run against MockAdapter
@@ -100,9 +95,8 @@ void main() {
       final model = MockAdapter(
         inferenceDelay: const Duration(milliseconds: 10),
       );
-      final input = MalformedInputInjector.generateKind(
-        MalformedInputKind.empty,
-      );
+      final input =
+          MalformedInputInjector.generateKind(MalformedInputKind.empty);
       final output = await model.runInference(input);
       expect(MalformedInputInjector.isHandledGracefully(output), isTrue);
     });
@@ -111,9 +105,8 @@ void main() {
       final model = MockAdapter(
         inferenceDelay: const Duration(milliseconds: 10),
       );
-      final input = MalformedInputInjector.generateKind(
-        MalformedInputKind.oversized,
-      );
+      final input =
+          MalformedInputInjector.generateKind(MalformedInputKind.oversized);
       final output = await model.runInference(input);
       expect(MalformedInputInjector.isHandledGracefully(output), isTrue);
     });

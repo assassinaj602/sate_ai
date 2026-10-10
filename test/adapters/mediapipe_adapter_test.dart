@@ -110,9 +110,8 @@ void main() {
         taskType: MediaPipeTaskType.poseEstimation,
         modelId: 'pose-model',
       );
-      final output = await poseAdapter.runInference(
-        AIInput(text: 'pose image'),
-      );
+      final output =
+          await poseAdapter.runInference(AIInput(text: 'pose image'));
       expect(output.text.toLowerCase(), contains('pose estimation'));
     });
 
@@ -121,9 +120,8 @@ void main() {
         taskType: MediaPipeTaskType.objectDetection,
         modelId: 'object-model',
       );
-      final output = await objectAdapter.runInference(
-        AIInput(text: 'object image'),
-      );
+      final output =
+          await objectAdapter.runInference(AIInput(text: 'object image'));
       expect(output.text.toLowerCase(), contains('object detection'));
     });
 

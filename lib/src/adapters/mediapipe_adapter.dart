@@ -64,8 +64,7 @@ class MediaPipeAdapter implements AIModelAdapter {
   Future<AIOutput> runInference(AIInput input) async {
     if (_isDegraded) {
       throw const AIInferenceError(
-        'MediaPipeAdapter is degraded. Call reset() before retrying.',
-      );
+          'MediaPipeAdapter is degraded. Call reset() before retrying.');
     }
 
     final stopwatch = Stopwatch()..start();

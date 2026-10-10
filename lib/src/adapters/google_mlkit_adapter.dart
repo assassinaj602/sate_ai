@@ -91,8 +91,7 @@ class GoogleMLKitAdapter implements AIModelAdapter {
 
     if (_isDegraded) {
       throw const AIInferenceError(
-        'GoogleMLKitAdapter is degraded. Call reset() before retrying.',
-      );
+          'GoogleMLKitAdapter is degraded. Call reset() before retrying.');
     }
 
     final stopwatch = Stopwatch()..start();

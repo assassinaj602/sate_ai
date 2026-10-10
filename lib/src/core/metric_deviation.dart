@@ -70,18 +70,15 @@ class BaselineComparison {
     buffer.writeln('## Summary');
     buffer.writeln('- **Model:** ${report.modelId}');
     buffer.writeln('- **Status:** ${passed ? "✅ PASSED" : "❌ FAILED"}');
+    buffer
+        .writeln('- **Comparison Time:** ${comparisonTime.toIso8601String()}');
     buffer.writeln(
-      '- **Comparison Time:** ${comparisonTime.toIso8601String()}',
-    );
-    buffer.writeln(
-      '- **Tolerance:** ${deviations.isEmpty ? "N/A" : "Deviations detected"}',
-    );
+        '- **Tolerance:** ${deviations.isEmpty ? "N/A" : "Deviations detected"}');
     buffer.writeln();
 
     if (deviations.isEmpty) {
       buffer.writeln(
-        '✅ No deviations detected. All metrics are within tolerance.',
-      );
+          '✅ No deviations detected. All metrics are within tolerance.');
     } else {
       buffer.writeln('## Deviations Detected');
       buffer.writeln();
