@@ -40,3 +40,4 @@ scripts:
   ci:
     description: Full CI - format, analyze, test.
     run: melos run format && melos run analyze && melos run test
+
