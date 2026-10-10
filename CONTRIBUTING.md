@@ -7,9 +7,9 @@ project, run tests, and submit changes.
 
 ### Requirements
 
-- Flutter 3.10 or newer
-- Dart 3.0 or newer
-- Linux, macOS, or Windows
+- Flutter 3.24 or newer (for `sate_ai`)
+- Dart 3.0 or newer (for `sate_core` and `sate_cli`)
+- Melos (`dart pub global activate melos`)
 - Git
 
 ### Clone and bootstrap
@@ -17,34 +17,32 @@ project, run tests, and submit changes.
 ```bash
 git clone https://github.com/assassinaj602/sate_ai.git
 cd sate_ai
-flutter pub get
-flutter test
+melos bootstrap
 ```
 
-## Running the Full Verification Suite
+### Run everything locally
 
 ```bash
-dart format --set-exit-if-changed lib/ test/ bin/
-flutter analyze --fatal-infos
-flutter test
+melos run ci           # format + analyze + test across all packages
 ```
 
-All three commands must pass before opening a pull request.
+### Run a single package
 
-## Project Layout
+```bash
+melos run test:core    # packages/sate_core
+melos run test:cli     # packages/sate_cli
+melos run test:ai      # packages/sate_ai
+```
 
-```
-lib/src/
-  core/          Core abstractions (FaultInjector, StressRunner, Report, ...)
-  adapters/      Model adapters (Mock, ONNX, TFLite, Fllama, MediaPipe, ...)
-  injectors/     Fault injectors
-  cli/           CLI helpers
-test/            Unit tests mirroring lib/ structure
-example/         Flutter demo app
-bin/             CLI entry point
-web/             Static web dashboard for HTML reports
-docs/            GitHub Pages site
-```
+### Project layout
+
+See the "Repository structure" table in the root README.
+
+### Adding a new package
+
+1. Create the package with `flutter create --template=package packages/my_package` or `dart create packages/my_package`
+2. Add it to the `packages` list in `melos.yaml`
+3. Run `melos bootstrap`
 
 ## Adding a Fault Injector
 
