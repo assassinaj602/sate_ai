@@ -1,0 +1,21 @@
+name: sate_core
+description: Pure Dart core for SATE AI — fault injection framework for on-device AI models. No Flutter dependency.
+version: 0.1.0
+homepage: https://github.com/assassinaj602/sate_ai
+repository: https://github.com/assassinaj602/sate_ai
+issue_tracker: https://github.com/assassinaj602/sate_ai/issues
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  args: ^2.4.0
+  yaml: ^3.1.2
+  sqflite_common_ffi: ^2.3.3
+  path: ^1.9.0
+  http: ^1.2.0
+  cron: ^0.6.0
+
+dev_dependencies:
+  test: ^1.24.0
+  lints: ^3.0.0
