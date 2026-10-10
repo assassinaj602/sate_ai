@@ -1,5 +1,5 @@
 import 'package:fllama/fllama.dart';
-import 'package:sate_ai/src/adapters/model_adapter.dart';
+import 'package:sate_core/sate_core.dart';
 
 /// Adapter for Llama, Phi, Gemma models via llama.cpp (Fllama).
 ///

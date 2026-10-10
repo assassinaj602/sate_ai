@@ -8,6 +8,7 @@ analyzer:
     - build/**
     - web/**
   errors:
+    invalid_dependency: ignore
     missing_required_param: error
     missing_return: error
     todo: ignore

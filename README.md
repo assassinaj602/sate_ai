@@ -23,6 +23,15 @@ Fault Injection Framework for On-Device AI Models in Flutter
 > 2. **EdgePulse Telemetry Paper:** [DOI: 10.5281/zenodo.23248718](https://doi.org/10.5281/zenodo.23248718)
 > 3. **Joint Fault Injection & Tracing Study:** [DOI: 10.5281/zenodo.23262270](https://doi.org/10.5281/zenodo.23262270) (280 real-device traces across TFLite, ONNX, and GGUF)
 
+## Architecture
+
+SATE AI is organized into two packages:
+
+- `sate_core` — pure Dart core (fault injectors, adapters, reports). No Flutter dependency.
+- `sate_ai` — Flutter package wrapping `sate_core`, plus native adapters (ONNX, TFLite, Fllama).
+
+The CLI (`dart pub global activate sate_ai`) uses only `sate_core` at runtime — Flutter is not required.
+
 ## Overview
 
 SATE AI is a fault injection framework for testing on-device AI models in
