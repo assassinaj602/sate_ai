@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 import 'package:http/http.dart' as http;
-import 'package:sate_ai/sate_ai.dart';
+import 'package:sate_core/sate_core.dart';
 
 void main() {
   StressReport makeReport({bool passed = true}) {
