@@ -99,15 +99,15 @@ void main() {
     test('constructor assertions work', () {
       expect(
         () => ModelSwapInjector(model: model, initialQuality: -0.1),
-        throwsAssertionError,
+        throwsA(isA<AssertionError>()),
       );
       expect(
         () => ModelSwapInjector(model: model, qualityDegradation: 0.0),
-        throwsAssertionError,
+        throwsA(isA<AssertionError>()),
       );
       expect(
         () => ModelSwapInjector(model: model, qualityThreshold: 1.5),
-        throwsAssertionError,
+        throwsA(isA<AssertionError>()),
       );
     });
   });

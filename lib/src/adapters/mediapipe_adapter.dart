@@ -1,4 +1,4 @@
-import 'package:sate_core/src/adapters/model_adapter.dart';
+import 'package:sate_core/sate_core.dart';
 
 /// Adapter for MediaPipe solutions (face detection, pose estimation, etc.).
 ///

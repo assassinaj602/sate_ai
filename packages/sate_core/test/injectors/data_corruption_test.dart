@@ -144,11 +144,11 @@ void main() {
     test('constructor asserts valid intensity', () {
       expect(
         () => DataCorruptionInjector(intensity: -0.1),
-        throwsAssertionError,
+        throwsA(isA<AssertionError>()),
       );
       expect(
         () => DataCorruptionInjector(intensity: 1.1),
-        throwsAssertionError,
+        throwsA(isA<AssertionError>()),
       );
     });
 

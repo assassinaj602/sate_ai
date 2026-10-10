@@ -136,11 +136,11 @@ void main() {
     test('constructor asserts valid parameters', () {
       expect(
         () => NetworkLatencyDropInjector(latencyMs: -1),
-        throwsAssertionError,
+        throwsA(isA<AssertionError>()),
       );
       expect(
         () => NetworkLatencyDropInjector(timeoutMs: -1),
-        throwsAssertionError,
+        throwsA(isA<AssertionError>()),
       );
     });
 

@@ -154,11 +154,11 @@ void main() {
     test('constructor asserts valid versions', () {
       expect(
         () => ModelVersionMismatchInjector(expectedVersion: ''),
-        throwsAssertionError,
+        throwsA(isA<AssertionError>()),
       );
       expect(
         () => ModelVersionMismatchInjector(actualVersion: ''),
-        throwsAssertionError,
+        throwsA(isA<AssertionError>()),
       );
     });
 

@@ -185,11 +185,11 @@ void main() {
     test('constructor throws assertion for invalid driftFactor', () {
       expect(
         () => QuantizationDriftInjector(model: model, driftFactor: -0.1),
-        throwsAssertionError,
+        throwsA(isA<AssertionError>()),
       );
       expect(
         () => QuantizationDriftInjector(model: model, driftFactor: 1.5),
-        throwsAssertionError,
+        throwsA(isA<AssertionError>()),
       );
     });
 
@@ -197,12 +197,12 @@ void main() {
       expect(
         () =>
             QuantizationDriftInjector(model: model, degradationThreshold: -0.1),
-        throwsAssertionError,
+        throwsA(isA<AssertionError>()),
       );
       expect(
         () =>
             QuantizationDriftInjector(model: model, degradationThreshold: 1.5),
-        throwsAssertionError,
+        throwsA(isA<AssertionError>()),
       );
     });
   });

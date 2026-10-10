@@ -33,10 +33,10 @@ void main() {
     test('5. Constructor asserts on invalid threshold', () {
       expect(
           () => ConfidenceThresholdInjector(model: mockModel, threshold: -0.1),
-          throwsAssertionError);
+          throwsA(isA<AssertionError>()));
       expect(
           () => ConfidenceThresholdInjector(model: mockModel, threshold: 1.1),
-          throwsAssertionError);
+          throwsA(isA<AssertionError>()));
     });
 
     test('6. reset clears failed state and resets confidence', () async {

@@ -100,15 +100,15 @@ void main() {
     test('constructor assertions work', () {
       expect(
         () => LatencyInjector(model: model, baseDelayMs: -1),
-        throwsAssertionError,
+        throwsA(isA<AssertionError>()),
       );
       expect(
         () => LatencyInjector(model: model, incrementMs: -1),
-        throwsAssertionError,
+        throwsA(isA<AssertionError>()),
       );
       expect(
         () => LatencyInjector(model: model, maxLatencyMs: 0),
-        throwsAssertionError,
+        throwsA(isA<AssertionError>()),
       );
     });
   });

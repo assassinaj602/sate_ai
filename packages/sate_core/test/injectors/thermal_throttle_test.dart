@@ -213,22 +213,22 @@ void main() {
     test('constructor throws assertion for invalid temperatureStep', () {
       expect(
         () => ThermalThrottleInjector(model: model, temperatureStep: 0),
-        throwsAssertionError,
+        throwsA(isA<AssertionError>()),
       );
       expect(
         () => ThermalThrottleInjector(model: model, temperatureStep: 60),
-        throwsAssertionError,
+        throwsA(isA<AssertionError>()),
       );
     });
 
     test('constructor throws assertion for invalid maxTemperature', () {
       expect(
         () => ThermalThrottleInjector(model: model, maxTemperature: 30),
-        throwsAssertionError,
+        throwsA(isA<AssertionError>()),
       );
       expect(
         () => ThermalThrottleInjector(model: model, maxTemperature: 130),
-        throwsAssertionError,
+        throwsA(isA<AssertionError>()),
       );
     });
   });
