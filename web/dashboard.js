@@ -1,5 +1,5 @@
 /**
- * SATE AI — Stress Test Report Viewer
+ * SATE AI: Stress Test Report Viewer
  *
  * Parses StressReport JSON, renders summary cards, charts (Chart.js),
  * detailed results table, and supports export to JSON / Markdown / CSV.
@@ -130,7 +130,7 @@
     if (report.passed) {
       statusBanner.className = 'status-banner visible pass';
       statusIcon.innerHTML = ICONS.check;
-      statusText.textContent = 'All injectors passed — no degradation detected';
+      statusText.textContent = 'All injectors passed: no degradation detected';
     } else {
       statusBanner.className = 'status-banner visible fail';
       statusIcon.innerHTML = ICONS.x;
@@ -146,7 +146,7 @@
     const errors = s.unexpectedErrors ?? (report.failures || []).length;
 
     summaryCards.innerHTML = [
-      { label: 'Model',    value: report.modelId ?? '—', cls: 'muted' },
+      { label: 'Model',    value: report.modelId ?? 'N/A', cls: 'muted' },
       { label: 'Tests',    value: total,                  cls: 'info' },
       { label: 'Passed',   value: passed,                 cls: 'pass' },
       { label: 'Failed',   value: failed,                 cls: 'fail' },
@@ -161,9 +161,9 @@
       return `<tr>
         <td>${info.icon}${esc(info.name)}</td>
         <td><span class="badge ${r.passed ? 'pass' : 'fail'}">${badge}${r.passed ? 'PASS' : 'FAIL'}</span></td>
-        <td class="mono">${r.inferenceTimeMs ?? '—'}</td>
-        <td class="mono">${r.memoryUsageMB != null ? Number(r.memoryUsageMB).toFixed(1) : '—'}</td>
-        <td>${r.errorMessage ? `<span class="error-text">${esc(r.errorMessage)}</span>` : '—'}</td>
+        <td class="mono">${r.inferenceTimeMs ?? 'N/A'}</td>
+        <td class="mono">${r.memoryUsageMB != null ? Number(r.memoryUsageMB).toFixed(1) : 'N/A'}</td>
+        <td>${r.errorMessage ? `<span class="error-text">${esc(r.errorMessage)}</span>` : 'N/A'}</td>
       </tr>`;
     }).join('');
 
@@ -263,7 +263,7 @@
       '# SATE AI Stress Test Report', '',
       '## Summary', '',
       '| Key | Value |', '|---|---|',
-      `| Model | \`${report.modelId ?? '—'}\` |`,
+      `| Model | \`${report.modelId ?? 'N/A'}\` |`,
       `| Overall | ${report.passed ? 'PASSED' : 'FAILED'} |`,
       `| Total tests | ${results.length} |`,
       `| Passed | ${results.filter(r => r.passed).length} |`,

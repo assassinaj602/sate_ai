@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Model Quantization Analyzer (Issue #96)
+  - Pure-Dart structural binary analyzer for ONNX Protobuf and TFLite FlatBuffer models
+  - `QuantizationAnalyzer`, `OnnxQuantizationAnalyzer`, and `TfliteQuantizationAnalyzer`
+  - Precision level detection (`float32`, `float16`, `int8`, `uint8`, `int16`) and warning flags
+  - CLI flags `--analyze-quantization` and `--quant-output`
+
+## [0.11.0] - 2026-10-03
+
+### Added
 - Multi-language support for reports (Issue #95)
   - `ReportLanguage` enum supporting English (`en`), Spanish (`es`), French (`fr`), German (`de`), and Portuguese (`pt`)
   - `I18n` class and `ReportLocalizer` for zero-dependency localized report rendering
@@ -24,8 +33,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `InferenceProfiler` for staged profiling
   - CLI flags `--profile` and `--profile-runs`
   - 10+ unit tests
-
-## [0.11.0] - 2026-09-26
 
 ### Added
 - CLI code generation for custom injectors (`sate_ai create injector <name>`)

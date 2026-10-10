@@ -35,7 +35,7 @@ enum MalformedInputKind {
 ///   final out = await model.runInference(badInput);
 ///   assert(MalformedInputInjector.isHandledGracefully(out));
 /// } on AIInferenceError catch (e) {
-///   // Acceptable — model rejected the input explicitly
+///   // Acceptable: model rejected the input explicitly
 /// }
 /// ```
 class MalformedInputInjector implements FaultInjector {
@@ -55,7 +55,7 @@ class MalformedInputInjector implements FaultInjector {
       'Generates empty, oversized, and binary-garbage inputs to test model '
       'input validation.';
 
-  /// No state to inject — this injector works via [generate].
+  /// No state to inject: this injector works via [generate].
   @override
   Future<void> inject() => Future<void>.value();
 

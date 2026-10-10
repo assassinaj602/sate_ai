@@ -1,5 +1,5 @@
 # Files to exclude from the published pub.dev package.
-# This complements .gitignore — list anything that should NOT be in the package.
+# This complements .gitignore: list anything that should NOT be in the package.
 
 # Android build artifacts
 example/android/.kotlin/

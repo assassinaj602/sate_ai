@@ -198,6 +198,10 @@ void main(List<String> arguments) async {
         help:
             'Language for report generation: en, es, fr, de, pt (default: en)',
         defaultsTo: 'en')
+    ..addOption('analyze-quantization',
+        help: 'Analyze quantization level of a model file (.onnx or .tflite)')
+    ..addOption('quant-output',
+        help: 'Output path for quantization analysis report (JSON or Markdown)')
     ..addFlag('help', abbr: 'h', help: 'Show this help', negatable: false);
 
   try {
@@ -206,6 +210,25 @@ void main(List<String> arguments) async {
       log('SATE AI CLI - Run stress tests on your AI model');
       log('');
       log(parser.usage);
+      exit(0);
+    }
+
+    final quantModelPath = results['analyze-quantization'] as String?;
+    if (quantModelPath != null) {
+      final file = File(quantModelPath);
+      final quantReport = await QuantizationAnalyzer.analyzeFile(file);
+      final quantOutputFile = results['quant-output'] as String?;
+
+      final content = (results['markdown'] as bool)
+          ? quantReport.toMarkdown()
+          : jsonEncode(quantReport.toJson());
+
+      if (quantOutputFile != null) {
+        await File(quantOutputFile).writeAsString(content);
+        log('Quantization analysis report written to $quantOutputFile');
+      } else {
+        log(quantReport.toMarkdown());
+      }
       exit(0);
     }
 

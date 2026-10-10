@@ -5,7 +5,7 @@ import 'package:onnxruntime/onnxruntime.dart';
 import 'package:sate_ai/sate_ai.dart';
 
 // ---------------------------------------------------------------------------
-// Stub OrtSession — returns pure Dart, never touches FFI / native DLL.
+// Stub OrtSession: returns pure Dart, never touches FFI / native DLL.
 // ---------------------------------------------------------------------------
 
 class _StubOrtSession implements OrtSession {

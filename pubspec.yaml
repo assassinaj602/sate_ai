@@ -9,11 +9,8 @@ topics:
   - testing
   - ai
   - on-device
-  - llm
   - fault-injection
-  - research
   - flutter
-  - machine-learning
 
 executables:
   sate_ai:
