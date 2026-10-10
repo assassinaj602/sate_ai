@@ -2,10 +2,10 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:cron/cron.dart';
-import 'package:sate_ai/src/adapters/model_adapter.dart';
-import 'package:sate_ai/src/core/fault_injector.dart';
-import 'package:sate_ai/src/core/report.dart';
-import 'package:sate_ai/src/core/stress_runner.dart';
+import 'package:sate_core/src/adapters/model_adapter.dart';
+import 'package:sate_core/src/core/fault_injector.dart';
+import 'package:sate_core/src/core/report.dart';
+import 'package:sate_core/src/core/stress_runner.dart';
 
 /// Scheduler for running stress tests at specified intervals.
 ///

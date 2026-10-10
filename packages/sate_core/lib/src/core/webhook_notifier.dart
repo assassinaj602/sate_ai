@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:sate_ai/src/core/report.dart';
-import 'package:sate_ai/src/core/webhook_payload.dart';
+import 'package:sate_core/src/core/report.dart';
+import 'package:sate_core/src/core/webhook_payload.dart';
 
 /// Sends webhook notifications for stress test results.
 ///

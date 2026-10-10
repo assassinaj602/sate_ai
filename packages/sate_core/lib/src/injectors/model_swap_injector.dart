@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:sate_ai/src/adapters/model_adapter.dart';
-import 'package:sate_ai/src/core/fault_injector.dart';
-import 'package:sate_ai/src/core/fault_type.dart';
+import 'package:sate_core/src/adapters/model_adapter.dart';
+import 'package:sate_core/src/core/fault_injector.dart';
+import 'package:sate_core/src/core/fault_type.dart';
 
 /// Simulates model corruption or swapping to a degraded model version.
 ///

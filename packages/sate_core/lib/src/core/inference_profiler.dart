@@ -1,5 +1,5 @@
-import 'package:sate_ai/src/adapters/model_adapter.dart';
-import 'package:sate_ai/src/core/profile_result.dart';
+import 'package:sate_core/src/adapters/model_adapter.dart';
+import 'package:sate_core/src/core/profile_result.dart';
 
 /// Profiles a single inference call on an [AIModelAdapter].
 ///

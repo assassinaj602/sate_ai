@@ -1,5 +1,5 @@
-import 'package:sate_ai/src/core/fault_type.dart';
-import 'package:sate_ai/src/core/report.dart';
+import 'package:sate_core/src/core/fault_type.dart';
+import 'package:sate_core/src/core/report.dart';
 
 /// Supported webhook providers.
 enum WebhookType {
