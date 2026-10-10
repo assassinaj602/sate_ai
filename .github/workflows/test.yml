@@ -9,8 +9,96 @@ on:
     branches: [ main ]
 
 jobs:
-  test:
+  sate-core:
+    name: sate_core (pure Dart)
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/sate_core
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+
+      - name: Install dependencies
+        run: dart pub get
+
+      - name: Format
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze
+        run: dart analyze
+
+      - name: Test
+        run: dart test
+
+  sate-cli:
+    name: sate_cli (pure Dart)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/sate_cli
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+
+      - name: Install core dependencies
+        working-directory: packages/sate_core
+        run: dart pub get
+
+      - name: Install dependencies
+        run: dart pub get
+
+      - name: Format
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze
+        run: dart analyze
+
+      - name: Test
+        run: dart test
+
+  sate-ai:
+    name: sate_ai (Flutter)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/sate_ai
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+
+      - name: Install core dependencies
+        working-directory: packages/sate_core
+        run: dart pub get
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Format
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze
+        run: flutter analyze --fatal-infos
+
+      - name: Test
+        run: flutter test
+
+  sate-ai-android:
+    name: sate_ai example app build
+    runs-on: ubuntu-latest
+    needs: [ sate-ai ]
+    defaults:
+      run:
+        working-directory: packages/sate_ai/example
     steps:
       - uses: actions/checkout@v4
 
@@ -43,66 +131,20 @@ jobs:
           sdkmanager "cmake;3.31.0"
         shell: bash
 
-      - name: Verify Android SDK
-        run: |
-          echo "ANDROID_HOME: $ANDROID_HOME"
-          sdkmanager --list | head -10
-        shell: bash
-
       - name: Create local.properties for Android SDK
         run: |
-          echo "sdk.dir=$ANDROID_HOME" > example/android/local.properties
-          cat example/android/local.properties
+          echo "sdk.dir=$ANDROID_HOME" > android/local.properties
+          cat android/local.properties
         shell: bash
 
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Install devtools dependencies
-        run: |
-          cd packages/sate_ai_devtools
-          flutter pub get
-          cd ../..
-        shell: bash
-
-      - name: Install sate_core and sate_cli dependencies
-        run: |
-          cd packages/sate_core
-          dart pub get
-          cd ../sate_cli
-          dart pub get
-          cd ../..
-        shell: bash
-
-      - name: Analyze code
-        run: flutter analyze --fatal-infos
-
-      - name: Analyze sate_core and sate_cli
-        run: |
-          cd packages/sate_core && dart analyze
-          cd ../sate_cli && dart analyze
-          cd ../..
-        shell: bash
-
-      - name: Run tests
-        run: flutter test
-
-      - name: Run sate_core and sate_cli tests
-        run: |
-          cd packages/sate_core && dart test
-          cd ../sate_cli && dart test
-          cd ../..
-        shell: bash
-
-      - name: Build example app
-        run: |
-          cd example
-          flutter pub get
-          flutter build apk --debug
-        shell: bash
+      - name: Build debug APK
+        run: flutter build apk --debug
 
   publish:
-    needs: test
+    needs: [ sate-core, sate-cli, sate-ai, sate-ai-android ]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
     permissions:
@@ -111,14 +153,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.24.0'
           channel: 'stable'
 
       - name: Install dependencies
+        working-directory: packages/sate_ai
         run: flutter pub get
 
       - name: Publish package
+        working-directory: packages/sate_ai
         run: dart pub publish --force

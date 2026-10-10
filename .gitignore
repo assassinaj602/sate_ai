@@ -63,3 +63,13 @@ lib/generated_plugin_registrant.dart
 
 # Docs generated
 doc/api/
+
+# Melos
+.melos_tool/
+.melos_workspace
+
+# Per-package Flutter artifacts
+packages/**/.dart_tool/
+packages/**/build/
+packages/**/.flutter-plugins
+packages/**/.flutter-plugins-dependencies

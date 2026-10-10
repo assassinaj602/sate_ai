@@ -29,12 +29,14 @@ runs:
         channel: 'stable'
 
     - name: Install Dependencies
-      run: flutter pub get
+      run: |
+        cd packages/sate_core && dart pub get && cd ../..
+        cd packages/sate_cli && dart pub get && cd ../..
       shell: bash
 
     - name: Activate SATE AI CLI Globally
       run: |
-        flutter pub global activate --source=path packages/sate_cli
+        dart pub global activate --source=path packages/sate_cli
         echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
       shell: bash
 

@@ -23,14 +23,38 @@ Fault Injection Framework for On-Device AI Models in Flutter
 > 2. **EdgePulse Telemetry Paper:** [DOI: 10.5281/zenodo.23248718](https://doi.org/10.5281/zenodo.23248718)
 > 3. **Joint Fault Injection & Tracing Study:** [DOI: 10.5281/zenodo.23262270](https://doi.org/10.5281/zenodo.23262270) (280 real-device traces across TFLite, ONNX, and GGUF)
 
-## Architecture
+## Repository structure
 
-SATE AI is organized into two packages:
+This repository is a monorepo containing three Dart/Flutter packages:
 
-- `sate_core` — pure Dart core (fault injectors, adapters, reports). No Flutter dependency.
-- `sate_ai` — Flutter package wrapping `sate_core`, plus native adapters (ONNX, TFLite, Fllama).
+| Package | Type | Description |
+|---|---|---|
+| [`packages/sate_core`](packages/sate_core) | Pure Dart | Framework-agnostic core: injectors, adapters interface, reports, baseline, templates, webhooks, i18n |
+| [`packages/sate_ai`](packages/sate_ai) | Flutter | Flutter package wrapping `sate_core`, plus native adapters (ONNX, TFLite, Fllama, MediaPipe, Core ML, Google ML Kit) |
+| [`packages/sate_cli`](packages/sate_cli) | Pure Dart | CLI binary: installable without Flutter via `dart pub global activate sate_cli` |
 
-The CLI (`dart pub global activate sate_ai`) uses only `sate_core` at runtime — Flutter is not required.
+Packages are orchestrated with [Melos](https://melos.invertase.dev/).
+
+### Development
+
+```bash
+# Install Melos
+dart pub global activate melos
+
+# Bootstrap all packages
+melos bootstrap
+
+# Run everything
+melos run ci
+```
+
+Individual package commands:
+
+```bash
+melos run test:core   # pure Dart core tests
+melos run test:cli    # CLI tests
+melos run test:ai     # Flutter package tests
+```
 
 ## Overview
 
@@ -99,7 +123,7 @@ flutter pub global activate sate_ai
 
 ## CI/CD Integration
 
-Add SATE AI to any pipeline with the Dart SDK alone — no Flutter needed:
+Add SATE AI to any pipeline with the Dart SDK alone - no Flutter needed:
 
 ```yaml
 - name: Install SATE AI CLI

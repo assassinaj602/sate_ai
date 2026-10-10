@@ -1,0 +1,43 @@
+name: sate_ai_workspace
+
+packages:
+  - packages/**
+
+command:
+  bootstrap:
+    runPubGetInParallel: true
+    usePubspecOverrides: true
+
+scripts:
+  analyze:
+    description: Run dart/flutter analyze in every package.
+    run: melos exec --fail-fast -- "if [ -f pubspec.yaml ]; then if grep -q 'flutter:' pubspec.yaml; then flutter analyze --fatal-infos; else dart analyze; fi; fi"
+    packageFilters:
+      dirExists: lib
+
+  format:
+    description: Run dart format in every package.
+    run: melos exec -- "dart format --output=none --set-exit-if-changed ."
+
+  test:
+    description: Run tests in every package (dart test or flutter test).
+    run: melos exec --fail-fast -- "if grep -q 'flutter:' pubspec.yaml; then flutter test; else dart test; fi"
+    packageFilters:
+      dirExists: test
+
+  test:core:
+    description: Run tests only in sate_core.
+    run: melos exec --scope=sate_core -- dart test
+
+  test:cli:
+    description: Run tests only in sate_cli.
+    run: melos exec --scope=sate_cli -- dart test
+
+  test:ai:
+    description: Run tests only in sate_ai.
+    run: melos exec --scope=sate_ai -- flutter test
+
+  ci:
+    description: Full CI - format, analyze, test.
+    run: melos run format && melos run analyze && melos run test
+
