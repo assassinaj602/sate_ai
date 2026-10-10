@@ -34,7 +34,7 @@ runs:
 
     - name: Activate SATE AI CLI Globally
       run: |
-        flutter pub global activate --source=path .
+        flutter pub global activate --source=path packages/sate_cli
         echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
       shell: bash
 

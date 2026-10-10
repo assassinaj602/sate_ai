@@ -65,11 +65,34 @@ jobs:
           cd ../..
         shell: bash
 
+      - name: Install sate_core and sate_cli dependencies
+        run: |
+          cd packages/sate_core
+          dart pub get
+          cd ../sate_cli
+          dart pub get
+          cd ../..
+        shell: bash
+
       - name: Analyze code
         run: flutter analyze --fatal-infos
 
+      - name: Analyze sate_core and sate_cli
+        run: |
+          cd packages/sate_core && dart analyze
+          cd ../sate_cli && dart analyze
+          cd ../..
+        shell: bash
+
       - name: Run tests
         run: flutter test
+
+      - name: Run sate_core and sate_cli tests
+        run: |
+          cd packages/sate_core && dart test
+          cd ../sate_cli && dart test
+          cd ../..
+        shell: bash
 
       - name: Build example app
         run: |
