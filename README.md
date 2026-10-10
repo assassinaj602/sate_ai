@@ -123,7 +123,7 @@ flutter pub global activate sate_ai
 
 ## CI/CD Integration
 
-Add SATE AI to any pipeline with the Dart SDK alone — no Flutter needed:
+Add SATE AI to any pipeline with the Dart SDK alone - no Flutter needed:
 
 ```yaml
 - name: Install SATE AI CLI
