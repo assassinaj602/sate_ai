@@ -20,7 +20,7 @@ dependencies:
   flutter:
     sdk: flutter
   sate_core:
-    path: packages/sate_core
+    path: ../sate_core
   onnxruntime: ^1.4.1
   tflite_flutter: ^0.12.0
   fllama: ^0.0.1
