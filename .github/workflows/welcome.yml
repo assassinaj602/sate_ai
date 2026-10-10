@@ -28,7 +28,7 @@ jobs:
 
             In the meantime, check out [CONTRIBUTING.md](../../CONTRIBUTING.md) if you'd like to fix it yourself!
           pr-message: |
-            🎉 Thanks for opening your first pull request on **SATE AI** — welcome!
+            🎉 Thanks for opening your first pull request on **SATE AI**: welcome!
 
             Please make sure you've:
             - [ ] Run `flutter test` and all tests pass

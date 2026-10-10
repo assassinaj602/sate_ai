@@ -2,29 +2,43 @@
 
 Fault Injection Framework for On-Device AI Models in Flutter
 
+> 🔍 **Looking for runtime observability?** Pair SATE AI with
+> [EdgePulse](https://github.com/assassinaj602/edgepulse): the observability
+> companion that traces memory, thermal state, battery draw, and latency during
+> inference, and works directly alongside SATE AI's fault injection.
+
 [![pub package](https://img.shields.io/pub/v/sate_ai.svg)](https://pub.dev/packages/sate_ai)
 [![pub points](https://img.shields.io/pub/points/sate_ai)](https://pub.dev/packages/sate_ai/score)
 [![pub likes](https://img.shields.io/pub/likes/sate_ai)](https://pub.dev/packages/sate_ai/score)
+[![DOI - SATE AI](https://zenodo.org/badge/DOI/10.5281/zenodo.23250418.svg)](https://doi.org/10.5281/zenodo.23250418)
+[![DOI - EdgePulse](https://zenodo.org/badge/DOI/10.5281/zenodo.23248718.svg)](https://doi.org/10.5281/zenodo.23248718)
+[![DOI - Joint Study](https://zenodo.org/badge/DOI/10.5281/zenodo.23262270.svg)](https://doi.org/10.5281/zenodo.23262270)
 [![GitHub stars](https://img.shields.io/github/stars/assassinaj602/sate_ai?style=flat)](https://github.com/assassinaj602/sate_ai/stargazers)
 [![CI](https://github.com/assassinaj602/sate_ai/actions/workflows/test.yml/badge.svg)](https://github.com/assassinaj602/sate_ai/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Flutter](https://img.shields.io/badge/Flutter-3.10%2B-blue.svg)](https://flutter.dev)
 
+> 📄 **Published research:** Three papers published on Zenodo cover SATE AI and on-device AI reliability:
+> 1. **SATE AI Framework Paper:** [DOI: 10.5281/zenodo.23250418](https://doi.org/10.5281/zenodo.23250418)
+> 2. **EdgePulse Telemetry Paper:** [DOI: 10.5281/zenodo.23248718](https://doi.org/10.5281/zenodo.23248718)
+> 3. **Joint Fault Injection & Tracing Study:** [DOI: 10.5281/zenodo.23262270](https://doi.org/10.5281/zenodo.23262270) (280 real-device traces across TFLite, ONNX, and GGUF)
+
 ## Overview
 
 SATE AI is a fault injection framework for testing on-device AI models in
-Flutter and Dart. It simulates real-world failure scenarios — memory pressure,
+Flutter and Dart. It simulates real-world failure scenarios: memory pressure,
 malformed inputs, quantization drift, thermal throttling, latency, model
-corruption, network failure, GPU memory pressure, and confidence degradation —
+corruption, network failure, GPU memory pressure, and confidence degradation:
 so developers can validate model reliability before shipping to production.
 
 ## Features
 
 - 11 fault injectors covering memory, I/O, thermal, and network failure modes
+- Model Quantization Analyzer for ONNX and TFLite models
 - 8 model adapters: MockAdapter, OnnxAdapter, TFLiteAdapter, FllamaAdapter,
   MediaPipeAdapter, CoreMLAdapter, GoogleMLKitAdapter, and custom adapters
 - CLI tool with subcommands for stress, benchmark, batch, schedule, serve,
-  health-check, badge, and template output
+  health-check, badge, template output, and quantization analysis
 - HTML report export with Chart.js charts
 - Real-time SSE monitoring dashboard
 - Golden baseline regression detection
@@ -40,7 +54,7 @@ so developers can validate model reliability before shipping to production.
 
 ```yaml
 dependencies:
-  sate_ai: ^0.13.0
+  sate_ai: ^0.11.0
 ```
 
 ```bash
@@ -151,6 +165,15 @@ sate_ai --compare-reports report1.json,report2.json --diff-html --diff-output di
 # Profiling
 sate_ai --model model.gguf --profile --profile-runs 5
 
+# Multi-language localized reports (en, es, fr, de, pt)
+sate_ai --model model.gguf --markdown --language es --output report_es.md
+sate_ai --model model.gguf --html --language fr --output report_fr.html
+
+# Webhook notifications
+sate_ai --model model.gguf --injectors memoryPressure \
+  --webhook-url https://hooks.slack.com/services/XXX/YYY/ZZZ \
+  --webhook-type slack
+
 # Generate a custom injector
 sate_ai create injector MyCustomInjector
 ```
@@ -162,10 +185,46 @@ sate_ai create injector MyCustomInjector
 - [Research Paper](https://assassinaj602.github.io/sate_ai/paper.html)
 - [Contributing Guide](CONTRIBUTING.md)
 
+## Citation
+
+If you use SATE AI or EdgePulse in your research, please cite the corresponding works:
+
+```bibtex
+@software{ullah2026sateai,
+  author       = {Muhammad Assad Ullah},
+  title        = {SATE AI: A Fault Injection and Reliability Engineering Framework for On-Device AI Models in Mobile Applications},
+  year         = {2026},
+  publisher    = {Zenodo},
+  version      = {0.1.0},
+  doi          = {10.5281/zenodo.23250418},
+  url          = {https://doi.org/10.5281/zenodo.23250418}
+}
+
+@software{ullah2026edgepulse,
+  author       = {Muhammad Assad Ullah},
+  title        = {EdgePulse: A Runtime Observability Framework for Quantized Large Language Models on Consumer Edge Devices},
+  year         = {2026},
+  publisher    = {Zenodo},
+  version      = {1.0.0},
+  doi          = {10.5281/zenodo.23248718},
+  url          = {https://doi.org/10.5281/zenodo.23248718}
+}
+
+@software{ullah2026joint,
+  author       = {Muhammad Assad Ullah},
+  title        = {Characterising On-Device AI Failure Modes Under Joint Fault Injection and Runtime Observability},
+  year         = {2026},
+  publisher    = {Zenodo},
+  version      = {1.0.0},
+  doi          = {10.5281/zenodo.23262270},
+  url          = {https://doi.org/10.5281/zenodo.23262270}
+}
+```
+
 ## Contributing
 
 Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT: see [LICENSE](LICENSE).

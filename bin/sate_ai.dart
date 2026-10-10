@@ -188,6 +188,20 @@ void main(List<String> arguments) async {
     ..addFlag('profile', help: 'Run a single-inference profiler and exit')
     ..addOption('profile-runs',
         help: 'Number of profiling runs (default: 1)', defaultsTo: '1')
+    ..addOption('webhook-url',
+        help: 'Webhook URL to POST stress test results to')
+    ..addOption('webhook-type',
+        help: 'Webhook provider: slack, discord, or teams', defaultsTo: 'slack')
+    ..addFlag('webhook-on-pass',
+        help: 'Also send webhook when tests pass (default: only on failure)')
+    ..addOption('language',
+        help:
+            'Language for report generation: en, es, fr, de, pt (default: en)',
+        defaultsTo: 'en')
+    ..addOption('analyze-quantization',
+        help: 'Analyze quantization level of a model file (.onnx or .tflite)')
+    ..addOption('quant-output',
+        help: 'Output path for quantization analysis report (JSON or Markdown)')
     ..addFlag('help', abbr: 'h', help: 'Show this help', negatable: false);
 
   try {
@@ -196,6 +210,25 @@ void main(List<String> arguments) async {
       log('SATE AI CLI - Run stress tests on your AI model');
       log('');
       log(parser.usage);
+      exit(0);
+    }
+
+    final quantModelPath = results['analyze-quantization'] as String?;
+    if (quantModelPath != null) {
+      final file = File(quantModelPath);
+      final quantReport = await QuantizationAnalyzer.analyzeFile(file);
+      final quantOutputFile = results['quant-output'] as String?;
+
+      final content = (results['markdown'] as bool)
+          ? quantReport.toMarkdown()
+          : jsonEncode(quantReport.toJson());
+
+      if (quantOutputFile != null) {
+        await File(quantOutputFile).writeAsString(content);
+        log('Quantization analysis report written to $quantOutputFile');
+      } else {
+        log(quantReport.toMarkdown());
+      }
       exit(0);
     }
 
@@ -429,6 +462,37 @@ void main(List<String> arguments) async {
       await db.close();
     }
 
+    final webhookUrl = results['webhook-url'] as String?;
+    if (webhookUrl != null) {
+      final typeStr = (results['webhook-type'] as String).toLowerCase();
+      final sendOnPass = results['webhook-on-pass'] as bool;
+
+      final WebhookType type;
+      switch (typeStr) {
+        case 'slack':
+          type = WebhookType.slack;
+          break;
+        case 'discord':
+          type = WebhookType.discord;
+          break;
+        case 'teams':
+          type = WebhookType.teams;
+          break;
+        default:
+          log('Unknown webhook type: $typeStr. Expected slack, discord, or teams.');
+          exit(2);
+      }
+
+      if (!report.passed || sendOnPass) {
+        final notifier = WebhookNotifier(url: webhookUrl, type: type);
+        final result = await notifier.send(report);
+        notifier.dispose();
+        log(result.message);
+      } else {
+        log('Skipping webhook (report passed and --webhook-on-pass not set).');
+      }
+    }
+
     final templatePath = results['template'] as String?;
 
     if (templatePath != null) {
@@ -443,19 +507,22 @@ void main(List<String> arguments) async {
       exit(report.passed ? 0 : 1);
     }
 
+    final langStr = results['language'] as String? ?? 'en';
+    final language = ReportLanguageX.parse(langStr);
+
     if (outputFile != null) {
       final content = useMarkdown
-          ? report.toMarkdown()
+          ? report.toMarkdownLocalized(language)
           : useHtml
-              ? report.toHtml()
+              ? report.toHtmlLocalized(language)
               : report.toJsonString();
       await File(outputFile).writeAsString(content);
       log('Report written to $outputFile');
     } else {
       if (useMarkdown) {
-        log(report.toMarkdown());
+        log(report.toMarkdownLocalized(language));
       } else if (useHtml) {
-        log(report.toHtml());
+        log(report.toHtmlLocalized(language));
       } else {
         log(report.toJsonString());
       }

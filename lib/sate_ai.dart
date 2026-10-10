@@ -1,4 +1,4 @@
-/// SATE AI — Fault Injection Framework for On-Device AI.
+/// SATE AI: Fault Injection Framework for On-Device AI.
 ///
 /// Import this library to access all public APIs:
 ///
@@ -45,6 +45,15 @@ export 'src/core/model_type_detector.dart';
 export 'src/core/model_factory.dart';
 export 'src/core/profile_result.dart';
 export 'src/core/inference_profiler.dart';
+export 'src/core/webhook_payload.dart';
+export 'src/core/webhook_notifier.dart';
+export 'src/core/quantization_report.dart';
+export 'src/core/analyzers/quantization_analyzer.dart';
+export 'src/core/analyzers/onnx_analyzer.dart';
+export 'src/core/analyzers/tflite_analyzer.dart';
+export 'src/i18n/i18n.dart';
+export 'src/i18n/report_language.dart';
+export 'src/i18n/report_localizer.dart';
 export 'src/adapters/model_adapter.dart';
 export 'src/adapters/mock_adapter.dart';
 export 'src/adapters/onnx_adapter.dart';

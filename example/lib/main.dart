@@ -73,7 +73,8 @@ class _StressDashboardState extends State<StressDashboard>
         );
 
       case AdapterType.onnx:
-        _appendLog('📦 Initializing OnnxAdapter (assets/models/mobilenet.onnx)...');
+        _appendLog(
+            '📦 Initializing OnnxAdapter (assets/models/mobilenet.onnx)...');
         try {
           final bytes = await rootBundle.load('assets/models/mobilenet.onnx');
           return OnnxAdapter(
@@ -86,7 +87,8 @@ class _StressDashboardState extends State<StressDashboard>
         }
 
       case AdapterType.tflite:
-        _appendLog('📦 Initializing TFLiteAdapter (assets/models/mobilenet.tflite)...');
+        _appendLog(
+            '📦 Initializing TFLiteAdapter (assets/models/mobilenet.tflite)...');
         try {
           return await TFLiteAdapter.fromAsset(
             'assets/models/mobilenet.tflite',
@@ -147,12 +149,14 @@ class _StressDashboardState extends State<StressDashboard>
     }
 
     if (injectors.isEmpty) {
-      _appendLog('⚠️ No injectors selected. Adding default MalformedInputInjector.');
+      _appendLog(
+          '⚠️ No injectors selected. Adding default MalformedInputInjector.');
       injectors.add(const MalformedInputInjector());
     }
 
     setState(() => _status = 'Running SateAI.stress() runner...');
-    _appendLog('🧪 Starting stress runner evaluation (${injectors.length} injectors)...');
+    _appendLog(
+        '🧪 Starting stress runner evaluation (${injectors.length} injectors)...');
 
     final report = await SateAI.stress(
       model: model,
@@ -221,7 +225,7 @@ class _StressDashboardState extends State<StressDashboard>
             // Row 1: Compact Horizontal Adapter Selector
             _buildAdapterSelectorRow(),
             const SizedBox(height: 8),
-            
+
             // Row 2: Horizontal Sliding Injectors Row (Left-to-Right Scrollable)
             _buildInjectorScrollRow(),
             const SizedBox(height: 8),
@@ -286,7 +290,9 @@ class _StressDashboardState extends State<StressDashboard>
                           type.name.toUpperCase(),
                           style: TextStyle(
                             color: isSelected ? Colors.white : Colors.white60,
-                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                            fontWeight: isSelected
+                                ? FontWeight.bold
+                                : FontWeight.normal,
                             fontSize: 11,
                           ),
                         ),
@@ -335,15 +341,22 @@ class _StressDashboardState extends State<StressDashboard>
             physics: const BouncingScrollPhysics(),
             child: Row(
               children: [
-                _buildInjectorChip('Memory Pressure', _useMemoryPressure, (v) => setState(() => _useMemoryPressure = v)),
+                _buildInjectorChip('Memory Pressure', _useMemoryPressure,
+                    (v) => setState(() => _useMemoryPressure = v)),
                 const SizedBox(width: 6),
-                _buildInjectorChip('Malformed Input', _useMalformedInput, (v) => setState(() => _useMalformedInput = v)),
+                _buildInjectorChip('Malformed Input', _useMalformedInput,
+                    (v) => setState(() => _useMalformedInput = v)),
                 const SizedBox(width: 6),
-                _buildInjectorChip('Thermal Throttle', _useThermalThrottle, (v) => setState(() => _useThermalThrottle = v)),
+                _buildInjectorChip('Thermal Throttle', _useThermalThrottle,
+                    (v) => setState(() => _useThermalThrottle = v)),
                 const SizedBox(width: 6),
-                _buildInjectorChip('Quantization Drift', _useQuantizationDrift, (v) => setState(() => _useQuantizationDrift = v)),
+                _buildInjectorChip('Quantization Drift', _useQuantizationDrift,
+                    (v) => setState(() => _useQuantizationDrift = v)),
                 const SizedBox(width: 6),
-                _buildInjectorChip('Confidence Validator', _useConfidenceValidation, (v) => setState(() => _useConfidenceValidation = v)),
+                _buildInjectorChip(
+                    'Confidence Validator',
+                    _useConfidenceValidation,
+                    (v) => setState(() => _useConfidenceValidation = v)),
               ],
             ),
           ),
@@ -352,7 +365,8 @@ class _StressDashboardState extends State<StressDashboard>
     );
   }
 
-  Widget _buildInjectorChip(String label, bool selected, ValueChanged<bool> onSelected) {
+  Widget _buildInjectorChip(
+      String label, bool selected, ValueChanged<bool> onSelected) {
     return FilterChip(
       visualDensity: VisualDensity.compact,
       labelPadding: const EdgeInsets.symmetric(horizontal: 4),
@@ -400,7 +414,9 @@ class _StressDashboardState extends State<StressDashboard>
                   : Icon(
                       _report == null
                           ? Icons.pending_outlined
-                          : (_report!.passed ? Icons.check_circle : Icons.error),
+                          : (_report!.passed
+                              ? Icons.check_circle
+                              : Icons.error),
                       color: color,
                       size: 18,
                     ),
@@ -473,10 +489,22 @@ class _StressDashboardState extends State<StressDashboard>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _StatChip(label: 'Total', value: '${report.totalTests}', color: const Color(0xFF48CAE4)),
-          _StatChip(label: 'Passed', value: '${report.passCount}', color: const Color(0xFF06D6A0)),
-          _StatChip(label: 'Failed', value: '${report.failureCount}', color: const Color(0xFFEF476F)),
-          _StatChip(label: 'Duration', value: '${report.totalDuration.inMilliseconds}ms', color: const Color(0xFFFFD166)),
+          _StatChip(
+              label: 'Total',
+              value: '${report.totalTests}',
+              color: const Color(0xFF48CAE4)),
+          _StatChip(
+              label: 'Passed',
+              value: '${report.passCount}',
+              color: const Color(0xFF06D6A0)),
+          _StatChip(
+              label: 'Failed',
+              value: '${report.failureCount}',
+              color: const Color(0xFFEF476F)),
+          _StatChip(
+              label: 'Duration',
+              value: '${report.totalDuration.inMilliseconds}ms',
+              color: const Color(0xFFFFD166)),
         ],
       ),
     );

@@ -100,7 +100,7 @@ class SSEServer {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SATE AI – Real-Time Monitor</title>
+  <title>SATE AI: Real-Time Monitor</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', sans-serif; background: #0f1117; color: #e4e6ed; padding: 20px; }
@@ -139,14 +139,14 @@ class SSEServer {
 <body>
   <div class="container">
     <header>
-      <h1>🧪 SATE AI – Real-Time Monitor</h1>
+      <h1>🧪 SATE AI: Real-Time Monitor</h1>
       <span class="status-badge idle" id="statusBadge">Idle</span>
     </header>
 
     <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
 
     <div class="grid" id="summaryGrid">
-      <div class="card"><div class="label">Model</div><div class="value" id="modelName">—</div></div>
+      <div class="card"><div class="label">Model</div><div class="value" id="modelName">N/A</div></div>
       <div class="card"><div class="label">Progress</div><div class="value" id="progressText">0 / 0</div></div>
       <div class="card"><div class="label">Passed</div><div class="value pass" id="passedCount">0</div></div>
       <div class="card"><div class="label">Failed</div><div class="value fail" id="failedCount">0</div></div>

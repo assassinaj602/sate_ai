@@ -32,7 +32,7 @@ What actually happened. Include any error messages or stack traces.
 
 ## Environment
 
-- **SATE AI version**: `0.14.0`
+- **SATE AI version**: `0.11.0`
 - **Flutter version**: `flutter --version`
 - **Dart version**: `dart --version`
 - **Platform**: Android / iOS / macOS / Web

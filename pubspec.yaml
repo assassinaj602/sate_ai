@@ -9,11 +9,8 @@ topics:
   - testing
   - ai
   - on-device
-  - llm
   - fault-injection
-  - research
   - flutter
-  - machine-learning
 
 executables:
   sate_ai:
@@ -33,6 +30,7 @@ dependencies:
   cron: ^0.6.0  # Add this for cron scheduling
   sqflite_common_ffi: ^2.3.3
   path: ^1.9.0
+  http: ^1.2.0
   # google_ml_kit: ^0.19.0  # Commented out (MediaPipe adapter uses simulation)
   # coreml_flutter: ^0.1.0  # Core ML support (iOS only; CoreMLAdapter uses simulation)
 

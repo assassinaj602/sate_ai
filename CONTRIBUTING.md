@@ -88,12 +88,12 @@ sate_ai create injector MyCustomInjector
 
 Use [Conventional Commits](https://www.conventionalcommits.org/):
 
-- `feat:` — new feature
-- `fix:` — bug fix
-- `docs:` — documentation
-- `test:` — tests
-- `chore:` — tooling, refactors
-- `style:` — formatting
+- `feat:`: new feature
+- `fix:`: bug fix
+- `docs:`: documentation
+- `test:`: tests
+- `chore:`: tooling, refactors
+- `style:`: formatting
 
 ## Pull Request Process
 
@@ -102,7 +102,7 @@ Use [Conventional Commits](https://www.conventionalcommits.org/):
 3. Push and open a pull request against `main`.
 4. The CI will run format, analyze, and tests.
 5. Address review comments.
-6. Do not merge your own PR — the maintainer will merge.
+6. Do not merge your own PR: the maintainer will merge.
 
 ## Reporting Issues
 

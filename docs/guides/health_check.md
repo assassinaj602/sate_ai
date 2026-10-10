@@ -30,7 +30,7 @@ sate_ai health --model llama3:8b --provider ollama
 ### Sample Output
 
 ```
-[+] SATE AI Health Diagnostic Scanner v0.14.0
+[+] SATE AI Health Diagnostic Scanner v0.11.0
 --------------------------------------------------
 [✓] SQLite native library (sqlite3 FFI): OK
 [✓] Model Provider Endpoint (http://localhost:11434): OK (12ms)
