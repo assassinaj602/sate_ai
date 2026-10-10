@@ -55,3 +55,4 @@ jobs:
           export PATH="$PATH:$HOME/.pub-cache/bin"
           which sate_ai || (echo "sate_ai not found" && exit 1)
           sate_ai --help | head -5
+
