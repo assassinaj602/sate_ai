@@ -13,6 +13,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Create dummy model file
+        run: mkdir -p models && touch models/dummy.gguf
+        shell: bash
+
       - name: Test AI Model with SATE AI
         uses: ./.github/actions/sate-ai-test
         with:
