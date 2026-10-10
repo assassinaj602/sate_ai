@@ -1,0 +1,22 @@
+name: sate_cli
+description: Command-line interface for SATE AI — fault injection testing for on-device AI models. Pure Dart, no Flutter required.
+version: 0.1.0
+homepage: https://github.com/assassinaj602/sate_ai
+repository: https://github.com/assassinaj602/sate_ai
+issue_tracker: https://github.com/assassinaj602/sate_ai/issues
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  sate_core:
+    path: ../sate_core
+  args: ^2.4.0
+
+dev_dependencies:
+  test: ^1.24.0
+  lints: ^3.0.0
+
+executables:
+  sate_ai: sate_ai
+

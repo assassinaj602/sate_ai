@@ -7,7 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- New `sate_cli` package — installable with `dart pub global activate sate_cli`
+  without requiring Flutter (Issue #119)
+- New `CLI` GitHub Actions workflow that runs on `dart:stable` to prove the
+  CLI works with no Flutter SDK installed
+
 ### Changed
+- CLI entry point moved from `bin/sate_ai.dart` to `packages/sate_cli/bin/sate_ai.dart`
+- `lib/sate_ai_cli.dart` in the Flutter package now re-exports `sate_core`
+  and is marked deprecated (kept for backwards compatibility)
 - Refactored architecture to extract pure Dart core into `sate_core` package (Issue #118)
   - Created standalone `packages/sate_core` package with no Flutter dependency
   - Moved core types, injectors, analyzers, i18n, and mock adapters into `sate_core`

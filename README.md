@@ -61,6 +61,25 @@ so developers can validate model reliability before shipping to production.
 
 ## Installation
 
+### CLI (no Flutter required)
+
+The CLI can be installed with only the Dart SDK:
+
+```bash
+dart pub global activate sate_cli
+sate_ai --model model.gguf --injectors memoryPressure
+```
+
+If `sate_ai` is not found after install, add the pub cache to your PATH:
+
+```bash
+export PATH="$PATH:$HOME/.pub-cache/bin"
+```
+
+### Flutter package
+
+Add to your `pubspec.yaml`:
+
 ```yaml
 dependencies:
   sate_ai: ^0.11.0
@@ -68,6 +87,37 @@ dependencies:
 
 ```bash
 flutter pub get
+```
+
+### Flutter developers who want both
+
+If you already have Flutter installed and want the CLI alongside the package:
+
+```bash
+flutter pub global activate sate_ai
+```
+
+## CI/CD Integration
+
+Add SATE AI to any pipeline with the Dart SDK alone — no Flutter needed:
+
+```yaml
+- name: Install SATE AI CLI
+  run: |
+    dart pub global activate sate_cli
+    echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
+
+- name: Run stress tests
+  run: |
+    sate_ai --model models/model.gguf \
+            --injectors memoryPressure,malformedInput \
+            --output report.json
+
+- name: Upload report
+  uses: actions/upload-artifact@v4
+  with:
+    name: sate-ai-report
+    path: report.json
 ```
 
 ## Quick Start

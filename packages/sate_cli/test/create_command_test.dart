@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:sate_ai/src/cli/templates.dart';
+import 'package:sate_cli/src/cli/templates.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('CLI Create Command', () {

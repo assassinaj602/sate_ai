@@ -2,8 +2,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:args/args.dart';
-import 'package:sate_ai/sate_ai_cli.dart';
-import 'package:sate_ai/src/cli/templates.dart';
+import 'package:sate_cli/src/cli/templates.dart';
+import 'package:sate_core/sate_core.dart';
 
 import 'sse_server.dart';
 
