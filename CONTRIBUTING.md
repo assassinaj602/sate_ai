@@ -68,6 +68,59 @@ sate_ai create injector MyCustomInjector
 4. Write unit tests in `test/adapters/<name>_adapter_test.dart`.
 5. Update `CHANGELOG.md` and README.
 
+## Adding a New Language SDK
+
+SATE AI is a multi-language framework. If you are interested in adding an SDK for a new runtime (such as Swift, Python, Rust, Go, or C++), follow this architectural specification.
+
+### 1. Architectural Pattern
+
+Every SATE AI language SDK must implement four fundamental components:
+
+1. **`ModelAdapter`**: An interface or abstract class defining the contract for interacting with AI runtimes. It must expose:
+   - Model identifier and state (`modelId`, `currentMemoryMB`, `isDegraded`).
+   - Inference execution (`runInference(input)`).
+   - Fault simulation hooks (`simulateMemoryPressure(mb)`, `reset()`, `isHealthy()`).
+
+2. **`FaultInjector`**: An interface representing a repeatable fault injection strategy. It must expose:
+   - Fault metadata (`type`, `name`, `description`).
+   - Injection hooks (`inject()`, `reset()`).
+
+3. **`StressRunner`**: The test orchestration engine that takes a model adapter and a list of injectors, executes each injector with timeout isolation and probe inferences, and aggregates results.
+
+4. **`StressReport`**: The structured evaluation report capturing individual test results, pass/fail status, duration metrics, and serializing to both standard JSON and Markdown formats.
+
+### 2. Built-in Fault Injectors
+
+Where possible, new SDKs should implement the standard 11 fault injectors:
+- `MemoryPressureInjector`
+- `MalformedInputInjector`
+- `QuantizationDriftInjector`
+- `ThermalThrottleInjector`
+- `LatencyInjector`
+- `ModelSwapInjector`
+- `ConfidenceThresholdInjector`
+- `GpuMemoryPressureInjector`
+- `DataCorruptionInjector`
+- `ModelVersionMismatchInjector`
+- `NetworkLatencyDropInjector`
+
+### 3. Packaging & Monorepo Conventions
+
+- Place the new SDK in `packages/sate_<language>/` (e.g., `packages/sate_ios/` for Swift).
+- Include comprehensive unit tests verifying the runner, report, mock adapter, and all injectors.
+- Include at least one native runtime adapter for the target platform (e.g., Core ML for iOS, PyTorch/ONNX for Python).
+- Include a package-level `README.md` with installation and quick-start instructions.
+- Add an automated testing job to `.github/workflows/test.yml`.
+
+### 4. Reference Implementations
+
+Refer to the existing SDKs in this monorepo as reference designs:
+- **Dart (Core & CLI)**: [`packages/sate_core`](packages/sate_core) and [`packages/sate_cli`](packages/sate_cli)
+- **Kotlin / Android**: [`packages/sate_android`](packages/sate_android) (Issue #121)
+- **TypeScript / Web**: [`packages/sate_web`](packages/sate_web) (Issue #122)
+
+---
+
 ## Testing Guidelines
 
 - Every public class and method must have tests.
