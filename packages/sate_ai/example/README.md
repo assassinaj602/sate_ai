@@ -13,6 +13,11 @@ flutter run
 
 The app runs on Android, iOS, web, macOS, Linux, and Windows.
 
+> Web builds are not supported when the TFLite adapter is active. The
+> tflite_flutter package relies on native FFI bindings that cannot be
+> transpiled to JavaScript. Web projects should use MockAdapter or a
+> web-compatible adapter.
+
 ## What it demonstrates
 
 - Swapping between MockAdapter, OnnxAdapter, and TFLiteAdapter
