@@ -1,6 +1,6 @@
 # SATE AI
 
-Fault Injection Framework for On-Device AI Models in Flutter
+Fault Injection and Reliability Framework for On-Device AI across Flutter, CLI, Android, Web, and more
 
 > 🔍 **Looking for runtime observability?** Pair SATE AI with
 > [EdgePulse](https://github.com/assassinaj602/edgepulse): the observability
@@ -23,9 +23,52 @@ Fault Injection Framework for On-Device AI Models in Flutter
 > 2. **EdgePulse Telemetry Paper:** [DOI: 10.5281/zenodo.23248718](https://doi.org/10.5281/zenodo.23248718)
 > 3. **Joint Fault Injection & Tracing Study:** [DOI: 10.5281/zenodo.23262270](https://doi.org/10.5281/zenodo.23262270) (280 real-device traces across TFLite, ONNX, and GGUF)
 
+## Platform Support
+
+| Platform | Language | Package / Target | Status |
+|---|---|---|---|
+| Flutter (Mobile, Desktop) | Dart | [`packages/sate_ai`](packages/sate_ai) | ✅ Available |
+| CLI (Linux, macOS, Windows) | Dart | [`packages/sate_cli`](packages/sate_cli) | ✅ Available |
+| Android Native | Kotlin | [`packages/sate_android`](packages/sate_android) | ✅ Available |
+| Web / Node.js | TypeScript / npm | [`packages/sate_web`](packages/sate_web) | ✅ Available |
+| iOS / macOS Native | Swift | `packages/sate_ios` | 🔭 Planned (Roadmap) |
+| Python Evaluation Runner | Python | `packages/sate_python` | 🔭 Planned (Roadmap) |
+
+## Architecture Overview
+
+SATE AI is designed with clean decoupling between business logic, runtime execution, and target platforms:
+
+```
+                      +-----------------------------+
+                      |       Standard Report       |
+                      |   (JSON / Markdown / HTML)  |
+                      +-----------------------------+
+                                     ^
+                                     |
+               +---------------------+---------------------+
+               |                     |                     |
+               v                     v                     v
+      +-----------------+   +-----------------+   +-----------------+
+      |    sate_core    |   |  sate_android   |   |    sate_web     |
+      |   (Pure Dart)   |   | (Kotlin / JVM)  |   |  (TypeScript)   |
+      +-----------------+   +-----------------+   +-----------------+
+         |           |               |                     |
+         v           v               v                     v
+   +----------+ +----------+   +-----------+       +---------------+
+   | sate_ai  | | sate_cli |   |  Android  |       |  Web / Node   |
+   | (Flutter)| |  (CLI)   |   |  TFLite   |       | TFJS / ONNX   |
+   +----------+ +----------+   +-----------+       +---------------+
+```
+
+- **`sate_core`**: The pure Dart foundational engine containing fault injector interfaces, report structures, golden baselines, i18n, webhooks, and scheduler. Contains zero Flutter or platform dependencies.
+- **`sate_cli`**: Standalone command-line executable distributed as an independent Dart application. Directly depends on `sate_core` without requiring Flutter SDK.
+- **`sate_ai`**: Flutter package providing UI integrations, DevTools extensions, and Flutter-specific native adapters (ONNX, TFLite, Fllama, MediaPipe, Core ML, Google ML Kit).
+- **`sate_android`**: Idiomatic Kotlin/Android SDK providing fault injection directly to Android applications using TensorFlow Lite without Flutter.
+- **`sate_web`**: TypeScript/npm SDK with support for TensorFlow.js and ONNX Runtime Web in browser or Node.js runtimes.
+
 ## Repository structure
 
-This repository is a monorepo containing three Dart/Flutter packages:
+This repository is organized as a monorepo containing the following packages:
 
 | Package | Type | Description |
 |---|---|---|
@@ -60,11 +103,12 @@ melos run test:ai     # Flutter package tests
 
 ## Overview
 
-SATE AI is a fault injection framework for testing on-device AI models in
-Flutter and Dart. It simulates real-world failure scenarios: memory pressure,
-malformed inputs, quantization drift, thermal throttling, latency, model
-corruption, network failure, GPU memory pressure, and confidence degradation:
-so developers can validate model reliability before shipping to production.
+SATE AI is a fault injection and resilience testing framework for on-device AI
+models across Flutter, mobile (Android/iOS), web, Node.js, and command-line environments.
+It simulates real-world failure scenarios: memory pressure, malformed inputs,
+quantization drift, thermal throttling, latency spikes, model corruption, network drops,
+GPU VRAM pressure, and confidence degradation: so developers can validate model
+reliability before shipping to production.
 
 ## Features
 
