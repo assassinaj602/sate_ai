@@ -32,8 +32,10 @@ Thumbs.db
 desktop.ini
 
 # Android
-android/.gradle/
-android/local.properties
+.gradle/
+**/.gradle/
+local.properties
+**/local.properties
 android/key.properties
 **/android/gradlew
 **/android/gradlew.bat

@@ -143,8 +143,31 @@ jobs:
       - name: Build debug APK
         run: flutter build apk --debug
 
+  sate-android:
+    name: sate_android (Kotlin)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/sate_android
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build
+        run: ./gradlew :sate-android:assembleDebug
+
+      - name: Test
+        run: ./gradlew :sate-android:test
+
   publish:
-    needs: [ sate-core, sate-cli, sate-ai, sate-ai-android ]
+    needs: [ sate-core, sate-cli, sate-ai, sate-ai-android, sate-android ]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
     permissions:

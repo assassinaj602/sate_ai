@@ -32,6 +32,7 @@ This repository is a monorepo containing three Dart/Flutter packages:
 | [`packages/sate_core`](packages/sate_core) | Pure Dart | Framework-agnostic core: injectors, adapters interface, reports, baseline, templates, webhooks, i18n |
 | [`packages/sate_ai`](packages/sate_ai) | Flutter | Flutter package wrapping `sate_core`, plus native adapters (ONNX, TFLite, Fllama, MediaPipe, Core ML, Google ML Kit) |
 | [`packages/sate_cli`](packages/sate_cli) | Pure Dart | CLI binary: installable without Flutter via `dart pub global activate sate_cli` |
+| [`packages/sate_android`](packages/sate_android) | Kotlin | Android native SDK for fault injection on TFLite models |
 
 Packages are orchestrated with [Melos](https://melos.invertase.dev/).
 
