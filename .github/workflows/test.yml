@@ -166,8 +166,30 @@ jobs:
       - name: Test
         run: ./gradlew :sate-android:test
 
+  sate-web:
+    name: sate_web (TypeScript)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/sate_web
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm run test
+
   publish:
-    needs: [ sate-core, sate-cli, sate-ai, sate-ai-android, sate-android ]
+    needs: [ sate-core, sate-cli, sate-ai, sate-ai-android, sate-android, sate-web ]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
     permissions:

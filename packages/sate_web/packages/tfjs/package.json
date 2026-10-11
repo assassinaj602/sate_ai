@@ -1,0 +1,33 @@
+{
+  "name": "@sate-ai/tfjs",
+  "version": "0.1.0",
+  "description": "TensorFlow.js adapter for SATE AI fault injection.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@sate-ai/core": "^0.1.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/assassinaj602/sate_ai",
+    "directory": "packages/sate_web/packages/tfjs"
+  }
+}

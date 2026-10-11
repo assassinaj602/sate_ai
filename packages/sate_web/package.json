@@ -1,0 +1,22 @@
+{
+  "name": "sate-ai-web",
+  "private": true,
+  "version": "0.1.0",
+  "description": "TypeScript SDK for SATE AI, a fault injection framework for on-device AI models.",
+  "type": "module",
+  "workspaces": [
+    "packages/core",
+    "packages/tfjs",
+    "packages/onnx"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
+    "lint": "npm run lint --workspaces"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.0",
+    "@types/node": "^20.10.6"
+  }
+}
