@@ -31,5 +31,15 @@ void main() {
       // Health check runs against MockAdapter fallback and succeeds or exits cleanly
       expect(result.exitCode, anyOf(0, 1, 2, 64));
     });
+
+    test('--help outputs adaptive-chaos option description', () async {
+      final result = await Process.run(
+        'dart',
+        ['run', 'bin/sate_ai.dart', '--help'],
+        workingDirectory: Directory.current.path,
+      );
+      expect(result.exitCode, 0);
+      expect(result.stdout, contains('adaptive-chaos'));
+    });
   });
 }

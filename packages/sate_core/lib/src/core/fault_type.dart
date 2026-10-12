@@ -55,6 +55,9 @@ enum FaultType {
 
   /// Custom user-generated injector.
   custom,
+
+  /// Adaptive chaos injection dynamically scaled by live resource telemetry.
+  adaptiveChaos,
 }
 
 /// Extension helpers on [FaultType].
@@ -88,6 +91,8 @@ extension FaultTypeX on FaultType {
         return 'Benchmark';
       case FaultType.custom:
         return 'Custom';
+      case FaultType.adaptiveChaos:
+        return 'Adaptive Chaos';
     }
   }
 
@@ -120,6 +125,8 @@ extension FaultTypeX on FaultType {
         return '📊';
       case FaultType.custom:
         return '🛠️';
+      case FaultType.adaptiveChaos:
+        return '🧠';
     }
   }
 }
