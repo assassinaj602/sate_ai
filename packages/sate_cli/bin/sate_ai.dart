@@ -86,6 +86,10 @@ List<FaultInjector> _buildInjectors(ArgResults results, AIModelAdapter model) {
         injectors
             .add(ConfidenceThresholdInjector(model: model, threshold: 0.5));
         break;
+      case 'adaptivechaos':
+      case 'adaptive_chaos':
+        injectors.add(AdaptiveChaosInjector(model: model));
+        break;
       default:
         log('Unknown injector: $name');
         exit(1);
@@ -202,6 +206,8 @@ void main(List<String> arguments) async {
         help: 'Analyze quantization level of a model file (.onnx or .tflite)')
     ..addOption('quant-output',
         help: 'Output path for quantization analysis report (JSON or Markdown)')
+    ..addFlag('adaptive-chaos',
+        help: 'Enable adaptive chaos injection scaling with live resource telemetry')
     ..addFlag('help', abbr: 'h', help: 'Show this help', negatable: false);
 
   try {
@@ -374,6 +380,10 @@ void main(List<String> arguments) async {
 
     final model = MockAdapter(modelId: 'cli-model');
     final injectors = _buildInjectors(results, model);
+
+    if (results['adaptive-chaos'] as bool) {
+      injectors.add(AdaptiveChaosInjector(model: model));
+    }
 
     if (results['health-check'] as bool) {
       log('Running health check on model: ${model.modelId}');
