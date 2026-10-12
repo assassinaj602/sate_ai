@@ -207,7 +207,8 @@ void main(List<String> arguments) async {
     ..addOption('quant-output',
         help: 'Output path for quantization analysis report (JSON or Markdown)')
     ..addFlag('adaptive-chaos',
-        help: 'Enable adaptive chaos injection scaling with live resource telemetry')
+        help:
+            'Enable adaptive chaos injection scaling with live resource telemetry')
     ..addFlag('help', abbr: 'h', help: 'Show this help', negatable: false);
 
   try {

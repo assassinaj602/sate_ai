@@ -53,7 +53,8 @@ void main() {
       expect(injector.telemetryHistory.length, equals(1));
     });
 
-    test('scales back injection intensity when memory headroom is low', () async {
+    test('scales back injection intensity when memory headroom is low',
+        () async {
       final model = MockAdapter();
       final monitor = FakeResourceMonitor(ResourceTelemetry(
         availableMemoryMB: 400,
@@ -79,7 +80,9 @@ void main() {
       expect(injector.lastAppliedMB, greaterThanOrEqualTo(10));
     });
 
-    test('triggers emergency backoff when memory headroom is critically depleted', () async {
+    test(
+        'triggers emergency backoff when memory headroom is critically depleted',
+        () async {
       final model = MockAdapter();
       final monitor = FakeResourceMonitor(ResourceTelemetry(
         availableMemoryMB: 100,
@@ -155,7 +158,8 @@ void main() {
       expect(injector.lastAppliedMB, equals(75)); // 75% of base
     });
 
-    test('recovers to nominal intensity when headroom returns to normal', () async {
+    test('recovers to nominal intensity when headroom returns to normal',
+        () async {
       final model = MockAdapter();
       final monitor = FakeResourceMonitor(ResourceTelemetry(
         availableMemoryMB: 200,
@@ -273,7 +277,8 @@ void main() {
 
       final report = await runner.run();
       expect(report.results.length, equals(1));
-      expect(report.results.first.injectorType, equals(FaultType.adaptiveChaos));
+      expect(
+          report.results.first.injectorType, equals(FaultType.adaptiveChaos));
       expect(report.passed, isTrue);
     });
   });

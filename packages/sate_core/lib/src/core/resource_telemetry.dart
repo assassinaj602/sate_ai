@@ -42,8 +42,9 @@ class ResourceTelemetry {
   final DateTime timestamp;
 
   /// Proportion of free memory available in range 0.0 to 1.0.
-  double get memoryHeadroomRatio =>
-      totalMemoryMB > 0 ? (availableMemoryMB / totalMemoryMB).clamp(0.0, 1.0) : 0.5;
+  double get memoryHeadroomRatio => totalMemoryMB > 0
+      ? (availableMemoryMB / totalMemoryMB).clamp(0.0, 1.0)
+      : 0.5;
 
   /// Whether current telemetry indicates dangerous resource depletion.
   bool get isCritical =>
@@ -111,12 +112,15 @@ class SystemResourceMonitor implements ResourceMonitor {
     final maxRssMB = maxRssBytes / (1024 * 1024);
 
     // Compute estimated available memory based on current process footprint
-    final estimatedAvailable = (fallbackTotalMemoryMB - currentRssMB).clamp(0.0, fallbackTotalMemoryMB);
+    final estimatedAvailable = (fallbackTotalMemoryMB - currentRssMB)
+        .clamp(0.0, fallbackTotalMemoryMB);
 
     return ResourceTelemetry(
       availableMemoryMB: estimatedAvailable,
       totalMemoryMB: fallbackTotalMemoryMB,
-      cpuLoadPercentage: (maxRssMB > 0 ? (currentRssMB / maxRssMB * 100.0) : 25.0).clamp(5.0, 95.0),
+      cpuLoadPercentage:
+          (maxRssMB > 0 ? (currentRssMB / maxRssMB * 100.0) : 25.0)
+              .clamp(5.0, 95.0),
       thermalState: ThermalState.nominal,
       timestamp: DateTime.now(),
     );

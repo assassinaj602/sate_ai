@@ -59,7 +59,8 @@ class AdaptiveChaosInjector implements FaultInjector {
   final double criticalHeadroomRatio;
 
   /// Optional callback invoked when a telemetry sample is evaluated.
-  final void Function(ResourceTelemetry telemetry, int appliedMB, Duration appliedInterval)?
+  final void Function(
+          ResourceTelemetry telemetry, int appliedMB, Duration appliedInterval)?
       onTelemetrySampled;
 
   final List<ResourceTelemetry> _telemetryHistory = [];
@@ -69,7 +70,8 @@ class AdaptiveChaosInjector implements FaultInjector {
   bool _isEmergencyBackedOff = false;
 
   /// Recorded history of all sampled telemetry observations.
-  List<ResourceTelemetry> get telemetryHistory => List.unmodifiable(_telemetryHistory);
+  List<ResourceTelemetry> get telemetryHistory =>
+      List.unmodifiable(_telemetryHistory);
 
   /// Last memory allocation in MB applied during the most recent [inject].
   int get lastAppliedMB => _lastAppliedMB;
@@ -112,8 +114,11 @@ class AdaptiveChaosInjector implements FaultInjector {
         telemetry.memoryHeadroomRatio < headroomThresholdRatio ||
         telemetry.cpuLoadPercentage > 85.0) {
       // Scale down allocation proportionally to remaining headroom
-      final factor = max(0.1, telemetry.memoryHeadroomRatio / headroomThresholdRatio);
-      final scaledMB = (baseAllocationMB * factor).round().clamp(minAllocationMB, baseAllocationMB);
+      final factor =
+          max(0.1, telemetry.memoryHeadroomRatio / headroomThresholdRatio);
+      final scaledMB = (baseAllocationMB * factor)
+          .round()
+          .clamp(minAllocationMB, baseAllocationMB);
       final scaledIntervalMs = (baseInterval.inMilliseconds * (1.0 / factor))
           .round()
           .clamp(baseInterval.inMilliseconds, maxInterval.inMilliseconds);
@@ -128,8 +133,11 @@ class AdaptiveChaosInjector implements FaultInjector {
 
     // 3. Mild throttling: Thermal fair
     if (telemetry.thermalState == ThermalState.fair) {
-      final scaledMB = (baseAllocationMB * 0.75).round().clamp(minAllocationMB, baseAllocationMB);
-      final scaledInterval = Duration(milliseconds: (baseInterval.inMilliseconds * 1.5).round());
+      final scaledMB = (baseAllocationMB * 0.75)
+          .round()
+          .clamp(minAllocationMB, baseAllocationMB);
+      final scaledInterval =
+          Duration(milliseconds: (baseInterval.inMilliseconds * 1.5).round());
       return (
         allocationMB: scaledMB,
         interval: scaledInterval,
@@ -139,16 +147,21 @@ class AdaptiveChaosInjector implements FaultInjector {
     }
 
     // 4. Abundant headroom (>50% free RAM, low CPU): Scale up aggression
-    if (telemetry.memoryHeadroomRatio > 0.50 && telemetry.cpuLoadPercentage < 50.0) {
-      final headroomBoost = ((telemetry.memoryHeadroomRatio - 0.50) * 2.0).clamp(0.0, 1.0);
+    if (telemetry.memoryHeadroomRatio > 0.50 &&
+        telemetry.cpuLoadPercentage < 50.0) {
+      final headroomBoost =
+          ((telemetry.memoryHeadroomRatio - 0.50) * 2.0).clamp(0.0, 1.0);
       final allocMin = min(baseAllocationMB, maxAllocationMB);
       final allocMax = max(baseAllocationMB, maxAllocationMB);
-      final boostMB = (baseAllocationMB + (maxAllocationMB - baseAllocationMB) * headroomBoost)
+      final boostMB = (baseAllocationMB +
+              (maxAllocationMB - baseAllocationMB) * headroomBoost)
           .round()
           .clamp(allocMin, allocMax);
 
-      final lowerIntervalMs = min(minInterval.inMilliseconds, baseInterval.inMilliseconds);
-      final upperIntervalMs = max(minInterval.inMilliseconds, baseInterval.inMilliseconds);
+      final lowerIntervalMs =
+          min(minInterval.inMilliseconds, baseInterval.inMilliseconds);
+      final upperIntervalMs =
+          max(minInterval.inMilliseconds, baseInterval.inMilliseconds);
       final boostIntervalMs = (baseInterval.inMilliseconds -
               (baseInterval.inMilliseconds - lowerIntervalMs) * headroomBoost)
           .round()
