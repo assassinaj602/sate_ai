@@ -141,13 +141,18 @@ class AdaptiveChaosInjector implements FaultInjector {
     // 4. Abundant headroom (>50% free RAM, low CPU): Scale up aggression
     if (telemetry.memoryHeadroomRatio > 0.50 && telemetry.cpuLoadPercentage < 50.0) {
       final headroomBoost = ((telemetry.memoryHeadroomRatio - 0.50) * 2.0).clamp(0.0, 1.0);
+      final allocMin = min(baseAllocationMB, maxAllocationMB);
+      final allocMax = max(baseAllocationMB, maxAllocationMB);
       final boostMB = (baseAllocationMB + (maxAllocationMB - baseAllocationMB) * headroomBoost)
           .round()
-          .clamp(baseAllocationMB, maxAllocationMB);
+          .clamp(allocMin, allocMax);
+
+      final lowerIntervalMs = min(minInterval.inMilliseconds, baseInterval.inMilliseconds);
+      final upperIntervalMs = max(minInterval.inMilliseconds, baseInterval.inMilliseconds);
       final boostIntervalMs = (baseInterval.inMilliseconds -
-              (baseInterval.inMilliseconds - minInterval.inMilliseconds) * headroomBoost)
+              (baseInterval.inMilliseconds - lowerIntervalMs) * headroomBoost)
           .round()
-          .clamp(minInterval.inMilliseconds, baseInterval.inMilliseconds);
+          .clamp(lowerIntervalMs, upperIntervalMs);
 
       return (
         allocationMB: boostMB,
