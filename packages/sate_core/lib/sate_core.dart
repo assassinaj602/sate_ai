@@ -34,6 +34,7 @@ export 'src/core/template_engine.dart';
 export 'src/core/template_loader.dart';
 export 'src/core/webhook_payload.dart';
 export 'src/core/webhook_notifier.dart';
+export 'src/core/resource_telemetry.dart';
 export 'src/core/quantization_report.dart';
 
 // Adapters
@@ -52,6 +53,7 @@ export 'src/injectors/gpu_memory_pressure_injector.dart';
 export 'src/injectors/data_corruption_injector.dart';
 export 'src/injectors/model_version_mismatch_injector.dart';
 export 'src/injectors/network_latency_drop_injector.dart';
+export 'src/injectors/adaptive_chaos_injector.dart';
 
 // Analyzers
 export 'src/core/analyzers/quantization_analyzer.dart';
