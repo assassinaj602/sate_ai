@@ -120,14 +120,10 @@ jobs:
           yes | sdkmanager --licenses || true
         shell: bash
 
-      - name: Install Android NDK
+      - name: Install Android NDK and CMake
         run: |
           sdkmanager "ndk;28.0.12433566"
           echo "ANDROID_NDK_HOME=${ANDROID_HOME}/ndk/28.0.12433566" >> $GITHUB_ENV
-        shell: bash
-
-      - name: Install CMake 3.31.0
-        run: |
           sdkmanager "cmake;3.31.0"
         shell: bash
 
@@ -203,10 +199,26 @@ jobs:
           flutter-version: '3.24.0'
           channel: 'stable'
 
-      - name: Install dependencies
+      - name: Install sate_core dependencies
+        working-directory: packages/sate_core
+        run: dart pub get
+
+      - name: Publish sate_core package
+        working-directory: packages/sate_core
+        run: dart pub publish --force
+
+      - name: Install sate_cli dependencies
+        working-directory: packages/sate_cli
+        run: dart pub get
+
+      - name: Publish sate_cli package
+        working-directory: packages/sate_cli
+        run: dart pub publish --force
+
+      - name: Install sate_ai dependencies
         working-directory: packages/sate_ai
         run: flutter pub get
 
-      - name: Publish package
+      - name: Publish sate_ai package
         working-directory: packages/sate_ai
         run: dart pub publish --force
