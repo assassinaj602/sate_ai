@@ -209,6 +209,15 @@ void main(List<String> arguments) async {
     ..addFlag('adaptive-chaos',
         help:
             'Enable adaptive chaos injection scaling with live resource telemetry')
+    ..addFlag('estimate',
+        help:
+            'Estimate test duration, peak memory, and battery cost before execution')
+    ..addOption('estimate-profile',
+        help:
+            'Device hardware profile for estimation: mobile, edge, tablet (default: mobile)',
+        defaultsTo: 'mobile')
+    ..addFlag('estimate-cloud',
+        help: 'Include estimated cloud API cost for hybrid/cloud models')
     ..addFlag('help', abbr: 'h', help: 'Show this help', negatable: false);
 
   try {
@@ -384,6 +393,46 @@ void main(List<String> arguments) async {
 
     if (results['adaptive-chaos'] as bool) {
       injectors.add(AdaptiveChaosInjector(model: model));
+    }
+
+    if (results['estimate'] as bool) {
+      final profileStr = results['estimate-profile'] as String? ?? 'mobile';
+      final DeviceHardwareProfile hardwareProfile;
+      switch (profileStr.toLowerCase()) {
+        case 'edge':
+        case 'edgeiot':
+        case 'iot':
+          hardwareProfile = DeviceHardwareProfile.edgeIoT;
+          break;
+        case 'tablet':
+          hardwareProfile = DeviceHardwareProfile.tablet;
+          break;
+        case 'mobile':
+        default:
+          hardwareProfile = DeviceHardwareProfile.mobile;
+          break;
+      }
+
+      final isCloud = results['estimate-cloud'] as bool;
+      final estimator = CostEstimator(hardwareProfile: hardwareProfile);
+      final estimate = estimator.estimate(
+        model: model,
+        injectors: injectors,
+        timeout: Duration(seconds: timeoutSeconds),
+        retryCount: retryCount,
+        isCloudModel: isCloud,
+      );
+
+      final content =
+          useMarkdown ? estimate.toMarkdown() : jsonEncode(estimate.toJson());
+
+      if (outputFile != null) {
+        await File(outputFile).writeAsString(content);
+        log('Stress test cost estimate written to $outputFile');
+      } else {
+        log(estimate.toMarkdown());
+      }
+      exit(0);
     }
 
     if (results['health-check'] as bool) {
