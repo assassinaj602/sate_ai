@@ -320,7 +320,7 @@ class _InteractiveTutorialDialogState extends State<InteractiveTutorialDialog> {
                   ],
                 ),
                 selected: isSelected,
-                selectedColor: const Color(0xFF6C63FF).withValues(alpha: 0.35),
+                selectedColor: const Color(0x596C63FF),
                 backgroundColor: const Color(0xFF222244),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
@@ -618,8 +618,7 @@ void main() async {
           decoration: BoxDecoration(
             color: const Color(0xFF1E1E38),
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-                color: const Color(0xFF48CAE4).withValues(alpha: 0.3)),
+            border: Border.all(color: const Color(0x4D48CAE4)),
           ),
           child: Row(
             children: [
@@ -929,7 +928,7 @@ void main() async {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: const Color(0xFF6C63FF).withValues(alpha: 0.2),
+            color: const Color(0x336C63FF),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(icon, color: const Color(0xFF48CAE4), size: 22),
