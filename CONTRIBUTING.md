@@ -46,14 +46,14 @@ See the "Repository structure" table in the root README.
 
 ## Adding a Fault Injector
 
-1. Create `lib/src/injectors/<name>_injector.dart`.
+1. Create `packages/sate_core/lib/src/injectors/<name>_injector.dart`.
 2. Implement `FaultInjector` (`type`, `name`, `description`, `inject`, `reset`).
-3. Add the new value to `FaultType` in `lib/src/core/fault_type.dart`.
-4. Export it from `lib/sate_ai.dart`.
-5. Write unit tests in `test/injectors/<name>_injector_test.dart`.
+3. Add the new value to `FaultType` in `packages/sate_core/lib/src/core/fault_type.dart`.
+4. Export it from `packages/sate_core/lib/sate_core.dart` (re-exported via `packages/sate_ai/lib/sate_ai.dart`).
+5. Write unit tests in `packages/sate_core/test/injectors/<name>_injector_test.dart`.
 6. Update `CHANGELOG.md` and README.
 
-You can also generate the scaffolding:
+You can also generate the scaffolding using the CLI:
 
 ```bash
 sate_ai create injector MyCustomInjector
@@ -61,11 +61,10 @@ sate_ai create injector MyCustomInjector
 
 ## Adding a Model Adapter
 
-1. Create `lib/src/adapters/<name>_adapter.dart`.
-2. Implement `AIModelAdapter` (all getters and methods, including
-   `simulateGPUMemoryPressure` and `currentGPUMemoryMB`).
-3. Export it from `lib/sate_ai.dart`.
-4. Write unit tests in `test/adapters/<name>_adapter_test.dart`.
+1. If the adapter is pure Dart / framework-agnostic, place it in `packages/sate_core/lib/src/adapter/<name>_adapter.dart`. If it requires Flutter or platform channels, place it in `packages/sate_ai/lib/src/adapters/<name>_adapter.dart`.
+2. Implement `AIModelAdapter` (all getters and methods, including `simulateGPUMemoryPressure` and `currentGPUMemoryMB`).
+3. Export it from `packages/sate_core/lib/sate_core.dart` or `packages/sate_ai/lib/sate_ai.dart`.
+4. Write unit tests in the corresponding package's `test/adapters/<name>_adapter_test.dart`.
 5. Update `CHANGELOG.md` and README.
 
 ## Adding a New Language SDK

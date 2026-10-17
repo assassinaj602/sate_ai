@@ -44,6 +44,10 @@ SATE AI is an open standard and cross-platform framework for validating the resi
 Targeting formal stabilization of cross-platform APIs, baseline report compatibility, and documentation:
 
 - [x] Cross-platform architecture and roadmap documentation (Issue #123)
+- [x] Adaptive chaos injection schedule based on live resource telemetry (Issue #98)
+- [x] Stress test cost and resource estimation for edge, mobile, and server profiles (Issue #97)
+- [x] Interactive onboarding tutorial inside Flutter example app (Issue #40)
+- [x] Real-world project showcase gallery and submission guide (Issue #43)
 - [ ] Standardized JSON Stress Report schema specification (v1.0.0 JSON schema)
 - [ ] Cross-platform report export compatibility between Dart, Kotlin, and TypeScript SDKs
 - [ ] Centralized documentation site with cross-language API guides
