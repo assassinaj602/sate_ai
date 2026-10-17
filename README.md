@@ -127,7 +127,7 @@ reliability before shipping to production.
 - SQLite storage for historical report tracking
 - CI/CD status badges (SVG)
 - Custom report templates (JSON/YAML)
-- Retry and flaky test detection
+- Interactive guided onboarding tutorial in the Flutter example app
 - Stress scheduler (cron)
 - VS Code extension
 

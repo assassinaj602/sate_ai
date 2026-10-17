@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sate_ai/sate_ai.dart';
 
+import 'tutorial/interactive_tutorial.dart';
+
 void main() => runApp(const SateAIApp());
 
 enum AdapterType { mock, onnx, tflite }
@@ -184,6 +186,32 @@ class _StressDashboardState extends State<StressDashboard>
 
   void _appendLog(String line) => setState(() => _log.add(line));
 
+  void _openTutorial() {
+    InteractiveTutorialDialog.show(
+      context,
+      initialConfig: TutorialConfiguration(
+        adapter: _selectedAdapter,
+        useMemoryPressure: _useMemoryPressure,
+        useMalformedInput: _useMalformedInput,
+        useThermalThrottle: _useThermalThrottle,
+        useQuantizationDrift: _useQuantizationDrift,
+        useConfidenceValidation: _useConfidenceValidation,
+      ),
+      onApply: (config) {
+        setState(() {
+          _selectedAdapter = config.adapter;
+          _useMemoryPressure = config.useMemoryPressure;
+          _useMalformedInput = config.useMalformedInput;
+          _useThermalThrottle = config.useThermalThrottle;
+          _useQuantizationDrift = config.useQuantizationDrift;
+          _useConfidenceValidation = config.useConfidenceValidation;
+        });
+        _appendLog(
+            '🎓 Tutorial configuration applied: Adapter=${_selectedAdapter.name.toUpperCase()}');
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
@@ -216,6 +244,23 @@ class _StressDashboardState extends State<StressDashboard>
             ),
           ],
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: OutlinedButton.icon(
+              onPressed: _openTutorial,
+              icon: const Icon(Icons.school, size: 16),
+              label: const Text('Tutorial'),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: const Color(0xFF48CAE4),
+                side: const BorderSide(color: Color(0xFF48CAE4)),
+                visualDensity: VisualDensity.compact,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              ),
+            ),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(12),
