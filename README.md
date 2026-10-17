@@ -114,6 +114,7 @@ reliability before shipping to production.
 
 - 11 fault injectors covering memory, I/O, thermal, and network failure modes
 - Adaptive Chaos Injection modulated by live device CPU, RAM, and thermal telemetry
+- Stress test cost and resource estimation for duration, memory, battery, and cloud API spend
 - Model Quantization Analyzer for ONNX and TFLite models
 - 8 model adapters: MockAdapter, OnnxAdapter, TFLiteAdapter, FllamaAdapter,
   MediaPipeAdapter, CoreMLAdapter, GoogleMLKitAdapter, and custom adapters
@@ -311,6 +312,9 @@ sate_ai --model model.gguf --injectors memoryPressure \
 
 # Generate a custom injector
 sate_ai create injector MyCustomInjector
+
+# Pre-flight stress test cost estimation
+sate_ai --estimate --injectors memoryPressure,thermalThrottle --estimate-profile edge
 ```
 
 ## Documentation
@@ -318,6 +322,8 @@ sate_ai create injector MyCustomInjector
 - [Website](https://assassinaj602.github.io/sate_ai/)
 - [API Reference](https://pub.dev/documentation/sate_ai)
 - [Research Paper](https://assassinaj602.github.io/sate_ai/paper.html)
+- [Cost and Resource Estimation Cookbook](cookbook/cost_estimation.md)
+- [Adaptive Chaos Testing Cookbook](cookbook/adaptive_chaos_testing.md)
 - [Contributing Guide](CONTRIBUTING.md)
 
 ## Citation

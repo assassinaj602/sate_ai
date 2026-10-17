@@ -36,6 +36,7 @@ export 'src/core/webhook_payload.dart';
 export 'src/core/webhook_notifier.dart';
 export 'src/core/resource_telemetry.dart';
 export 'src/core/quantization_report.dart';
+export 'src/core/cost_estimator.dart';
 
 // Adapters
 export 'src/adapters/model_adapter.dart';
