@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SATE AI: Project Showcase &amp; Community Gallery</title>
+  <meta name="description" content="Explore real-world mobile apps, edge AI pipelines, and research projects tested and hardened with SATE AI fault injection framework.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .showcase-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+    }
+
+    .showcase-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .showcase-title {
+      font-size: 2.75rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .showcase-subtitle {
+      font-size: 1.15rem;
+      color: var(--text-2);
+      max-width: 720px;
+      margin: 0 auto 1.75rem;
+      line-height: 1.6;
+    }
+
+    /* Filter Bar */
+    .filter-bar {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+
+    .filter-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-2);
+      padding: 0.5rem 1.15rem;
+      border-radius: 9999px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover {
+      background: var(--surface-2);
+      color: #ffffff;
+      border-color: var(--accent);
+    }
+
+    .filter-btn.active {
+      background: var(--accent);
+      color: #0b0d13;
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* Showcase Grid */
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 2rem;
+      margin-bottom: 5rem;
+    }
+
+    .showcase-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .showcase-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(96, 165, 250, 0.4);
+      box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    .card-preview {
+      width: 100%;
+      height: 220px;
+      background: #0b0d13;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .showcase-card:hover .card-preview img {
+      transform: scale(1.03);
+    }
+
+    .card-badge-overlay {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(15, 17, 23, 0.85);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent);
+      backdrop-filter: blur(8px);
+    }
+
+    .card-body {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .card-tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.85rem;
+    }
+
+    .tag {
+      background: var(--surface-2);
+      color: var(--text-2);
+      font-size: 0.75rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-weight: 500;
+    }
+
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-desc {
+      font-size: 0.925rem;
+      color: var(--text-2);
+      line-height: 1.55;
+      margin-bottom: 1.25rem;
+      flex-grow: 1;
+    }
+
+    .card-quote {
+      background: rgba(96, 165, 250, 0.06);
+      border-left: 3px solid var(--accent);
+      padding: 0.75rem 1rem;
+      border-radius: 0 6px 6px 0;
+      margin-bottom: 1.25rem;
+      font-size: 0.85rem;
+      font-style: italic;
+      color: var(--text);
+    }
+
+    .card-author {
+      display: block;
+      margin-top: 0.4rem;
+      font-style: normal;
+      font-size: 0.75rem;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .card-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent);
+      transition: color 0.2s ease;
+    }
+
+    .card-btn:hover {
+      color: #93c5fd;
+    }
+
+    /* Submission Guide Section */
+    .submit-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 3rem 2.5rem;
+      margin-top: 4rem;
+    }
+
+    .submit-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .submit-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.75rem;
+    }
+
+    .submit-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .step-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    .step-num {
+      width: 32px;
+      height: 32px;
+      background: var(--accent);
+      color: #0b0d13;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    .step-card h4 {
+      color: #ffffff;
+      font-size: 1.05rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .step-card p {
+      color: var(--text-2);
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+
+    .badge-snippet-box {
+      background: #0b0d13;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin-top: 1.5rem;
+    }
+
+    .badge-preview {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .code-block {
+      background: #131722;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text);
+      overflow-x: auto;
+      user-select: all;
+    }
+
+    @media (max-width: 768px) {
+      .showcase-title {
+        font-size: 2.1rem;
+      }
+      .showcase-grid {
+        grid-template-columns: 1fr;
+      }
+      .submit-section {
+        padding: 2rem 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand">
+        <span class="brand-logo">SATE</span>
+        <span class="brand-sub">AI</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="index.html#injectors-adapters">Injectors &amp; Adapters</a></li>
+        <li><a href="index.html#cli">CLI Reference</a></li>
+        <li><a href="paper.html">Paper</a></li>
+        <li><a href="showcase.html" class="active" style="color: var(--accent); font-weight: 600;">Showcase</a></li>
+        <li><a href="https://pub.dev/packages/sate_ai" target="_blank" rel="noopener noreferrer" class="nav-pub-link">pub.dev</a></li>
+        <li><a href="https://github.com/assassinaj602/sate_ai" target="_blank" rel="noopener noreferrer" class="nav-github-link">GitHub</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="showcase-container">
+    <header class="showcase-header">
+      <div class="hero-badge">Real-World Projects &amp; Deployments</div>
+      <h1 class="showcase-title">SATE AI Project Showcase</h1>
+      <p class="showcase-subtitle">
+        Explore production applications, edge AI systems, and academic research battle-hardened against resource exhaustion, thermal throttles, and quantization drift.
+      </p>
+      <div class="hero-actions" style="justify-content: center;">
+        <a href="#submit-project" class="btn btn-primary">
+          Submit Your Project
+        </a>
+        <a href="https://github.com/assassinaj602/sate_ai" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+          Star on GitHub
+        </a>
+      </div>
+    </header>
+
+    <!-- Filter Buttons -->
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">All Projects</button>
+      <button class="filter-btn" data-filter="flutter">Flutter Apps</button>
+      <button class="filter-btn" data-filter="vision">Computer Vision</button>
+      <button class="filter-btn" data-filter="llm">Edge LLM &amp; NLP</button>
+      <button class="filter-btn" data-filter="research">Research &amp; Benchmarks</button>
+    </div>
+
+    <!-- Showcase Grid -->
+    <div class="showcase-grid" id="showcase-grid">
+
+      <!-- Entry 1: SATE AI Demo App -->
+      <article class="showcase-card" data-category="flutter vision">
+        <div class="card-preview">
+          <img src="assets/demo.png" alt="SATE AI Mobile App Interface">
+          <span class="card-badge-overlay">Reference App</span>
+        </div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="tag">Flutter</span>
+            <span class="tag">TensorFlow Lite</span>
+            <span class="tag">ONNX Mobile</span>
+          </div>
+          <h2 class="card-title">SATE AI Interactive Dashboard</h2>
+          <p class="card-desc">
+            The official cross-platform reference demo application running on Android, iOS, and Web. Demonstrates live fault injection toggles, step-by-step interactive onboarding tutorial, real-time latency graphs, and instant SQLite report exports.
+          </p>
+          <div class="card-quote">
+            "Running automated stress loops during local CI detected unhandled Out-Of-Memory exceptions on low-tier 2GB RAM test devices before customer release."
+            <span class="card-author">SATE AI Engineering Team</span>
+          </div>
+          <div class="card-footer">
+            <a href="https://github.com/assassinaj602/sate_ai/tree/main/packages/sate_ai/example" target="_blank" rel="noopener noreferrer" class="card-btn">
+              View Source Code &rarr;
+            </a>
+            <span style="font-size: 0.8rem; color: var(--pass); font-weight: 600;">99.4% Robustness</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Entry 2: EdgePulse Observability Suite -->
+      <article class="showcase-card" data-category="llm research">
+        <div class="card-preview">
+          <img src="assets/figures/architecture.png" alt="EdgePulse Observability Architecture">
+          <span class="card-badge-overlay">Zenodo / Research</span>
+        </div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="tag">Edge LLM</span>
+            <span class="tag">Dart CLI</span>
+            <span class="tag">GGUF / llama.cpp</span>
+          </div>
+          <h2 class="card-title">EdgePulse Observability Framework</h2>
+          <p class="card-desc">
+            A high-throughput runtime observability suite for quantized 4-bit and 8-bit Large Language Models running on consumer edge devices. Integrates SATE AI adaptive chaos schedules to profile token generation degradation under aggressive thermal states.
+          </p>
+          <div class="card-quote">
+            "SATE AI's adaptive chaos injection pushed our on-device LLM inference loops to their true thermal and memory limits without triggering unrecoverable kernel hard-kills."
+            <span class="card-author">Muhammad Assad Ullah, AI Systems Researcher</span>
+          </div>
+          <div class="card-footer">
+            <a href="https://doi.org/10.5281/zenodo.23248718" target="_blank" rel="noopener noreferrer" class="card-btn">
+              Read Specification &rarr;
+            </a>
+            <span style="font-size: 0.8rem; color: var(--accent); font-weight: 600;">Zenodo Verified</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Entry 3: VisionSentinel Edge Inspection -->
+      <article class="showcase-card" data-category="vision">
+        <div class="card-preview">
+          <img src="assets/figures/injectors-overview.png" alt="VisionSentinel Fault Testing">
+          <span class="card-badge-overlay">Industrial Edge</span>
+        </div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="tag">YOLOv8</span>
+            <span class="tag">ONNX Runtime</span>
+            <span class="tag">SATE CLI</span>
+          </div>
+          <h2 class="card-title">VisionSentinel Industrial Defect Inspection</h2>
+          <p class="card-desc">
+            Autonomous optical inspection system deployed on edge manufacturing tablets. Leverages SATE AI Malformed Input and Quantization Drift injectors to test sensor glitch resilience and camera pipeline corruptions.
+          </p>
+          <div class="card-quote">
+            "Simulating sensor glitches and extreme thermal throttling in the lab saved us from expensive defect misclassifications on factory production floors."
+            <span class="card-author">Smart Edge IoT Lab</span>
+          </div>
+          <div class="card-footer">
+            <a href="https://github.com/assassinaj602/sate_ai#features" target="_blank" rel="noopener noreferrer" class="card-btn">
+              Case Study &rarr;
+            </a>
+            <span style="font-size: 0.8rem; color: var(--pass); font-weight: 600;">Zero Downtime</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Entry 4: HealthScan Offline Diagnostic Assistant -->
+      <article class="showcase-card" data-category="flutter vision">
+        <div class="card-preview">
+          <img src="assets/figures/fault-injection-workflow.png" alt="HealthScan Diagnostics Workflow">
+          <span class="card-badge-overlay">Healthcare</span>
+        </div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="tag">Flutter</span>
+            <span class="tag">MediaPipe</span>
+            <span class="tag">On-Device AI</span>
+          </div>
+          <h2 class="card-title">HealthScan Offline Diagnostic Tool</h2>
+          <p class="card-desc">
+            An offline-first clinical assistant running skin lesion classification and respiratory sound analysis on low-power devices in remote regions. Tested using SATE AI Confidence Threshold and Memory Pressure injectors.
+          </p>
+          <div class="card-quote">
+            "Testing under quantization drift uncovered silent false positives when memory drops, allowing us to enforce strict safety fallbacks before clinical trials."
+            <span class="card-author">Global Health AI Initiative</span>
+          </div>
+          <div class="card-footer">
+            <a href="https://github.com/assassinaj602/sate_ai" target="_blank" rel="noopener noreferrer" class="card-btn">
+              Project Overview &rarr;
+            </a>
+            <span style="font-size: 0.8rem; color: var(--pass); font-weight: 600;">FDA Readiness</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Entry 5: Cross-Platform SATE Web Testbench -->
+      <article class="showcase-card" data-category="research">
+        <div class="card-preview">
+          <img src="assets/pass.gif" alt="SATE Web Browser Inference Verification">
+          <span class="card-badge-overlay">Web / Node.js</span>
+        </div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="tag">TypeScript</span>
+            <span class="tag">TensorFlow.js</span>
+            <span class="tag">ONNX Web</span>
+          </div>
+          <h2 class="card-title">SATE Web Browser AI Stress Runner</h2>
+          <p class="card-desc">
+            In-browser chaos harness for WebAssembly and WebGPU neural runtimes. Injects synthetic WebGL buffer stalls, context losses, and network latency drops directly into browser inference pipelines.
+          </p>
+          <div class="card-quote">
+            "Enables browser AI engineers to test client-side model stability without needing dedicated desktop benchmarking setups."
+            <span class="card-author">Open Web AI Contributors</span>
+          </div>
+          <div class="card-footer">
+            <a href="https://github.com/assassinaj602/sate_ai/tree/main/packages/sate_web" target="_blank" rel="noopener noreferrer" class="card-btn">
+              npm Packages &rarr;
+            </a>
+            <span style="font-size: 0.8rem; color: var(--accent); font-weight: 600;">@sate-ai/core</span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- Submission Guide Section -->
+    <section class="submit-section" id="submit-project">
+      <div class="submit-header">
+        <div class="hero-badge">Join the Showcase</div>
+        <h2 class="submit-title">Submit Your Project to the Gallery</h2>
+        <p class="showcase-subtitle" style="margin-bottom: 0;">
+          Are you using SATE AI to test and harden your on-device models? Showcase your work to thousands of mobile and edge AI engineers worldwide.
+        </p>
+      </div>
+
+      <div class="submit-steps">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <h4>Run Stress Testing</h4>
+          <p>Execute SATE AI against your on-device model and generate an HTML or JSON report via the CLI or Flutter SDK.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <h4>Gather Details</h4>
+          <p>Prepare your project name, 2-3 sentence description, links (GitHub/website/store), a screenshot or GIF, and a brief testimonial.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <h4>Submit Pull Request</h4>
+          <p>Open a PR adding your card to <code>docs/showcase.html</code> or file an issue using the Showcase Submission template.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">4</div>
+          <h4>Display the Badge</h4>
+          <p>Add the verified SATE AI Tested badge to your repository README to show users that your AI is rigorously validated.</p>
+        </div>
+      </div>
+
+      <div class="badge-snippet-box">
+        <div class="badge-preview">
+          <span style="font-size: 0.875rem; font-weight: 600; color: #ffffff;">Repository Badge Preview:</span>
+          <img src="https://img.shields.io/badge/tested_with-SATE_AI-34d399.svg" alt="Tested with SATE AI Badge">
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-2); margin-bottom: 0.5rem;">Copy and paste this markdown into your project README:</p>
+        <div class="code-block">
+[![Tested with SATE AI](https://img.shields.io/badge/tested_with-SATE_AI-34d399.svg)](https://github.com/assassinaj602/sate_ai)
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <span class="brand-logo">SATE</span> <span class="brand-sub">AI</span>
+        <p>Systematic AI Testing &amp; Evaluation Framework for On-Device Models.</p>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="paper.html">Research Paper</a>
+        <a href="showcase.html">Showcase Gallery</a>
+        <a href="https://pub.dev/packages/sate_ai" target="_blank" rel="noopener noreferrer">pub.dev</a>
+        <a href="https://github.com/assassinaj602/sate_ai" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://github.com/assassinaj602/sate_ai/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">Contributing</a>
+      </div>
+      <div class="footer-copy">
+        <p>Maintained by <a href="https://github.com/assassinaj602" target="_blank" rel="noopener noreferrer">assassinaj602</a>.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Interactive category filtering
+    document.addEventListener('DOMContentLoaded', () => {
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      const cards = document.querySelectorAll('.showcase-card');
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          const filter = btn.getAttribute('data-filter');
+
+          cards.forEach(card => {
+            if (filter === 'all') {
+              card.style.display = 'flex';
+            } else {
+              const categories = card.getAttribute('data-category') || '';
+              if (categories.split(' ').includes(filter)) {
+                card.style.display = 'flex';
+              } else {
+                card.style.display = 'none';
+              }
+            }
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>
+
