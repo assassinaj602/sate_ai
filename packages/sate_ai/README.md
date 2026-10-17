@@ -25,13 +25,16 @@ Fault Injection Framework for On-Device AI Models in Flutter
 
 ## Repository structure
 
-This repository is a monorepo containing three Dart/Flutter packages:
+This repository is a monorepo containing the following packages:
 
 | Package | Type | Description |
 |---|---|---|
 | [`packages/sate_core`](packages/sate_core) | Pure Dart | Framework-agnostic core: injectors, adapters interface, reports, baseline, templates, webhooks, i18n |
 | [`packages/sate_ai`](packages/sate_ai) | Flutter | Flutter package wrapping `sate_core`, plus native adapters (ONNX, TFLite, Fllama, MediaPipe, Core ML, Google ML Kit) |
 | [`packages/sate_cli`](packages/sate_cli) | Pure Dart | CLI binary: installable without Flutter via `dart pub global activate sate_cli` |
+| [`packages/sate_android`](packages/sate_android) | Kotlin | Android native SDK for fault injection on TFLite models |
+| [`packages/sate_web`](packages/sate_web) | TypeScript/npm | TypeScript/npm SDK for browser and Node.js (TensorFlow.js, ONNX Runtime Web) |
+| [`packages/sate_ai_devtools`](packages/sate_ai_devtools) | Flutter | Flutter DevTools extension for real-time fault injection monitoring |
 
 Packages are orchestrated with [Melos](https://melos.invertase.dev/).
 
@@ -67,6 +70,8 @@ so developers can validate model reliability before shipping to production.
 ## Features
 
 - 11 fault injectors covering memory, I/O, thermal, and network failure modes
+- Adaptive Chaos Injection modulated by live device CPU, RAM, and thermal telemetry
+- Stress test cost and resource estimation for duration, memory, battery, and cloud API spend
 - Model Quantization Analyzer for ONNX and TFLite models
 - 8 model adapters: MockAdapter, OnnxAdapter, TFLiteAdapter, FllamaAdapter,
   MediaPipeAdapter, CoreMLAdapter, GoogleMLKitAdapter, and custom adapters
@@ -79,7 +84,8 @@ so developers can validate model reliability before shipping to production.
 - SQLite storage for historical report tracking
 - CI/CD status badges (SVG)
 - Custom report templates (JSON/YAML)
-- Retry and flaky test detection
+- Interactive guided onboarding tutorial in the Flutter example app
+- Project showcase gallery featuring real-world deployments and edge AI benchmarks
 - Stress scheduler (cron)
 - VS Code extension
 
@@ -269,9 +275,12 @@ sate_ai create injector MyCustomInjector
 ## Documentation
 
 - [Website](https://assassinaj602.github.io/sate_ai/)
+- [Project Showcase Gallery](https://assassinaj602.github.io/sate_ai/showcase.html)
 - [API Reference](https://pub.dev/documentation/sate_ai)
 - [Research Paper](https://assassinaj602.github.io/sate_ai/paper.html)
-- [Contributing Guide](CONTRIBUTING.md)
+- [Cost and Resource Estimation Cookbook](../../cookbook/cost_estimation.md)
+- [Adaptive Chaos Testing Cookbook](../../cookbook/adaptive_chaos_testing.md)
+- [Contributing Guide](../../CONTRIBUTING.md)
 
 ## Citation
 
