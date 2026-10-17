@@ -128,6 +128,7 @@ reliability before shipping to production.
 - CI/CD status badges (SVG)
 - Custom report templates (JSON/YAML)
 - Interactive guided onboarding tutorial in the Flutter example app
+- Project showcase gallery featuring real-world deployments and edge AI benchmarks
 - Stress scheduler (cron)
 - VS Code extension
 
@@ -317,9 +318,17 @@ sate_ai create injector MyCustomInjector
 sate_ai --estimate --injectors memoryPressure,thermalThrottle --estimate-profile edge
 ```
 
+## Showcase
+
+Discover how teams, researchers, and developers use SATE AI to harden on-device models:
+
+- **[Project Showcase Gallery](https://assassinaj602.github.io/sate_ai/showcase.html)**: Interactive web gallery with filterable categories, testimonials, and reliability metrics.
+- **[SHOWCASE.md](SHOWCASE.md)**: Submission guidelines, project details, and official "Tested with SATE AI" badge snippets for your README.
+
 ## Documentation
 
 - [Website](https://assassinaj602.github.io/sate_ai/)
+- [Project Showcase Gallery](https://assassinaj602.github.io/sate_ai/showcase.html)
 - [API Reference](https://pub.dev/documentation/sate_ai)
 - [Research Paper](https://assassinaj602.github.io/sate_ai/paper.html)
 - [Cost and Resource Estimation Cookbook](cookbook/cost_estimation.md)
