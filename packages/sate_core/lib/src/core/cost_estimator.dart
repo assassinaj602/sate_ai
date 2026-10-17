@@ -128,7 +128,8 @@ class StressCostEstimate {
 
   /// Percentage of total device memory that will be consumed at peak.
   double get memoryUsagePercentage => hardwareProfile.deviceTotalMemoryMb > 0
-      ? (estimatedPeakMemoryMB / hardwareProfile.deviceTotalMemoryMb * 100.0).clamp(0.0, 100.0)
+      ? (estimatedPeakMemoryMB / hardwareProfile.deviceTotalMemoryMb * 100.0)
+          .clamp(0.0, 100.0)
       : 0.0;
 
   /// Serializes to a JSON map.
@@ -151,14 +152,19 @@ class StressCostEstimate {
     return StressCostEstimate(
       modelId: json['modelId'] as String,
       totalInjectors: json['totalInjectors'] as int,
-      estimatedDuration: Duration(milliseconds: json['estimatedDurationMs'] as int),
+      estimatedDuration:
+          Duration(milliseconds: json['estimatedDurationMs'] as int),
       estimatedPeakMemoryMB: (json['estimatedPeakMemoryMB'] as num).toDouble(),
-      estimatedBatteryDrainMah: (json['estimatedBatteryDrainMah'] as num).toDouble(),
-      estimatedBatteryDrainPercent: (json['estimatedBatteryDrainPercent'] as num).toDouble(),
-      hardwareProfile: DeviceHardwareProfile.fromJson(json['hardwareProfile'] as Map<String, dynamic>),
+      estimatedBatteryDrainMah:
+          (json['estimatedBatteryDrainMah'] as num).toDouble(),
+      estimatedBatteryDrainPercent:
+          (json['estimatedBatteryDrainPercent'] as num).toDouble(),
+      hardwareProfile: DeviceHardwareProfile.fromJson(
+          json['hardwareProfile'] as Map<String, dynamic>),
       estimatedInferenceCycles: json['estimatedInferenceCycles'] as int? ?? 0,
       estimatedTokenCount: json['estimatedTokenCount'] as int? ?? 0,
-      estimatedCloudCostUsd: (json['estimatedCloudCostUsd'] as num?)?.toDouble() ?? 0.0,
+      estimatedCloudCostUsd:
+          (json['estimatedCloudCostUsd'] as num?)?.toDouble() ?? 0.0,
     );
   }
 
@@ -177,24 +183,29 @@ class StressCostEstimate {
     final minutes = estimatedDuration.inMinutes;
     final seconds = estimatedDuration.inSeconds % 60;
     final durationStr = minutes > 0 ? '${minutes}m ${seconds}s' : '${seconds}s';
-    buffer.writeln('| **Projected Duration** | $durationStr | Wall-clock test time |');
+    buffer.writeln(
+        '| **Projected Duration** | $durationStr | Wall-clock test time |');
     buffer.writeln(
         '| **Peak Memory Usage** | ${estimatedPeakMemoryMB.toStringAsFixed(1)} MB | ~${memoryUsagePercentage.toStringAsFixed(1)}% of ${hardwareProfile.deviceTotalMemoryMb.toStringAsFixed(0)} MB |');
     buffer.writeln(
         '| **Battery Consumption** | ${estimatedBatteryDrainMah.toStringAsFixed(2)} mAh | ~${estimatedBatteryDrainPercent.toStringAsFixed(2)}% of ${hardwareProfile.batteryCapacityMah.toStringAsFixed(0)} mAh |');
-    buffer.writeln('| **Inference Cycles** | $estimatedInferenceCycles | Total test probes |');
+    buffer.writeln(
+        '| **Inference Cycles** | $estimatedInferenceCycles | Total test probes |');
 
     if (estimatedCloudCostUsd > 0.0) {
-      buffer.writeln('| **Cloud API Cost** | \$${estimatedCloudCostUsd.toStringAsFixed(4)} | Based on ~$estimatedTokenCount tokens |');
+      buffer.writeln(
+          '| **Cloud API Cost** | \$${estimatedCloudCostUsd.toStringAsFixed(4)} | Based on ~$estimatedTokenCount tokens |');
     }
 
     buffer.writeln();
     if (memoryUsagePercentage > 85.0) {
-      buffer.writeln('> ⚠️ **Warning:** Projected peak memory exceeds 85% of total device memory. OOM risk is high.');
+      buffer.writeln(
+          '> ⚠️ **Warning:** Projected peak memory exceeds 85% of total device memory. OOM risk is high.');
       buffer.writeln();
     }
     if (estimatedBatteryDrainPercent > 5.0) {
-      buffer.writeln('> 🔋 **Notice:** Projected battery drain exceeds 5%. Ensure test device is connected to power.');
+      buffer.writeln(
+          '> 🔋 **Notice:** Projected battery drain exceeds 5%. Ensure test device is connected to power.');
       buffer.writeln();
     }
 
@@ -280,11 +291,14 @@ class CostEstimator {
 
     for (final injector in injectors) {
       if (injector is MemoryPressureInjector) {
-        maxInjectorMemoryDelta = max(maxInjectorMemoryDelta, injector.limitMb.toDouble());
+        maxInjectorMemoryDelta =
+            max(maxInjectorMemoryDelta, injector.limitMb.toDouble());
       } else if (injector is GpuMemoryPressureInjector) {
-        maxInjectorMemoryDelta = max(maxInjectorMemoryDelta, injector.limitMb.toDouble());
+        maxInjectorMemoryDelta =
+            max(maxInjectorMemoryDelta, injector.limitMb.toDouble());
       } else if (injector is AdaptiveChaosInjector) {
-        maxInjectorMemoryDelta = max(maxInjectorMemoryDelta, injector.baseAllocationMB.toDouble());
+        maxInjectorMemoryDelta =
+            max(maxInjectorMemoryDelta, injector.baseAllocationMB.toDouble());
       } else {
         // Generic non-memory injectors have minimal memory overhead (~15 MB probe buffers)
         maxInjectorMemoryDelta = max(maxInjectorMemoryDelta, 15.0);
@@ -297,7 +311,8 @@ class CostEstimator {
     // Battery Drain (mAh) = (Current (mA) * Duration (hours))
     final durationHours = totalDurationMs / (1000.0 * 60.0 * 60.0);
     // Weighted current draw: 80% active inference current, 20% idle current
-    final avgCurrentMa = (hardwareProfile.inferenceCurrentMa * 0.80) + (hardwareProfile.idleCurrentMa * 0.20);
+    final avgCurrentMa = (hardwareProfile.inferenceCurrentMa * 0.80) +
+        (hardwareProfile.idleCurrentMa * 0.20);
     final batteryDrainMah = avgCurrentMa * durationHours;
 
     final batteryDrainPercent = hardwareProfile.batteryCapacityMah > 0
