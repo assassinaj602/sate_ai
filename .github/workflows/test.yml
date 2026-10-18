@@ -203,10 +203,11 @@ jobs:
           flutter-version: '3.24.0'
           channel: 'stable'
 
-      - name: Install dependencies
-        working-directory: packages/sate_ai
-        run: flutter pub get
+      - name: Install Melos
+        run: dart pub global activate melos
 
-      - name: Publish package
-        working-directory: packages/sate_ai
-        run: dart pub publish --force
+      - name: Bootstrap Melos
+        run: melos bootstrap
+
+      - name: Publish packages
+        run: melos publish --no-dry-run --yes
