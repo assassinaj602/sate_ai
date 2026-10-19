@@ -1,0 +1,12 @@
+build/
+.dart_tool/
+*.iml
+.idea/
+example/build/
+example/.dart_tool/
+example/android/.gradle/
+example/android/app/build/
+example/ios/Pods/
+example/windows/flutter/ephemeral/
+example/linux/flutter/ephemeral/
+example/macos/Pods/
