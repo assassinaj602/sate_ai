@@ -11,6 +11,8 @@ Welcome to the **SATE AI Cookbook**! This collection of practical recipes demons
 - [Recipe 3: Testing a Speech-to-Text Model](recipe-3-speech-to-text-testing.md)
 - [Recipe 4: Testing with ONNX Runtime](recipe-4-onnx-runtime-testing.md)
 - [Recipe 5: Testing with TensorFlow Lite](recipe-5-tflite-testing.md)
+- [Recipe 6: Adaptive Chaos Injection Testing](recipe-6-adaptive-chaos-testing.md)
+- [Recipe 7: Cost and Resource Estimation](recipe-7-cost-estimation.md)
 - [Integration Guide & Advanced Workflows](integration-guide.md)
 - [Summary & Quick Reference](SUMMARY.md)
 
