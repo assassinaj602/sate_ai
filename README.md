@@ -326,10 +326,21 @@ Discover how teams, researchers, and developers use SATE AI to harden on-device 
 - **[Project Showcase Gallery](https://assassinaj602.github.io/sate_ai/showcase.html)**: Interactive web gallery with filterable categories, testimonials, and reliability metrics.
 - **[SHOWCASE.md](SHOWCASE.md)**: Submission guidelines, project details, and official "Tested with SATE AI" badge snippets for your README.
 
+## Engineering Blog Series
+
+Read our in-depth 5-part technical blog series on building, testing, and hardening on-device AI:
+- **[Part 1: The Problem - Why On-Device AI Needs Chaos Engineering](blog/part-1-the-problem.md)**
+- **[Part 2: Architecture & Anatomy - How SATE AI Actually Works](blog/part-2-architecture-and-injectors.md)**
+- **[Part 3: Real-World Edge Testing - Benchmarking on Physical Hardware](blog/part-3-real-world-edge-testing.md)**
+- **[Part 4: Lessons Learned - Hard-Won Insights Building Open-Source Tooling](blog/part-4-lessons-learned.md)**
+- **[Part 5: Future Roadmap - The Road Ahead for Edge AI Reliability](blog/part-5-future-roadmap.md)**
+- **[Interactive Web Reading Experience](https://assassinaj602.github.io/sate_ai/blog.html)**
+
 ## Documentation
 
 - [Website](https://assassinaj602.github.io/sate_ai/)
 - [Project Showcase Gallery](https://assassinaj602.github.io/sate_ai/showcase.html)
+- [5-Part Engineering Blog Series](https://assassinaj602.github.io/sate_ai/blog.html)
 - [API Reference](https://pub.dev/documentation/sate_ai)
 - [Research Paper](https://assassinaj602.github.io/sate_ai/paper.html)
 - [Cost and Resource Estimation Cookbook](cookbook/cost_estimation.md)
