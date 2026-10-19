@@ -78,6 +78,17 @@ Targeting formal stabilization of cross-platform APIs, baseline report compatibi
   - Direct bindings to GGML, ExecuTorch, and LiteRT.
   - Uniform FFI layer consumable by any programming language.
 
+### Academic & Research Milestones
+
+- **Conference Paper Expansion (Issue #45)**:
+  - Full 9-10 page empirical research paper targeting top-tier software engineering venues (ICSE, ASE, ISSTA).
+  - Formal comparative taxonomy matrix against traditional ML fuzzing and cloud chaos engineering frameworks.
+  - Empirical evaluation on physical ARM64 hardware (TECNO CH7n) across TFLite, ONNX, and llama.cpp/GGUF models.
+- **JOSS Resubmission Milestone (February 2027, Issue #46)**:
+  - 6-month public development history requirement reached.
+  - Standalone JOSS-compliant paper and bibliography at `paper/paper.md` and `paper/paper.bib`.
+  - Comprehensive verification checklist and submission protocol maintained in `research/joss/RESUBMISSION_PLAN.md`.
+
 ---
 
 ## 🤝 Community Feedback & Contributions
