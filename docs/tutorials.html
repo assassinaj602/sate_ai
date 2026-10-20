@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SATE AI Video Tutorials: Hands-On On-Device AI Chaos Engineering</title>
+  <meta name="description" content="A 5-part video tutorial series teaching you how to install, build custom injectors, wrap ML models, and automate chaos testing in CI/CD pipelines.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .tutorials-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+    }
+
+    .tutorials-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .series-badge {
+      display: inline-block;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      font-size: 0.825rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    .tutorials-title {
+      font-size: 2.75rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .tutorials-subtitle {
+      font-size: 1.15rem;
+      color: var(--text-2);
+      max-width: 760px;
+      margin: 0 auto 1.75rem;
+      line-height: 1.6;
+    }
+
+    .video-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+      margin-bottom: 4rem;
+    }
+
+    .video-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      transition: all 0.25s ease;
+    }
+
+    @media (max-width: 860px) {
+      .video-card {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .video-card:hover {
+      border-color: rgba(99, 102, 241, 0.45);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    .video-thumbnail-box {
+      background: #0f172a;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 220px;
+      border-right: 1px solid var(--border);
+    }
+
+    @media (max-width: 860px) {
+      .video-thumbnail-box {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+    }
+
+    .play-icon-btn {
+      width: 64px;
+      height: 64px;
+      background: rgba(99, 102, 241, 0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.5);
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .video-thumbnail-box:hover .play-icon-btn {
+      transform: scale(1.1);
+      background: #4f46e5;
+    }
+
+    .video-duration-badge {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      background: rgba(0, 0, 0, 0.8);
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .video-content {
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .video-meta {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .episode-pill {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #818cf8;
+      background: rgba(99, 102, 241, 0.12);
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+    }
+
+    .level-pill {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-2);
+    }
+
+    .video-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.65rem;
+      line-height: 1.3;
+    }
+
+    .video-desc {
+      color: var(--text-2);
+      font-size: 0.95rem;
+      line-height: 1.55;
+      margin-bottom: 1rem;
+    }
+
+    .transcript-toggle {
+      background: none;
+      border: none;
+      color: #38bdf8;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0;
+      margin-bottom: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .transcript-toggle:hover {
+      text-decoration: underline;
+    }
+
+    .transcript-box {
+      display: none;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.875rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .transcript-box.open {
+      display: block;
+    }
+
+    .video-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .watch-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #6366f1;
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 0.875rem;
+      padding: 0.5rem 1.15rem;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .watch-btn:hover {
+      background: #4f46e5;
+      transform: translateY(-1px);
+    }
+
+    .script-link {
+      font-size: 0.875rem;
+      color: var(--text-2);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .script-link:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <span class="logo-text">SATE AI</span>
+        <span class="logo-badge">Docs</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Overview</a>
+        <a href="showcase.html">Showcase</a>
+        <a href="paper.html">Paper</a>
+        <a href="blog.html">Blog Series</a>
+        <a href="tutorials.html" class="active">Video Tutorials</a>
+        <a href="https://github.com/assassinaj602/sate_ai" target="_blank" rel="noopener" class="nav-github">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Tutorials Container -->
+  <main class="tutorials-container">
+
+    <header class="tutorials-header">
+      <div class="series-badge">5-Part Video Course</div>
+      <h1 class="tutorials-title">Mastering On-Device AI Chaos</h1>
+      <p class="tutorials-subtitle">
+        Short, high-density video tutorials covering installation, custom fault injectors, model runtime adapters, CI/CD automation, and real-time DevTools telemetry.
+      </p>
+    </header>
+
+    <div class="video-grid">
+
+      <!-- Video 1 -->
+      <div class="video-card">
+        <div class="video-thumbnail-box">
+          <a href="https://github.com/assassinaj602/sate_ai/blob/main/tutorials/video-1-getting-started.md" target="_blank" rel="noopener" class="play-icon-btn" aria-label="Play Video 1">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </a>
+          <span class="video-duration-badge">3:45</span>
+        </div>
+        <div class="video-content">
+          <div>
+            <div class="video-meta">
+              <span class="episode-pill">EPISODE 01</span>
+              <span class="level-pill">Beginner</span>
+            </div>
+            <h2 class="video-title">Getting Started with SATE AI</h2>
+            <p class="video-desc">
+              Installing the package, configuring your first StressRunner with MemoryPressureInjector, and interpreting P50/P90/P99 latency percentiles and recommendations.
+            </p>
+            <button class="transcript-toggle" onclick="toggleTranscript('t1')">
+              <span>View Transcript &amp; Script</span> &darr;
+            </button>
+            <div id="t1" class="transcript-box">
+              <strong>[00:00]</strong> Welcome to SATE AI. Learn how models fail under mobile OS memory constraints.<br>
+              <strong>[00:30]</strong> Install SATE AI via `flutter pub add sate_ai` or CLI.<br>
+              <strong>[01:15]</strong> Instantiate StressRunner with MemoryPressureInjector and run 20 iterations.<br>
+              <strong>[02:30]</strong> Read ASCII terminal report with latency percentiles and pass rates.
+            </div>
+          </div>
+          <div class="video-actions">
+            <a href="https://github.com/assassinaj602/sate_ai/blob/main/tutorials/video-1-getting-started.md" class="watch-btn" target="_blank" rel="noopener">
+              Watch Guide &rarr;
+            </a>
+            <a href="https://github.com/assassinaj602/sate_ai/blob/main/tutorials/video-1-getting-started.md" class="script-link" target="_blank" rel="noopener">
+              Full Code &amp; Script
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video 2 -->
+      <div class="video-card">
+        <div class="video-thumbnail-box">
+          <a href="https://github.com/assassinaj602/sate_ai/blob/main/tutorials/video-2-custom-injector.md" target="_blank" rel="noopener" class="play-icon-btn" aria-label="Play Video 2">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </a>
+          <span class="video-duration-badge">4:15</span>
+        </div>
+        <div class="video-content">
+          <div>
+            <div class="video-meta">
+              <span class="episode-pill">EPISODE 02</span>
+              <span class="level-pill">Intermediate</span>
+            </div>
+            <h2 class="video-title">Building a Custom Fault Injector</h2>
+            <p class="video-desc">
+              Understanding the FaultInjector interface and its three-phase lifecycle: setUp, inject, and tearDown. Building a BatteryDrainInjector that keeps CPU cores busy using worker isolates.
+            </p>
+            <button class="transcript-toggle" onclick="toggleTranscript('t2')">
+              <span>View Transcript &amp; Script</span> &darr;
+            </button>
+            <div id="t2" class="transcript-box">
+              <strong>[00:00]</strong> SATE AI supports custom hardware injectors.<br>
+              <strong>[00:35]</strong> Understand setUp, inject, and tearDown lifecycle hooks.<br>
+              <strong>[01:30]</strong> Spawn worker isolates to emulate background battery drain.<br>
+              <strong>[03:00]</strong> Attach custom injector to StressRunner and verify cleanup.
+            </div>
+          </div>
+          <div class="video-actions">
+            <a href="https://github.com/assassinaj602/sate_ai/blob/main/tutorials/video-2-custom-injector.md" class="watch-btn" target="_blank" rel="noopener">
+              Watch Guide &rarr;
+            </a>
+            <a href="https://github.com/assassinaj602/sate_ai/blob/main/tutorials/video-2-custom-injector.md" class="script-link" target="_blank" rel="noopener">
+              Full Code &amp; Script
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video 3 -->
+      <div class="video-card">
+        <div class="video-thumbnail-box">
+          <a href="https://github.com/assassinaj602/sate_ai/blob/main/tutorials/video-3-custom-adapter.md" target="_blank" rel="noopener" class="play-icon-btn" aria-label="Play Video 3">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </a>
+          <span class="video-duration-badge">4:30</span>
+        </div>
+        <div class="video-content">
+          <div>
+            <div class="video-meta">
+              <span class="episode-pill">EPISODE 03</span>
+              <span class="level-pill">Intermediate</span>
+            </div>
+            <h2 class="video-title">Creating a Custom Model Adapter</h2>
+            <p class="video-desc">
+              Integrating any machine learning engine with SATE AI using the AIModelAdapter contract. Step-by-step implementation of a PyTorch Mobile adapter with boundary float verification.
+            </p>
+            <button class="transcript-toggle" onclick="toggleTranscript('t3')">
+              <span>View Transcript &amp; Script</span> &darr;
+            </button>
+            <div id="t3" class="transcript-box">
+              <strong>[00:00]</strong> Runtime independence: testing models regardless of C/C++ backend.<br>
+              <strong>[00:30]</strong> Implement initialize, predict, and dispose methods.<br>
+              <strong>[01:25]</strong> Wrap PyTorch Mobile TorchScript models with tensor conversion.<br>
+              <strong>[03:00]</strong> Pair with MalformedTensorInjector to test boundary handling.
+            </div>
+          </div>
+          <div class="video-actions">
+            <a href="https://github.com/assassinaj602/sate_ai/blob/main/tutorials/video-3-custom-adapter.md" class="watch-btn" target="_blank" rel="noopener">
+              Watch Guide &rarr;
+            </a>
+            <a href="https://github.com/assassinaj602/sate_ai/blob/main/tutorials/video-3-custom-adapter.md" class="script-link" target="_blank" rel="noopener">
+              Full Code &amp; Script
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video 4 -->
+      <div class="video-card">
+        <div class="video-thumbnail-box">
+          <a href="https://github.com/assassinaj602/sate_ai/blob/main/tutorials/video-4-ci-cd-integration.md" target="_blank" rel="noopener" class="play-icon-btn" aria-label="Play Video 4">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </a>
+          <span class="video-duration-badge">4:00</span>
+        </div>
+        <div class="video-content">
+          <div>
+            <div class="video-meta">
+              <span class="episode-pill">EPISODE 04</span>
+              <span class="level-pill">Advanced</span>
+            </div>
+            <h2 class="video-title">CI/CD Integration &amp; Automation</h2>
+            <p class="video-desc">
+              Automating stress testing in GitHub Actions using the sate-ai-test composite action. Configuring automated quality gates that block pull requests if pass rate falls below 95%.
+            </p>
+            <button class="transcript-toggle" onclick="toggleTranscript('t4')">
+              <span>View Transcript &amp; Script</span> &darr;
+            </button>
+            <div id="t4" class="transcript-box">
+              <strong>[00:00]</strong> Automate chaos tests on every pull request.<br>
+              <strong>[00:35]</strong> Headless CLI: `sate test` with pure Dart execution.<br>
+              <strong>[01:45]</strong> Configure GitHub composite action in 4 lines of YAML.<br>
+              <strong>[03:00]</strong> Set automated gating thresholds for pass rate and P99 latency.
+            </div>
+          </div>
+          <div class="video-actions">
+            <a href="https://github.com/assassinaj602/sate_ai/blob/main/tutorials/video-4-ci-cd-integration.md" class="watch-btn" target="_blank" rel="noopener">
+              Watch Guide &rarr;
+            </a>
+            <a href="https://github.com/assassinaj602/sate_ai/blob/main/tutorials/video-4-ci-cd-integration.md" class="script-link" target="_blank" rel="noopener">
+              Full Code &amp; Script
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video 5 -->
+      <div class="video-card">
+        <div class="video-thumbnail-box">
+          <a href="https://github.com/assassinaj602/sate_ai/blob/main/tutorials/video-5-advanced-features.md" target="_blank" rel="noopener" class="play-icon-btn" aria-label="Play Video 5">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </a>
+          <span class="video-duration-badge">4:45</span>
+        </div>
+        <div class="video-content">
+          <div>
+            <div class="video-meta">
+              <span class="episode-pill">EPISODE 05</span>
+              <span class="level-pill">Advanced</span>
+            </div>
+            <h2 class="video-title">Advanced Telemetry &amp; Web Dashboard</h2>
+            <p class="video-desc">
+              Real-time monitoring using the Flutter DevTools extension, archiving historical test runs in SQLite, exporting standalone HTML reports, and debugging with random seeds.
+            </p>
+            <button class="transcript-toggle" onclick="toggleTranscript('t5')">
+              <span>View Transcript &amp; Script</span> &darr;
+            </button>
+            <div id="t5" class="transcript-box">
+              <strong>[00:00]</strong> Diagnostic capabilities: live visual telemetry.<br>
+              <strong>[00:30]</strong> Flutter DevTools extension with real-time latency graphs.<br>
+              <strong>[01:45]</strong> SQLite report persistence and standalone HTML export.<br>
+              <strong>[03:00]</strong> Reproducible debugging using fixed random seeds.
+            </div>
+          </div>
+          <div class="video-actions">
+            <a href="https://github.com/assassinaj602/sate_ai/blob/main/tutorials/video-5-advanced-features.md" class="watch-btn" target="_blank" rel="noopener">
+              Watch Guide &rarr;
+            </a>
+            <a href="https://github.com/assassinaj602/sate_ai/blob/main/tutorials/video-5-advanced-features.md" class="script-link" target="_blank" rel="noopener">
+              Full Code &amp; Script
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <p>&copy; 2026 SATE AI. Open source under the MIT License.</p>
+    </div>
+  </footer>
+
+  <script>
+    function toggleTranscript(id) {
+      const box = document.getElementById(id);
+      box.classList.toggle('open');
+    }
+  </script>
+
+</body>
+</html>

@@ -326,6 +326,16 @@ Discover how teams, researchers, and developers use SATE AI to harden on-device 
 - **[Project Showcase Gallery](https://assassinaj602.github.io/sate_ai/showcase.html)**: Interactive web gallery with filterable categories, testimonials, and reliability metrics.
 - **[SHOWCASE.md](SHOWCASE.md)**: Submission guidelines, project details, and official "Tested with SATE AI" badge snippets for your README.
 
+## Video Tutorials
+
+Watch our 5-part video course for hands-on, step-by-step guidance:
+- **[Episode 1: Getting Started](tutorials/video-1-getting-started.md)**: Installation, first stress test, interpreting reports.
+- **[Episode 2: Adding a Custom Injector](tutorials/video-2-custom-injector.md)**: The FaultInjector contract, lifecycle methods, battery drain injection.
+- **[Episode 3: Adding a Custom Adapter](tutorials/video-3-custom-adapter.md)**: The AIModelAdapter contract, wrapping PyTorch Mobile and custom engines.
+- **[Episode 4: CI/CD Integration & Automation](tutorials/video-4-ci-cd-integration.md)**: Headless CLI, GitHub Actions composite action, automated gating.
+- **[Episode 5: Advanced Features & Web Dashboard](tutorials/video-5-advanced-features.md)**: Flutter DevTools extension, SQLite persistence, and debugging tips.
+- **[Interactive Video Portal](https://assassinaj602.github.io/sate_ai/tutorials.html)**
+
 ## Engineering Blog Series
 
 Read our in-depth 5-part technical blog series on building, testing, and hardening on-device AI:
@@ -340,6 +350,7 @@ Read our in-depth 5-part technical blog series on building, testing, and hardeni
 
 - [Website](https://assassinaj602.github.io/sate_ai/)
 - [Project Showcase Gallery](https://assassinaj602.github.io/sate_ai/showcase.html)
+- [Video Tutorials Portal](https://assassinaj602.github.io/sate_ai/tutorials.html)
 - [5-Part Engineering Blog Series](https://assassinaj602.github.io/sate_ai/blog.html)
 - [API Reference](https://pub.dev/documentation/sate_ai)
 - [Research Paper](https://assassinaj602.github.io/sate_ai/paper.html)
