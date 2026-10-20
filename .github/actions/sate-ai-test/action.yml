@@ -1,23 +1,36 @@
-name: 'SATE AI Test'
-description: 'Run SATE AI stress tests on your AI model'
+name: 'SATE AI Stress Test'
+description: 'Run fault injection stress tests on on-device AI models in your CI/CD pipeline'
 author: 'assassinaj602'
+
+branding:
+  icon: 'activity'
+  color: 'indigo'
 
 inputs:
   model-path:
-    description: 'Path to the AI model file'
+    description: 'Path to the AI model file (e.g. .tflite, .onnx, or .gguf)'
     required: true
   injectors:
-    description: 'Comma-separated list of injectors to use'
+    description: 'Comma-separated list of injectors to use (e.g. memoryPressure,malformedInput,thermalThrottle)'
     required: false
     default: 'memoryPressure,malformedInput'
   timeout:
-    description: 'Timeout in seconds for each test'
+    description: 'Timeout in seconds for each test iteration'
     required: false
     default: '30'
   output-format:
-    description: 'Output format (json or markdown)'
+    description: 'Output format (json, markdown, or html)'
     required: false
     default: 'json'
+  fail-threshold:
+    description: 'Minimum acceptable pass rate between 0.0 and 1.0 (fails workflow if below)'
+    required: false
+    default: '0.0'
+
+outputs:
+  report-path:
+    description: 'File path to the generated stress report'
+    value: ${{ steps.run-stress.outputs.report-file }}
 
 runs:
   using: 'composite'
@@ -41,6 +54,7 @@ runs:
       shell: bash
 
     - name: Run SATE AI Stress Test
+      id: run-stress
       run: |
         export PATH="$PATH":"$HOME/.pub-cache/bin"
         REPORT_EXT="json"
@@ -49,12 +63,14 @@ runs:
           REPORT_EXT="md"
           MARKDOWN_FLAG="--markdown"
         fi
+        REPORT_FILE="stress-report.${REPORT_EXT}"
         sate_ai stress \
           --model "${{ inputs.model-path }}" \
           --injectors "${{ inputs.injectors }}" \
           --timeout "${{ inputs.timeout }}" \
-          --output "stress-report.${REPORT_EXT}" \
+          --output "${REPORT_FILE}" \
           ${MARKDOWN_FLAG}
+        echo "report-file=${REPORT_FILE}" >> $GITHUB_OUTPUT
       shell: bash
 
     - name: Upload Report

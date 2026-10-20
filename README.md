@@ -15,6 +15,7 @@ Fault Injection and Reliability Framework for On-Device AI across Flutter, CLI, 
 [![DOI - Joint Study](https://zenodo.org/badge/DOI/10.5281/zenodo.23262270.svg)](https://doi.org/10.5281/zenodo.23262270)
 [![GitHub stars](https://img.shields.io/github/stars/assassinaj602/sate_ai?style=flat)](https://github.com/assassinaj602/sate_ai/stargazers)
 [![CI](https://github.com/assassinaj602/sate_ai/actions/workflows/test.yml/badge.svg)](https://github.com/assassinaj602/sate_ai/actions)
+[![GitHub Marketplace](https://img.shields.io/badge/Marketplace-SATE%20AI%20Stress%20Test-blue.svg?logo=github&style=flat)](https://github.com/marketplace/actions/sate-ai-stress-test)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Flutter](https://img.shields.io/badge/Flutter-3.10%2B-blue.svg)](https://flutter.dev)
 
@@ -178,7 +179,25 @@ flutter pub global activate sate_ai
 
 ## CI/CD Integration
 
-Add SATE AI to any pipeline with the Dart SDK alone - no Flutter needed:
+### Option A: Official GitHub Marketplace Action
+
+Add automated fault injection to your GitHub Actions workflows with the official [SATE AI Stress Test](https://github.com/marketplace/actions/sate-ai-stress-test) action:
+
+```yaml
+- name: Run SATE AI Stress Test
+  uses: assassinaj602/sate_ai/.github/actions/sate-ai-test@main
+  with:
+    model-path: 'assets/models/classifier.tflite'
+    injectors: 'memoryPressure,malformedInput,thermalThrottle'
+    output-format: 'markdown'
+    fail-threshold: '0.95'
+```
+
+For full documentation and advanced parameters, see [.github/actions/sate-ai-test/README.md](.github/actions/sate-ai-test/README.md).
+
+### Option B: Headless CLI (Pure Dart)
+
+Run SATE AI in any pipeline (GitLab CI, Bitbucket, CircleCI) with the Dart SDK alone:
 
 ```yaml
 - name: Install SATE AI CLI
@@ -350,6 +369,7 @@ Read our in-depth 5-part technical blog series on building, testing, and hardeni
 
 - [Website](https://assassinaj602.github.io/sate_ai/)
 - [Project Showcase Gallery](https://assassinaj602.github.io/sate_ai/showcase.html)
+- [GitHub Marketplace Action](https://github.com/marketplace/actions/sate-ai-stress-test)
 - [Video Tutorials Portal](https://assassinaj602.github.io/sate_ai/tutorials.html)
 - [5-Part Engineering Blog Series](https://assassinaj602.github.io/sate_ai/blog.html)
 - [API Reference](https://pub.dev/documentation/sate_ai)

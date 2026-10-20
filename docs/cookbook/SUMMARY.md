@@ -9,6 +9,8 @@
 | [**Recipe 3: Speech-to-Text Testing**](recipe-3-speech-to-text-testing.md) | Audio buffer framing, noise handling, certainty scores | `MalformedInput`, `Latency`, `ConfidenceThreshold` | Confidence thresholds |
 | [**Recipe 4: ONNX Runtime Testing**](recipe-4-onnx-runtime-testing.md) | Cross-platform ONNX tensors, native C++ memory management | All injectors (`OnnxAdapter`) | HTML stress reports |
 | [**Recipe 5: TensorFlow Lite Testing**](recipe-5-tflite-testing.md) | INT8/FP16 quantized weights, GPU delegate fallback | All injectors (`TFLiteAdapter`) | Golden baselines |
+| [**Recipe 6: Adaptive Chaos Injection**](recipe-6-adaptive-chaos-testing.md) | Closed-loop CPU, RAM, and thermal feedback loops | `AdaptiveChaosInjector` | Real-time adaptive chaos report |
+| [**Recipe 7: Cost and Resource Estimation**](recipe-7-cost-estimation.md) | Pre-flight duration, memory, battery, and cloud spend | `CostEstimator` | Markdown and CLI cost table |
 
 ---
 

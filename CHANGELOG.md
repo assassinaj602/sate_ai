@@ -24,6 +24,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Preserved Flutter-native adapters (`OnnxAdapter`, `TFLiteAdapter`, `FllamaAdapter`) in `sate_ai`
 
 ### Added
+- Stress Test Cost and Resource Estimation (Issue #97)
+  - Pre-flight estimation of test duration, peak RAM, battery drain, and cloud API spend
+  - `CostEstimator` with customizable `DeviceProfile` (Mobile, Edge, Tablet)
+  - CLI flags `--estimate`, `--estimate-profile`, `--estimate-cloud`
+  - Cookbook guide `cookbook/cost_estimation.md`
+- Adaptive Chaos Injection Schedule (Issue #98)
+  - Dynamic fault injection auto-modulated by live device CPU, RAM, and thermal state
+  - `AdaptiveChaosInjector` prevents unrecoverable OS hard-kills while probing true thresholds
+  - CLI flag `--adaptive-chaos`
+  - Cookbook recipe `cookbook/adaptive_chaos_testing.md`
+- Official GitHub Marketplace Action (Issue #44)
+  - Standardized composite action with Marketplace metadata in `.github/actions/sate-ai-test/`
+  - Pipeline gating with `fail-threshold` input and `report-path` output
+- 5-Part Engineering Video Tutorial Series (Issue #41)
+  - Full production scripts, slide snippets, and transcripts in `tutorials/`
+  - Interactive web portal at `docs/tutorials.html` with transcript accordions
+- 5-Part Engineering Blog Series (Issue #47)
+  - Complete 5-part deep dive in `blog/` covering architecture, 12 injectors, and edge testing
+  - Interactive blog hub at `docs/blog.html`
+- JOSS Resubmission Milestone Plan (Issue #46)
+  - Standalone JOSS-compliant paper and bibliography in `paper/paper.md` and `paper/paper.bib`
+  - 6-month development history tracking in `research/joss/RESUBMISSION_PLAN.md`
+- Conference Paper Expansion (Issue #45)
+  - Comprehensive empirical conference paper targeting ICSE, ASE, and ISSTA
+  - Comparative taxonomy matrix and physical ARM64 hardware benchmarks on TECNO CH7n
+  - Interactive web viewer at `docs/paper.html`
+- Project Showcase Gallery (Issue #43)
+  - Web gallery showcasing production edge apps and research projects at `docs/showcase.html`
+- Interactive In-App Tutorial System (Issue #40)
+  - Guided onboarding and interactive tutorial flow in `example/lib/tutorial/`
+- Cross-Platform SDK Monorepo Expansion (Issues #120, #121, #122, #123)
+  - TypeScript / npm SDK packages in `packages/sate_web`
+  - Android Kotlin SDK in `packages/sate_android`
+  - Architecture restructuring into `sate_core`, `sate_cli`, and `sate_ai`
 - Model Quantization Analyzer (Issue #96)
   - Pure-Dart structural binary analyzer for ONNX Protobuf and TFLite FlatBuffer models
   - `QuantizationAnalyzer`, `OnnxQuantizationAnalyzer`, and `TfliteQuantizationAnalyzer`
