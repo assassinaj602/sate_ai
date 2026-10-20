@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SATE AI Engineering Blog Series: On-Device AI Chaos Engineering</title>
+  <meta name="description" content="A 5-part engineering deep dive on building, testing, and hardening on-device AI models against memory pressure, thermal throttling, and hardware hostility.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .blog-container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+    }
+
+    .blog-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .blog-badge {
+      display: inline-block;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      background: rgba(99, 102, 241, 0.15);
+      color: #818cf8;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      font-size: 0.825rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    .blog-title {
+      font-size: 2.75rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .blog-subtitle {
+      font-size: 1.15rem;
+      color: var(--text-2);
+      max-width: 760px;
+      margin: 0 auto 1.75rem;
+      line-height: 1.6;
+    }
+
+    .posts-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    .post-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .post-card:hover {
+      border-color: rgba(99, 102, 241, 0.45);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    .post-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .part-tag {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      border: 1px solid rgba(56, 189, 248, 0.25);
+    }
+
+    .read-time {
+      font-size: 0.85rem;
+      color: var(--text-2);
+    }
+
+    .post-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.75rem;
+      line-height: 1.35;
+    }
+
+    .post-title a {
+      color: #ffffff;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .post-title a:hover {
+      color: #818cf8;
+    }
+
+    .post-description {
+      color: var(--text-2);
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 1.25rem;
+    }
+
+    .post-highlights {
+      background: rgba(15, 23, 42, 0.6);
+      border-left: 3px solid #6366f1;
+      border-radius: 0 8px 8px 0;
+      padding: 0.85rem 1.15rem;
+      margin-bottom: 1.25rem;
+      font-size: 0.92rem;
+      color: #cbd5e1;
+    }
+
+    .post-highlights ul {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+
+    .post-highlights li {
+      margin-bottom: 0.35rem;
+    }
+
+    .post-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .read-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #6366f1;
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 0.55rem 1.2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .read-btn:hover {
+      background: #4f46e5;
+      transform: translateY(-1px);
+    }
+
+    .share-strip {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.85rem;
+      color: var(--text-2);
+    }
+
+    .share-link {
+      color: #94a3b8;
+      text-decoration: none;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      transition: all 0.2s;
+    }
+
+    .share-link:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .syndication-box {
+      background: rgba(30, 41, 59, 0.5);
+      border: 1px dashed rgba(148, 163, 184, 0.3);
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <span class="logo-text">SATE AI</span>
+        <span class="logo-badge">Docs</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Overview</a>
+        <a href="showcase.html">Showcase</a>
+        <a href="paper.html">Paper</a>
+        <a href="blog.html" class="active">Blog Series</a>
+        <a href="https://github.com/assassinaj602/sate_ai" target="_blank" rel="noopener" class="nav-github">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Blog Container -->
+  <main class="blog-container">
+
+    <header class="blog-header">
+      <div class="blog-badge">5-Part Technical Series</div>
+      <h1 class="blog-title">Engineering On-Device AI Chaos</h1>
+      <p class="blog-subtitle">
+        A deep architectural journey into building, empirically validating, and standardizing fault injection for edge machine learning models across Flutter, Android, and Web ecosystems.
+      </p>
+    </header>
+
+    <!-- Articles Grid -->
+    <div class="posts-grid">
+
+      <!-- Post 1 -->
+      <article class="post-card">
+        <div class="post-card-header">
+          <span class="part-tag">PART 1</span>
+          <span class="read-time">6 min read</span>
+        </div>
+        <h2 class="post-title">
+          <a href="https://github.com/assassinaj602/sate_ai/blob/main/blog/part-1-the-problem.md">The Problem: Why On-Device AI Needs Chaos Engineering</a>
+        </h2>
+        <p class="post-description">
+          Why models that pass all development tests abruptly crash in production. Exploring real-world smartphone operating system hostility: Low Memory Killer (LMK) signals, thermal throttling, and why cloud chaos engineering tools fail on consumer edge devices.
+        </p>
+        <div class="post-highlights">
+          <strong>Key Topics:</strong>
+          <ul>
+            <li>Memory pressure and unhandled SIGKILL process terminations</li>
+            <li>Malformed tensor input mutations causing native pointer segfaults</li>
+            <li>Comparative analysis: Cloud Chaos Monkey vs Academic Fuzzers vs SATE AI</li>
+          </ul>
+        </div>
+        <div class="post-footer">
+          <a href="https://github.com/assassinaj602/sate_ai/blob/main/blog/part-1-the-problem.md" class="read-btn" target="_blank" rel="noopener">
+            Read Article &rarr;
+          </a>
+          <div class="share-strip">
+            <span>Share:</span>
+            <a href="https://twitter.com/intent/tweet?text=Why+does+your+on-device+AI+crash+in+production%3F+Part+1+of+the+SATE+AI+chaos+engineering+series&url=https://assassinaj602.github.io/sate_ai/blog.html" target="_blank" rel="noopener" class="share-link">X / Twitter</a>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://assassinaj602.github.io/sate_ai/blog.html" target="_blank" rel="noopener" class="share-link">LinkedIn</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Post 2 -->
+      <article class="post-card">
+        <div class="post-card-header">
+          <span class="part-tag">PART 2</span>
+          <span class="read-time">8 min read</span>
+        </div>
+        <h2 class="post-title">
+          <a href="https://github.com/assassinaj602/sate_ai/blob/main/blog/part-2-architecture-and-injectors.md">Architecture &amp; Anatomy: How SATE AI Actually Works</a>
+        </h2>
+        <p class="post-description">
+          A deep dive into the four core decoupled contracts: AIModelAdapter, FaultInjector, StressRunner, and StressReport. Exploring the 12 domain-specific injectors and the multi-language monorepo design across Dart, Kotlin, and TypeScript.
+        </p>
+        <div class="post-highlights">
+          <strong>Key Topics:</strong>
+          <ul>
+            <li>The lifecycle of a fault injector: setUp, inject, tearDown</li>
+            <li>Uniform adapters for TFLite, ONNX, llama.cpp, Google ML Kit, and MediaPipe</li>
+            <li>Resource, data, and dynamic telemetry-driven injector categories</li>
+          </ul>
+        </div>
+        <div class="post-footer">
+          <a href="https://github.com/assassinaj602/sate_ai/blob/main/blog/part-2-architecture-and-injectors.md" class="read-btn" target="_blank" rel="noopener">
+            Read Article &rarr;
+          </a>
+          <div class="share-strip">
+            <span>Share:</span>
+            <a href="https://twitter.com/intent/tweet?text=Deep+dive+into+the+architecture+of+SATE+AI%3A+12+fault+injectors+and+modular+runtimes&url=https://assassinaj602.github.io/sate_ai/blog.html" target="_blank" rel="noopener" class="share-link">X / Twitter</a>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://assassinaj602.github.io/sate_ai/blog.html" target="_blank" rel="noopener" class="share-link">LinkedIn</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Post 3 -->
+      <article class="post-card">
+        <div class="post-card-header">
+          <span class="part-tag">PART 3</span>
+          <span class="read-time">7 min read</span>
+        </div>
+        <h2 class="post-title">
+          <a href="https://github.com/assassinaj602/sate_ai/blob/main/blog/part-3-real-world-edge-testing.md">Real-World Edge Testing: Benchmarking on Physical Hardware</a>
+        </h2>
+        <p class="post-description">
+          Empirical hardware benchmarks executed on physical Android smartphone hardware (TECNO CH7n, MediaTek Helio G85 octa-core) across MobileNetV2, ResNet-18, and SmolLM-135M. Uncovering thermal latency blowups and memory thresholds.
+        </p>
+        <div class="post-highlights">
+          <strong>Key Topics:</strong>
+          <ul>
+            <li>Empirical 4.8x latency surge observed under thermal core frequency downclocking</li>
+            <li>The 800MB allocation cliff: triggering Android LMK process eviction</li>
+            <li>Closed-loop adaptive chaos injection maintaining 100% survival rate</li>
+            <li>Sub-0.4% framework instrumentation overhead</li>
+          </ul>
+        </div>
+        <div class="post-footer">
+          <a href="https://github.com/assassinaj602/sate_ai/blob/main/blog/part-3-real-world-edge-testing.md" class="read-btn" target="_blank" rel="noopener">
+            Read Article &rarr;
+          </a>
+          <div class="share-strip">
+            <span>Share:</span>
+            <a href="https://twitter.com/intent/tweet?text=Empirical+testing+of+edge+AI+models+on+physical+hardware%3A+thermal+throttling+and+OOMs&url=https://assassinaj602.github.io/sate_ai/blog.html" target="_blank" rel="noopener" class="share-link">X / Twitter</a>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://assassinaj602.github.io/sate_ai/blog.html" target="_blank" rel="noopener" class="share-link">LinkedIn</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Post 4 -->
+      <article class="post-card">
+        <div class="post-card-header">
+          <span class="part-tag">PART 4</span>
+          <span class="read-time">6 min read</span>
+        </div>
+        <h2 class="post-title">
+          <a href="https://github.com/assassinaj602/sate_ai/blob/main/blog/part-4-lessons-learned.md">Lessons Learned: Hard-Won Insights Building Open-Source Tooling</a>
+        </h2>
+        <p class="post-description">
+          Behind the scenes of building cross-platform developer tools: what went well (pure Dart decoupling, Melos orchestration), what broke (CI Android NDK licenses, Flutter version shifts, timer jitter), and pragmatic advice for open-source infrastructure creators.
+        </p>
+        <div class="post-highlights">
+          <strong>Key Topics:</strong>
+          <ul>
+            <li>Extracting pure Dart kernel early to decouple from UI engines</li>
+            <li>Managing cross-platform CI matrix challenges on GitHub runners</li>
+            <li>The four core architectural principles: defensive cleanup, zero silent kills, reproducible seeds</li>
+          </ul>
+        </div>
+        <div class="post-footer">
+          <a href="https://github.com/assassinaj602/sate_ai/blob/main/blog/part-4-lessons-learned.md" class="read-btn" target="_blank" rel="noopener">
+            Read Article &rarr;
+          </a>
+          <div class="share-strip">
+            <span>Share:</span>
+            <a href="https://twitter.com/intent/tweet?text=Hard-won+lessons+learned+building+open-source+on-device+AI+tooling&url=https://assassinaj602.github.io/sate_ai/blog.html" target="_blank" rel="noopener" class="share-link">X / Twitter</a>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://assassinaj602.github.io/sate_ai/blog.html" target="_blank" rel="noopener" class="share-link">LinkedIn</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Post 5 -->
+      <article class="post-card">
+        <div class="post-card-header">
+          <span class="part-tag">PART 5</span>
+          <span class="read-time">5 min read</span>
+        </div>
+        <h2 class="post-title">
+          <a href="https://github.com/assassinaj602/sate_ai/blob/main/blog/part-5-future-roadmap.md">Future Roadmap: The Road Ahead for Edge AI Reliability</a>
+        </h2>
+        <p class="post-description">
+          The upcoming evolutions for SATE AI: native Swift SDK and Apple CoreML adapter, Python continuous evaluation pipeline integration, embedded C++ IoT engine for microcontrollers, and the vision for an open edge AI resilience certification standard.
+        </p>
+        <div class="post-highlights">
+          <strong>Key Topics:</strong>
+          <ul>
+            <li>Apple CoreML adapter and Apple Neural Engine (ANE) thermal probing</li>
+            <li>Pytest and MLflow CI gating integration</li>
+            <li>Bare-metal C++17/20 IoT engine for microcontrollers and TinyML</li>
+            <li>Community milestones and the Edge AI Resilience Index standard</li>
+          </ul>
+        </div>
+        <div class="post-footer">
+          <a href="https://github.com/assassinaj602/sate_ai/blob/main/blog/part-5-future-roadmap.md" class="read-btn" target="_blank" rel="noopener">
+            Read Article &rarr;
+          </a>
+          <div class="share-strip">
+            <span>Share:</span>
+            <a href="https://twitter.com/intent/tweet?text=The+future+of+on-device+AI+reliability%3A+Apple+CoreML%2C+Python+evaluation%2C+and+IoT+engines&url=https://assassinaj602.github.io/sate_ai/blog.html" target="_blank" rel="noopener" class="share-link">X / Twitter</a>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://assassinaj602.github.io/sate_ai/blog.html" target="_blank" rel="noopener" class="share-link">LinkedIn</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- Syndication Box -->
+    <div class="syndication-box">
+      <h3 style="color: #ffffff; margin-bottom: 0.5rem;">Cross-Posting &amp; Contributions</h3>
+      <p style="color: var(--text-2); font-size: 0.95rem; max-width: 650px; margin: 0 auto 1.5rem; line-height: 1.5;">
+        This series is freely available under the MIT License for republishing on DEV.to, Hashnode, Medium, or corporate tech blogs. Pull requests with community guest articles and case studies are warmly welcomed.
+      </p>
+      <a href="https://github.com/assassinaj602/sate_ai/tree/main/blog" class="read-btn" target="_blank" rel="noopener">
+        Explore Markdown Files in Repository &rarr;
+      </a>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <p>&copy; 2026 SATE AI. Open source under the MIT License.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
