@@ -120,14 +120,10 @@ jobs:
           yes | sdkmanager --licenses || true
         shell: bash
 
-      - name: Install Android NDK
+      - name: Install Android NDK and CMake
         run: |
           sdkmanager "ndk;28.0.12433566"
           echo "ANDROID_NDK_HOME=${ANDROID_HOME}/ndk/28.0.12433566" >> $GITHUB_ENV
-        shell: bash
-
-      - name: Install CMake 3.31.0
-        run: |
           sdkmanager "cmake;3.31.0"
         shell: bash
 

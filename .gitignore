@@ -75,3 +75,5 @@ packages/**/.dart_tool/
 packages/**/build/
 packages/**/.flutter-plugins
 packages/**/.flutter-plugins-dependencies
+
+pubspec_overrides.yaml
